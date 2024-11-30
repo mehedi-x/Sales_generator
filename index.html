@@ -26,16 +26,17 @@
             z-index: 1000;
         }
 
+        .total-sale {
+            font-size: 1.2em;
+            white-space: nowrap;
+        }
+
         .menu-btn {
             font-size: 1.5em;
             background: none;
             border: none;
             color: white;
             cursor: pointer;
-        }
-
-        .total-sale {
-            font-size: 1.2em;
         }
 
         /* Full-Screen Menu Styling */
@@ -221,11 +222,14 @@
 </footer>
 
 <script>
-    // Menu Toggle
+    let salesData = JSON.parse(localStorage.getItem("salesData")) || [];
+    let shopNameStored = localStorage.getItem("shopName");
+
     const menuBtn = document.getElementById('menu-btn');
     const menuOverlay = document.getElementById('menu-overlay');
     const closeMenuBtn = document.getElementById('close-menu-btn');
 
+    // Menu Toggle Logic
     menuBtn.addEventListener('click', () => {
         menuOverlay.classList.add('active');
     });
@@ -234,7 +238,88 @@
         menuOverlay.classList.remove('active');
     });
 
-    // Add your JavaScript logic from the original code here.
+    // Generate Sale
+    function generateSale() {
+        const shopName = document.getElementById("shop-name").value;
+        const productName = document.getElementById("product-name").value;
+        const productPrice = parseFloat(document.getElementById("product-price").value);
+        const productQuantity = parseFloat(document.getElementById("product-quantity").value) || 1;
+
+        if (!productName || isNaN(productPrice) || productPrice <= 0 || productQuantity <= 0) {
+            alert("Please fill out all fields with valid values.");
+            return;
+        }
+
+        // Save shop name only once
+        if (!shopNameStored && shopName) {
+            localStorage.setItem("shopName", shopName);
+            document.getElementById("shop-name").style.display = "none";
+            shopNameStored = shopName;
+        }
+
+        const product = {
+            shopName: shopNameStored,
+            productName,
+            productPrice,
+            productQuantity,
+            total: productPrice * productQuantity,
+            time: new Date().toLocaleString(),
+        };
+
+        salesData.push(product);
+        localStorage.setItem("salesData", JSON.stringify(salesData));
+        updateLastSaleView(product);
+        updateTotalSale();
+        resetForm();
+    }
+
+    function updateLastSaleView(lastSale) {
+        const saleSummary = document.getElementById("sale-summary");
+        saleSummary.innerHTML = `
+            <strong>Shop:</strong> ${lastSale.shopName}<br>
+            <strong>Product:</strong> ${lastSale.productName}<br>
+            <strong>Quantity:</strong> ${lastSale.productQuantity}<br>
+            <strong>Total:</strong> ৳${lastSale.total.toFixed(2)}<br>
+            <strong>Time:</strong> ${lastSale.time}
+        `;
+    }
+
+    function updateTotalSale() {
+        const totalSaleAmount = salesData.reduce((total, sale) => total + sale.total, 0);
+        document.getElementById("total-sale").textContent = `Total Sale: ৳${totalSaleAmount.toFixed(2)}`;
+    }
+
+    function resetForm() {
+        document.getElementById("product-name").value = "";
+        document.getElementById("product-price").value = "";
+        document.getElementById("product-quantity").value = "";
+    }
+
+    function openCloseStoreModal() {
+        alert("Sales History: " + JSON.stringify(salesData, null, 2));
+    }
+
+    function downloadSalesHistory() {
+        const data = JSON.stringify(salesData, null, 2);
+        const blob = new Blob([data], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "sales_history.json";
+        a.click();
+    }
+
+    function closeStore() {
+        if (confirm("Are you sure you want to close the store? This will delete all sales data.")) {
+            localStorage.clear();
+            salesData = [];
+            shopNameStored = null;
+            location.reload();
+        }
+    }
+
+    // Initialize Total Sale on Load
+    document.addEventListener("DOMContentLoaded", updateTotalSale);
 </script>
 
 </body>

@@ -45,6 +45,11 @@
             right: 20px;
             padding: 10px;
             border-radius: 5px;
+            width: 200px;
+        }
+        .menu-content h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.1em;
         }
         .menu-content a {
             color: white;
@@ -120,9 +125,13 @@
         <div class="total-sale" id="total-sale">Total Sale: ৳0.00</div>
         <button class="menu-btn" id="menu-btn">☰</button>
         <div class="menu-content" id="menu-content">
-            <a href="#" onclick="openCloseStoreModal()">Full Sales History</a>
-            <a href="#" onclick="downloadSalesHistory()">Download Sales History</a>
-            <a href="#" onclick="closeStore()">Close Store</a>
+            <h3>Sales Related</h3>
+            <a href="#" onclick="viewSalesHistory()">View Sales History</a>
+            <a href="#" onclick="exportSalesData()">Export Sales Data</a>
+
+            <h3>Store Settings</h3>
+            <a href="#" onclick="closeStore()">Close & Clear Store Data</a>
+            
             <button class="cancel-menu-btn" id="cancel-menu-btn" onclick="cancelMenu()">X</button>
         </div>
     </header>
@@ -252,39 +261,35 @@
         document.getElementById("close-store-modal").style.display = "none";
     }
 
-    // Close Store and Clear Data
+    // Export Sales Data (as CSV)
+    function exportSalesData() {
+        let csvContent = "Shop Name, Product, Quantity, Price, Total, Time\n";
+        salesData.forEach(sale => {
+            csvContent += `${sale.shopName},${sale.productName},${sale.productQuantity},${sale.productPrice},${sale.total},${sale.time}\n`;
+        });
+
+        const blob = new Blob([csvContent], { type: "text/csv" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "sales_data.csv";
+        link.click();
+    }
+
+    // View Sales History
+    function viewSalesHistory() {
+        openCloseStoreModal();
+    }
+
+    // Close Store (Clear Data)
     function closeStore() {
-        salesData = [];
-        localStorage.removeItem("salesData");
-        localStorage.removeItem("shopName"); // Remove shopName too
-        shopNameStored = null; // Reset stored shop name
-        updateTotalSale();
-        alert("Store is closed and data has been cleared.");
-        document.getElementById("shop-name").style.display = "block";  // Show shop name input after closing
-    }
-
-    // Download Sales History
-    function downloadSalesHistory() {
-        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(salesData, null, 2));
-        const downloadAnchorNode = document.createElement('a');
-        downloadAnchorNode.setAttribute("href", dataStr);
-        downloadAnchorNode.setAttribute("download", "sales_history.json");
-        document.body.appendChild(downloadAnchorNode);
-        downloadAnchorNode.click();
-        downloadAnchorNode.remove();
-    }
-
-    // Load data from localStorage on page load
-    window.onload = function () {
-        if (shopNameStored) {
-            document.getElementById("shop-name").style.display = "none"; // Hide shop name input if it's already stored
-            const lastSale = salesData[salesData.length - 1];  // Get the last sale
-            if (lastSale) {
-                updateLastSaleView(lastSale);  // Update the Last Sale view
-            }
+        if (confirm("Are you sure you want to close the store and clear all data?")) {
+            localStorage.removeItem("salesData");
+            localStorage.removeItem("shopName");
+            salesData = [];
+            updateTotalSale();
+            document.getElementById("sale-summary").innerHTML = "No sales yet.";
         }
-        updateTotalSale();
-    };
+    }
 </script>
 
 </body>

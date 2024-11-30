@@ -237,31 +237,26 @@
     // Open Close Store Modal
     function openCloseStoreModal() {
         const fullSalesList = document.getElementById("full-sales-list");
-        fullSalesList.innerHTML = "";
-
-        salesData.forEach((sale, index) => {
-            const listItem = document.createElement("li");
-            listItem.innerHTML = `
-                <strong>${index + 1}.</strong> Shop: ${sale.shopName}, Product: ${sale.productName},
-                Quantity: ${sale.productQuantity}, Total: ৳${sale.total.toFixed(2)}
-            `;
-            fullSalesList.appendChild(listItem);
-        });
-
+        fullSalesList.innerHTML = salesData.map(sale => `
+            <li>${sale.productName} (₺${sale.productPrice} x ${sale.productQuantity})</li>
+        `).join("");
         document.getElementById("close-store-modal").style.display = "flex";
     }
 
-    // Close Store
+    // Cancel Close Store
+    function cancelStoreClosure() {
+        document.getElementById("close-store-modal").style.display = "none";
+    }
+
+    // Close Store and Clear Data
     function closeStore() {
         salesData = [];
         localStorage.removeItem("salesData");
+        localStorage.removeItem("shopName"); // Remove shopName too
+        shopNameStored = null; // Reset stored shop name
         updateTotalSale();
         alert("Store is closed and data has been cleared.");
-    }
-
-    // Cancel Store Closure
-    function cancelStoreClosure() {
-        document.getElementById("close-store-modal").style.display = "none";
+        document.getElementById("shop-name").style.display = "block";  // Show shop name input after closing
     }
 
     // Download Sales History

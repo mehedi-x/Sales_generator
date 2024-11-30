@@ -1,108 +1,207 @@
 /* General Styles */
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f9f9f9; /* Soft Light Gray for body */
-    color: #333; /* Dark Text */
+    background-color: #f4f4f9; /* Light Gray for better readability */
+    color: #333; /* Neutral dark text color */
     transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Main Wrapper */
+.main-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
 }
 
 /* Header Styles */
 header {
-    background-color: #ffffff; /* White background for header */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff; /* Clean white header */
     color: #333; /* Dark text */
     padding: 20px;
-    border-radius: 8px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
 }
 
-/* Close Store Button (3 dots) */
+/* Brand Name Styling */
+header .brand-name {
+    font-size: 1.8em;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #007bff; /* Blue branding */
+}
+
+/* Close Store Button */
 .close-store-btn {
-    color: #555; /* Neutral gray for dots */
-    font-size: 1.5em;
+    background: none;
+    border: none;
+    color: #555;
+    font-size: 1.8em;
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.3s ease;
 }
 
 .close-store-btn:hover {
-    color: #007bff; /* Blue hover effect */
+    color: #e63946; /* Red hover effect */
+    transform: scale(1.2); /* Slight zoom on hover */
 }
 
 /* Form Section */
 .form-section {
-    background-color: #ffffff; /* White background */
+    background-color: #ffffff;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
 }
 
+.form-section h2 {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    color: #007bff;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Form Input Fields */
 .form-section input {
-    background-color: #f7f7f7; /* Light input background */
-    color: #333; /* Dark text */
-    border: 1px solid #ccc;
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1em;
+    background-color: #f9f9f9;
+    color: #333;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
 }
 
 .form-section input:focus {
-    border-color: #007bff; /* Blue border on focus */
-    background-color: #ffffff; /* Pure white */
+    border-color: #007bff;
+    outline: none;
+    background-color: #ffffff;
 }
 
+/* Form Buttons */
 .form-section button {
-    background-color: #007bff; /* Blue button */
+    width: 100%;
+    background-color: #007bff;
     color: #fff;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    text-transform: uppercase;
 }
 
 .form-section button:hover {
     background-color: #0056b3;
+    transform: translateY(-3px); /* Lift effect on hover */
 }
 
 /* Sales Section */
 .sales-section {
-    background-color: #ffffff; /* White background */
-    color: #333;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
 }
 
 .sales-section h3 {
-    color: #333;
+    font-size: 1.4em;
+    color: #007bff;
+    margin-bottom: 10px;
+    font-weight: bold;
 }
 
 .sales-section p {
+    font-size: 1em;
     color: #555;
 }
 
 /* Modal */
-.modal-content {
-    background-color: #ffffff; /* White modal background */
-    color: #333; /* Dark text */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
 }
 
+.modal-content {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.modal-content h3 {
+    font-size: 1.5em;
+    color: #007bff;
+    margin-bottom: 20px;
+}
+
+.modal-content ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+.modal-content ul li {
+    margin-bottom: 10px;
+    font-size: 1em;
+    color: #555;
+}
+
+/* Modal Buttons */
 .modal-content button {
-    background-color: #007bff; /* Blue button */
+    background-color: #007bff;
     color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 5px;
+    font-size: 1em;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .modal-content button:hover {
     background-color: #0056b3;
+    transform: scale(1.05);
 }
 
 /* Footer */
 footer {
-    background-color: #ffffff; /* Light footer */
+    background-color: #ffffff;
     color: #333;
-}
-
-footer .navigation a {
-    color: #007bff; /* Blue links */
-}
-
-footer .navigation a:hover {
-    color: #0056b3;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
     header {
+        flex-direction: column;
         text-align: center;
     }
 

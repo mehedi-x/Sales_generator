@@ -4,10 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Responsive Store</title>
+    <!-- Google Fonts Link for Roboto -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         /* General Styles */
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Roboto', sans-serif; /* Apply the new font */
             margin: 0;
             padding: 0;
             background-color: #1e1e1e; /* Default Dark Mode background */
@@ -313,152 +315,110 @@
         <input type="text" id="product-name" placeholder="Product Name">
         <input type="number" id="product-price" placeholder="Product Price">
         <input type="number" id="product-quantity" placeholder="Product Quantity">
-        <button onclick="generateSale()">Generate Sale</button>
+        <button id="add-product-btn">Add Product</button>
     </div>
 
     <div class="sales-section">
-        <h3>Last Sale:</h3>
-        <p id="sale-summary">No sales yet.</p>
+        <h3>Sales Record</h3>
+        <p id="sales-record">No sales yet.</p>
     </div>
 
     <footer>
         <div class="navigation">
-            <a href="#">Home</a>
-            <a href="#">About</a>
+            <a href="#">About Us</a>
             <a href="#">Contact</a>
             <a href="#">Privacy Policy</a>
         </div>
+        <div>&copy; 2024 Responsive Store</div>
     </footer>
 </div>
 
 <!-- Full Sales History Modal -->
 <div id="close-store-modal">
     <div class="modal-content">
-        <h2>Full Sales History</h2>
-        <ul id="full-sales-list"></ul>
+        <h2>Are you sure you want to close the store?</h2>
+        <button id="close-store-confirm-btn">Yes, Close Store</button>
         <button class="cancel-close-store-btn" onclick="cancelStoreClosure()">Cancel</button>
     </div>
 </div>
 
 <script>
-    let salesData = JSON.parse(localStorage.getItem("salesData")) || [];
+    let totalSale = 0;
+    let sales = [];
 
-    // Menu Button Toggle
-    document.getElementById('menu-btn').addEventListener('click', function () {
-        const menuContent = document.getElementById('menu-content');
-        menuContent.style.display = (menuContent.style.display === "block") ? "none" : "block";
+    document.getElementById('add-product-btn').addEventListener('click', function () {
+        const shopName = document.getElementById('shop-name').value;
+        const productName = document.getElementById('product-name').value;
+        const productPrice = parseFloat(document.getElementById('product-price').value);
+        const productQuantity = parseInt(document.getElementById('product-quantity').value);
+
+        if (shopName && productName && !isNaN(productPrice) && !isNaN(productQuantity)) {
+            const saleAmount = productPrice * productQuantity;
+            totalSale += saleAmount;
+            sales.push({ shopName, productName, saleAmount });
+            updateSalesRecord();
+            updateTotalSale();
+        } else {
+            alert("Please fill out all fields correctly.");
+        }
     });
 
-    // Close the menu
-    function cancelMenu() {
-        document.getElementById('menu-content').style.display = "none";
-    }
-
-    // Generate Sale
-    function generateSale() {
-        const shopName = document.getElementById("shop-name").value;
-        const productName = document.getElementById("product-name").value;
-        const productPrice = parseFloat(document.getElementById("product-price").value);
-        const productQuantity = parseFloat(document.getElementById("product-quantity").value) || 1;
-
-        if (!shopName || !productName || isNaN(productPrice) || productPrice <= 0 || productQuantity <= 0) {
-            alert("Please fill out all fields with valid values.");
-            return;
+    function updateSalesRecord() {
+        const salesRecord = document.getElementById('sales-record');
+        if (sales.length === 0) {
+            salesRecord.innerHTML = 'No sales yet.';
+        } else {
+            salesRecord.innerHTML = sales.map(sale => 
+                `${sale.shopName} - ${sale.productName}: ৳${sale.saleAmount.toFixed(2)}`
+            ).join('<br>');
         }
-
-        const product = {
-            shopName,
-            productName,
-            productPrice,
-            productQuantity,
-            total: productPrice * productQuantity,
-        };
-
-        // Update sales data and save to local storage
-        salesData.push(product);
-        localStorage.setItem("salesData", JSON.stringify(salesData));
-
-        // Update sales display
-        updateLastSaleView(product);
-        updateTotalSale();
-        resetForm();
     }
 
-    // Update last sale view
-    function updateLastSaleView(lastSale) {
-        const saleSummary = document.getElementById("sale-summary");
-        saleSummary.innerHTML = `
-            <strong>Shop:</strong> ${lastSale.shopName}<br>
-            <strong>Product:</strong> ${lastSale.productName}<br>
-            <strong>Quantity:</strong> ${lastSale.productQuantity}<br>
-            <strong>Total:</strong> ৳${lastSale.total.toFixed(2)}
-        `;
-    }
-
-    // Update total sales
     function updateTotalSale() {
-        const totalSaleAmount = salesData.reduce((total, sale) => total + sale.total, 0);
-        document.getElementById("total-sale").textContent = `Total Sale: ৳${totalSaleAmount.toFixed(2)}`;
+        document.getElementById('total-sale').innerText = `Total Sale: ৳${totalSale.toFixed(2)}`;
     }
 
-    // Reset form fields
-    function resetForm() {
-        document.getElementById("shop-name").value = "";
-        document.getElementById("product-name").value = "";
-        document.getElementById("product-price").value = "";
-        document.getElementById("product-quantity").value = "";
+    // Menu toggle
+    const menuBtn = document.getElementById('menu-btn');
+    const menuContent = document.getElementById('menu-content');
+    const cancelMenuBtn = document.getElementById('cancel-menu-btn');
+
+    menuBtn.addEventListener('click', function () {
+        menuContent.style.display = 'block';
+    });
+
+    function cancelMenu() {
+        menuContent.style.display = 'none';
     }
 
     // Open Close Store Modal
     function openCloseStoreModal() {
-        const fullSalesList = document.getElementById("full-sales-list");
-        fullSalesList.innerHTML = "";
-
-        salesData.forEach((sale, index) => {
-            const listItem = document.createElement("li");
-            listItem.innerHTML = `
-                <strong>${index + 1}.</strong> Shop: ${sale.shopName}, Product: ${sale.productName},
-                Quantity: ${sale.productQuantity}, Total: ৳${sale.total.toFixed(2)}
-            `;
-            fullSalesList.appendChild(listItem);
-        });
-
-        document.getElementById("close-store-modal").style.display = "flex";
+        document.getElementById('close-store-modal').style.display = 'flex';
     }
 
-    // Close Store
-    function closeStore() {
-        salesData = [];
-        localStorage.removeItem("salesData");
-        document.getElementById("close-store-modal").style.display = "none";
-        alert("Store closed and all sales data cleared!");
-        location.reload();
-    }
-
-    // Cancel Store Closure
     function cancelStoreClosure() {
-        document.getElementById("close-store-modal").style.display = "none";
+        document.getElementById('close-store-modal').style.display = 'none';
     }
 
-    // Download Sales History as CSV
-    function downloadSalesHistory() {
-        const csvContent = "Shop Name, Product Name, Product Price, Quantity, Total\n" +
-            salesData.map(sale => `${sale.shopName}, ${sale.productName}, ${sale.productPrice}, ${sale.productQuantity}, ${sale.total.toFixed(2)}`).join("\n");
+    // Handle Store Closing
+    document.getElementById('close-store-confirm-btn').addEventListener('click', function () {
+        alert("Store has been closed.");
+        document.getElementById('close-store-modal').style.display = 'none';
+        // Optionally, reset data or perform further actions
+    });
 
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement("a");
+    // Handle downloading sales history
+    function downloadSalesHistory() {
+        const salesHistory = sales.map(sale => 
+            `${sale.shopName} - ${sale.productName}: ৳${sale.saleAmount.toFixed(2)}`
+        ).join('\n');
+        const blob = new Blob([salesHistory], { type: 'text/plain' });
+        const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.download = "Sales_History.csv";
+        link.download = 'sales_history.txt';
         link.click();
     }
 
-    // Initialize
-    window.onload = function () {
-        if (salesData.length > 0) {
-            updateLastSaleView(salesData[salesData.length - 1]);
-            updateTotalSale();
-        }
-    };
 </script>
 
 </body>

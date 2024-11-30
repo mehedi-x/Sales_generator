@@ -77,9 +77,9 @@ This software is designed to manage shop invoices and sales efficiently. It incl
 
 ## **Feedback and Support**
 
-If you encounter any issues or have suggestions, please contact us via the **Contact** section or email us at `support@yourshop.com`.
+If you encounter any issues or have suggestions, please contact us via the **Contact** section or email us at `mehedi.exx@gmail.com`.
 
 ---
 
 **Version 1.0.0**  
-Developed by [Your Name].
+Developed by Mehedi Hasan.

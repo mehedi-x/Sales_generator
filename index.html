@@ -3,15 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Responsive Store</title>
+    <title>Responsive Store with Dark Mode</title>
     <style>
-        /* Basic styling */
+        /* Default Styling */
         body {
             font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            color: #333;
             margin: 0;
             padding: 0;
-            background-color: #f8f8f8;
         }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: white;
+        }
+
         .main-wrapper {
             max-width: 1200px;
             margin: 0 auto;
@@ -27,6 +35,10 @@
             padding: 10px 20px;
         }
 
+        header.dark-mode {
+            background-color: #222;
+        }
+
         .total-sale {
             font-size: 1.2em;
         }
@@ -36,6 +48,7 @@
             border: none;
             color: white;
             font-size: 1.5em;
+            cursor: pointer;
         }
 
         .menu-content {
@@ -56,23 +69,21 @@
             margin: 5px 0;
         }
 
-        .cancel-menu-btn {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5em;
-            cursor: pointer;
-        }
-
         .form-section, .sales-section {
             margin: 20px 0;
         }
 
-        .form-section input {
+        .form-section input, .form-section select {
             margin: 5px 0;
             padding: 8px;
             width: 100%;
             box-sizing: border-box;
+        }
+
+        .form-section img {
+            width: 100px;
+            height: 100px;
+            margin-top: 10px;
         }
 
         button {
@@ -81,6 +92,24 @@
             color: white;
             border: none;
             cursor: pointer;
+        }
+
+        .dark-mode-btn {
+            background-color: #333;
+            color: white;
+            padding: 5px 15px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .online-support {
+            display: inline-block;
+            background-color: #28a745;
+            padding: 10px;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 10px;
         }
 
         footer {
@@ -94,6 +123,12 @@
             color: white;
             text-decoration: none;
             margin: 0 10px;
+        }
+
+        .search-bar input {
+            padding: 8px;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         #close-store-modal {
@@ -139,7 +174,6 @@
                 width: 100%;
             }
         }
-
     </style>
 </head>
 <body>
@@ -154,7 +188,12 @@
             <a href="#" onclick="closeStore()">Close Store</a>
             <button class="cancel-menu-btn" id="cancel-menu-btn" onclick="cancelMenu()">X</button>
         </div>
+        <button class="dark-mode-btn" id="dark-mode-btn" onclick="toggleDarkMode()">Toggle Dark Mode</button>
     </header>
+
+    <div class="search-bar">
+        <input type="text" id="product-search" placeholder="Search Product...">
+    </div>
 
     <div class="form-section">
         <h2>Product Entry</h2>
@@ -162,6 +201,13 @@
         <input type="text" id="product-name" placeholder="Product Name">
         <input type="number" id="product-price" placeholder="Product Price">
         <input type="number" id="product-quantity" placeholder="Product Quantity">
+        <input type="file" id="product-image" placeholder="Upload Product Image">
+        <select id="product-category">
+            <option value="">Select Category</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Clothing">Clothing</option>
+            <option value="Grocery">Grocery</option>
+        </select>
         <button onclick="generateSale()">Generate Sale</button>
     </div>
 
@@ -193,6 +239,12 @@
     let salesData = JSON.parse(localStorage.getItem("salesData")) || [];
     let shopNameStored = localStorage.getItem("shopName");
 
+    // Toggle Dark Mode
+    function toggleDarkMode() {
+        document.body.classList.toggle("dark-mode");
+        document.querySelector("header").classList.toggle("dark-mode");
+    }
+
     // Menu Button Toggle
     document.getElementById('menu-btn').addEventListener('click', function () {
         const menuContent = document.getElementById('menu-content');
@@ -209,71 +261,65 @@
         const shopName = document.getElementById("shop-name").value;
         const productName = document.getElementById("product-name").value;
         const productPrice = parseFloat(document.getElementById("product-price").value);
-        const productQuantity = parseFloat(document.getElementById("product-quantity").value) || 1;
+        const productQuantity = parseInt(document.getElementById("product-quantity").value);
+        const productCategory = document.getElementById("product-category").value;
+        const productImage = document.getElementById("product-image").files[0];
 
-        if (!productName || isNaN(productPrice) || productPrice <= 0 || productQuantity <= 0) {
-            alert("Please fill out all fields with valid values.");
+        if (!shopName || !productName || !productPrice || !productQuantity) {
+            alert("Please fill in all fields.");
             return;
         }
 
-        // Save shop name only once
-        if (!shopNameStored && shopName) {
-            localStorage.setItem("shopName", shopName);  // Save the shop name to local storage
-            document.getElementById("shop-name").style.display = "none";  // Hide shop name input after first entry
-            shopNameStored = shopName;  // Assign it to the variable
-        }
-
         const product = {
-            shopName: shopNameStored,
-            productName,
-            productPrice,
-            productQuantity,
+            name: productName,
+            price: productPrice,
+            quantity: productQuantity,
             total: productPrice * productQuantity,
-            time: new Date().toLocaleString(),  // Adding the current time of sale
+            category: productCategory,
+            image: productImage ? URL.createObjectURL(productImage) : "",
+            time: new Date().toLocaleString(),
         };
 
-        // Update sales data and save to local storage
         salesData.push(product);
-        localStorage.setItem("salesData", JSON.stringify(salesData)); // Save salesData to localStorage
-
-        // Update sales display
-        updateLastSaleView(product);
+        localStorage.setItem("salesData", JSON.stringify(salesData));
         updateTotalSale();
-        resetForm();
+        displaySaleSummary(product);
     }
 
-    // Update last sale view
-    function updateLastSaleView(lastSale) {
+    // Update Total Sale
+    function updateTotalSale() {
+        let totalSale = 0;
+        salesData.forEach(sale => totalSale += sale.total);
+        document.getElementById("total-sale").innerText = `Total Sale: ৳${totalSale.toFixed(2)}`;
+    }
+
+    // Display Last Sale Summary
+    function displaySaleSummary(product) {
         const saleSummary = document.getElementById("sale-summary");
         saleSummary.innerHTML = `
-            <strong>Shop:</strong> ${lastSale.shopName}<br>
-            <strong>Product:</strong> ${lastSale.productName}<br>
-            <strong>Quantity:</strong> ${lastSale.productQuantity}<br>
-            <strong>Total:</strong> ৳${lastSale.total.toFixed(2)}<br>
-            <strong>Time:</strong> ${lastSale.time}  <!-- Displaying the sale time -->
+            <strong>Product:</strong> ${product.name}<br>
+            <strong>Category:</strong> ${product.category}<br>
+            <strong>Total:</strong> ৳${product.total.toFixed(2)}<br>
+            <strong>Time:</strong> ${product.time}<br>
+            <img src="${product.image}" alt="${product.name}" />
         `;
-    }
-
-    // Update total sales
-    function updateTotalSale() {
-        const totalSaleAmount = salesData.reduce((total, sale) => total + sale.total, 0);
-        document.getElementById("total-sale").textContent = `Total Sale: ৳${totalSaleAmount.toFixed(2)}`;
-    }
-
-    // Reset form fields
-    function resetForm() {
-        document.getElementById("product-name").value = "";
-        document.getElementById("product-price").value = "";
-        document.getElementById("product-quantity").value = "";
     }
 
     // Open Close Store Modal
     function openCloseStoreModal() {
-        const fullSalesList = document.getElementById("full-sales-list");
-        fullSalesList.innerHTML = salesData.map(sale => `
-            <li>${sale.productName} (₺${sale.productPrice} x ${sale.productQuantity}) - ${sale.time}</li>
-        `).join("");
-        document.getElementById("close-store-modal").style.display = "flex";
+        const modal = document.getElementById("close-store-modal");
+        const salesList = document.getElementById("full-sales-list");
+        salesList.innerHTML = "";
+        salesData.forEach((sale, index) => {
+            const listItem = document.createElement("li");
+            listItem.innerHTML = `
+                <strong>Product:</strong> ${sale.name}<br>
+                <strong>Total Sale:</strong> ৳${sale.total.toFixed(2)}<br>
+                <strong>Time:</strong> ${sale.time}<br>
+            `;
+            salesList.appendChild(listItem);
+        });
+        modal.style.display = "flex";
     }
 
     // Close Store
@@ -281,7 +327,6 @@
         localStorage.clear();
         salesData = [];
         updateTotalSale();
-        resetForm();
         alert("Store has been closed!");
     }
 

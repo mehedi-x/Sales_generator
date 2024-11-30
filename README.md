@@ -1,4 +1,4 @@
-# Invoice Generator Software
+# Sale Generator Software
 
 This software is designed to manage shop invoices and sales efficiently. It includes features like generating invoices, tracking total sales, saving sales history, and providing a professional and responsive user interface. Below is a detailed explanation of the software.
 

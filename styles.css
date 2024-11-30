@@ -3,8 +3,8 @@ body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #1e1e1e; /* Dark background */
-    color: #f0f0f0; /* Light text */
+    background-color: #1e1e1e; /* Soft Dark Gray for body (Dark Mode) */
+    color: #f0f0f0; /* Light Text */
     transition: background-color 0.3s ease; /* Smooth transition for dark mode */
 }
 
@@ -13,7 +13,6 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
-    box-sizing: border-box;
 }
 
 /* Header Styles */
@@ -21,56 +20,66 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #333;
+    background-color: #333; /* Darker gray background */
     color: #fff;
     padding: 20px;
     border-radius: 8px;
     margin-bottom: 20px;
-    position: relative;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    position: relative; /* For positioning the button */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Add some shadow for depth */
 }
 
-/* Header: Navigation */
-header .navigation {
-    display: flex;
-    gap: 20px;
-}
-
-header .navigation a {
+/* Brand Name Styling */
+header .brand-name {
+    font-size: 1.5em;
+    font-weight: bold;
     color: #fff;
-    text-decoration: none;
-    font-size: 1em;
+    text-transform: uppercase; /* Make the brand name uppercase for a professional look */
+    letter-spacing: 2px; /* Slight spacing for modern look */
 }
 
-/* Close Store Button */
+/* Close Store Button (3 dots) */
 .close-store-btn {
     background: none;
     border: none;
-    color: #e0e0e0;
-    font-size: 1.5em;
+    color: #e0e0e0; /* Light gray for the dots */
+    font-size: 1.5em; /* Larger dots size */
     cursor: pointer;
+    transition: color 0.3s ease, transform 0.3s ease;
     position: absolute;
-    right: 20px;
+    right: 20px; /* Positioning the button to the right */
     top: 50%;
-    transform: translateY(-50%);
+    transform: translateY(-50%); /* Center vertically */
+}
+
+.close-store-btn:hover {
+    color: #f39c12; /* Hover effect: Yellow color */
+    transform: scale(1.1); /* Slight zoom on hover */
 }
 
 /* Form Section */
 .form-section {
-    background-color: #2c2c2c;
+    background-color: #2c2c2c; /* Dark background for form */
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
+    transition: all 0.3s ease; /* Smooth transition effect */
+}
+
+.form-section:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Shadow grow effect on hover */
 }
 
 .form-section h2 {
     font-size: 1.2em;
     margin-bottom: 15px;
-    color: #f0f0f0;
-    text-align: left;
+    color: #f0f0f0; /* White color for the heading */
+    text-align: left; /* Align text to the left */
+    font-weight: 600;
 }
 
+/* Form Section Input Fields */
 .form-section input {
     width: 100%;
     padding: 12px;
@@ -78,12 +87,20 @@ header .navigation a {
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 1em;
-    background-color: #444;
+    box-sizing: border-box;
+    background-color: #444; /* Darker background for inputs */
     color: #f0f0f0;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.form-section input:focus {
+    border-color: #e63946; /* Red border on focus */
+    outline: none;
+    background-color: #333; /* Darker background when focused */
 }
 
 .form-section button {
-    background-color: #e63946;
+    background-color: #e63946; /* Red button */
     color: #fff;
     padding: 12px 18px;
     border: none;
@@ -92,11 +109,18 @@ header .navigation a {
     font-size: 1em;
     display: block;
     margin: 0 auto;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-section button:hover {
+    background-color: #d53b30;
+    transform: translateY(-3px); /* Slight lift on hover */
 }
 
 /* Sales Section */
 .sales-section {
-    background-color: #2c2c2c;
+    background-color: #2c2c2c; /* Dark background */
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -116,58 +140,147 @@ header .navigation a {
     color: #f0f0f0;
 }
 
-/* Invoice Section */
-.invoice {
-    margin-top: 30px;
+/* Calculator Section */
+.calculator-display {
+    background-color: #2c2c2c; /* Dark background */
     padding: 20px;
-    background-color: #2c2c2c;
     border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align content to the left */
 }
 
-.invoice h3 {
-    font-size: 1.2em;
-    margin-bottom: 15px;
+.calculator-display h3 {
+    color: #e63946; /* Red color for calculator heading */
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+/* Last Sale Summary Grid */
+.calculator-display .last-sale-summary {
+    margin-top: 20px;
+    font-size: 0.9em;
+    color: #f0f0f0;
+    background-color: #444; /* Darker background */
+    padding: 10px;
+    border-radius: 5px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.calculator-display .last-sale-summary:hover {
+    transform: translateY(-5px); /* Slight lift on hover */
+}
+
+.calculator-display .last-sale-summary .sale-item {
+    background-color: #333; /* Dark background for sale item */
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.calculator-display .last-sale-summary .sale-item:hover {
+    transform: translateY(-3px); /* Lift effect on hover */
+}
+
+.calculator-display .last-sale-summary .sale-item span {
+    font-weight: bold;
     color: #f0f0f0;
 }
 
-.invoice p {
+.calculator-display .last-sale-summary .sale-item .sale-title {
+    font-size: 0.85em;
     color: #f0f0f0;
 }
 
-/* Modal (Shop Name Modal) */
-#shop-name-modal {
+.calculator-display .last-sale-summary .sale-item .sale-price {
+    font-size: 1em;
+    color: #e63946; /* Red price */
+}
+
+.calculator-display .last-sale-summary .sale-item .sale-quantity {
+    font-size: 0.9em;
+    color: #28a745; /* Green quantity */
+}
+
+/* Modal */
+.modal {
+    display: none;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
+    background-color: rgba(0, 0, 0, 0.6);
     justify-content: center;
     align-items: center;
-    z-index: 1000;
+    transition: opacity 0.3s ease;
 }
 
 .modal-content {
-    background-color: #2c2c2c;
+    background-color: #333;
     padding: 20px;
     border-radius: 8px;
+    width: 90%;
+    max-width: 400px;
     text-align: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
 }
 
-#shop-name-input {
-    width: 100%;
-    padding: 10px;
-    margin-top: 10px;
+.modal-content.show {
+    transform: scale(1); /* Modal appears smoothly */
+}
+
+.modal-content h3 {
+    color: #f0f0f0;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.modal-content ul {
+    list-style-type: none;
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+.modal-content ul li {
     margin-bottom: 10px;
+    font-size: 0.9em;
+    color: #f0f0f0;
+}
+
+.modal-content button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 5px;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.modal-content button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05); /* Slight zoom on hover */
 }
 
 /* Footer */
 footer {
-    background-color: #222;
+    background-color: #222; /* Dark footer */
     color: #fff;
-    padding: 20px;
+    padding: 20px 0;
     text-align: center;
     margin-top: 40px;
     display: flex;
@@ -175,55 +288,60 @@ footer {
     align-items: center;
 }
 
-/* Mobile View Adjustments */
-@media (max-width: 768px) {
+footer .navigation {
+    display: flex;
+    gap: 15px;
+}
 
-    /* Header layout adjustment for mobile */
+footer .navigation a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1em;
+    transition: color 0.3s ease;
+}
+
+footer .navigation a:hover {
+    color: #e63946; /* Hover red */
+}
+
+footer .client-logos {
+    display: flex;
+    gap: 20px;
+}
+
+footer .client-logos img {
+    height: 30px;
+    width: auto;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+footer .client-logos img:hover {
+    opacity: 1;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
     header {
         flex-direction: column;
         text-align: center;
     }
 
-    header .navigation {
-        flex-direction: column;
-        margin-top: 10px;
-    }
-
-    .form-section, .sales-section, .invoice {
+    .form-section,
+    .sales-section {
         padding: 15px;
     }
 
-    .form-section input, .form-section button {
-        font-size: 1.1em;
-        padding: 10px;
+    .modal-content {
+        padding: 15px;
     }
 
-    .invoice p {
-        font-size: 1.1em;
+    .calculator-display .last-sale-summary {
+        grid-template-columns: 1fr;
     }
 
     footer {
         flex-direction: column;
         align-items: center;
-        margin-top: 20px;
-    }
-
-    footer .navigation {
-        flex-direction: column;
-        margin-top: 10px;
-    }
-
-    footer .client-logos {
-        margin-top: 15px;
-    }
-
-    /* Shop Name Modal */
-    #shop-name-modal {
-        padding: 10px;
-    }
-
-    .modal-content {
-        width: 90%;
-        padding: 15px;
     }
 }

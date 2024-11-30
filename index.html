@@ -25,6 +25,7 @@
             color: white;
             padding: 15px 25px;
             border-radius: 5px;
+            width: 100%;
         }
         .total-sale {
             font-size: 1.4em;
@@ -138,9 +139,9 @@
         /* Media Queries for Responsiveness */
         @media (max-width: 768px) {
             header {
-                flex-direction: column;
-                align-items: flex-start;
-                text-align: center;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
             }
             .menu-btn {
                 font-size: 2em;
@@ -160,6 +161,9 @@
 
         @media (max-width: 480px) {
             header {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
                 padding: 10px;
             }
             .menu-btn {
@@ -256,18 +260,18 @@
             shopNameStored = shopName;  // Assign it to the variable
         }
 
-        const product = {
-            shopName: shopNameStored,
+        const productTotal = productPrice * productQuantity;
+        const sale = {
+            shopName: shopNameStored || shopName,
             productName,
             productPrice,
             productQuantity,
-            total: productPrice * productQuantity,
-            time: new Date().toLocaleString(),  // Adding the current time of sale
+            total: productTotal,
+            time: new Date().toLocaleString()
         };
 
-        // Update sales data and save to local storage
-        salesData.push(product);
-        localStorage.setItem("salesData", JSON.stringify(salesData)); // Save salesData to localStorage
+        salesData.push(sale);
+        localStorage.setItem("salesData", JSON.stringify(salesData));
 
         // Update sales display
         updateLastSaleView(product);

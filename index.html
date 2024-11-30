@@ -3,420 +3,178 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Responsive Store</title>
-    <style>
-        /* General Styles */
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #1e1e1e; /* Default Dark Mode background */
-            color: #f0f0f0; /* Light text color */
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        /* Main Wrapper */
-        .main-wrapper {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        /* Header Styles */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #333;
-            color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
-        /* Total Sale Styling */
-        header .total-sale {
-            font-size: 1em;
-            font-weight: bold;
-            color: #fff;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* Menu Button */
-        .menu-btn {
-            background: none;
-            border: none;
-            color: #e0e0e0;
-            font-size: 1.5em;
-            cursor: pointer;
-            transition: color 0.3s;
-        }
-
-        .menu-btn:hover {
-            color: #f39c12;
-        }
-
-        /* Menu */
-        .menu-content {
-            display: none;
-            position: absolute;
-            background-color: #333;
-            min-width: 200px;
-            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-            z-index: 1;
-            right: 0;
-            border-radius: 5px;
-            transition: opacity 0.3s ease;
-        }
-
-        .menu-content a {
-            color: #fff;
-            padding: 12px;
-            text-decoration: none;
-            display: block;
-        }
-
-        .menu-content a:hover {
-            background-color: #575757;
-        }
-
-        /* Form Section */
-        .form-section {
-            background-color: #2c2c2c;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
-
-        .form-section h2 {
-            font-size: 1.2em;
-            margin-bottom: 15px;
-            color: #f0f0f0;
-            text-align: left;
-            font-weight: 600;
-        }
-
-        .form-section input {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 1em;
-            box-sizing: border-box;
-            background-color: #444;
-            color: #f0f0f0;
-            transition: border-color 0.3s ease, background-color 0.3s ease;
-        }
-
-        .form-section input:focus {
-            border-color: #e63946;
-            outline: none;
-            background-color: #333;
-        }
-
-        .form-section button {
-            background-color: #e63946;
-            color: #fff;
-            padding: 12px 18px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1em;
-            display: block;
-            margin: 0 auto;
-        }
-
-        .form-section button:hover {
-            background-color: #d53b30;
-        }
-
-        /* Sales Section */
-        .sales-section {
-            background-color: #2c2c2c;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
-
-        .sales-section h3 {
-            text-align: left;
-            color: #f0f0f0;
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
-
-        .sales-section p {
-            text-align: left;
-            font-size: 1.1em;
-            color: #f0f0f0;
-        }
-
-        /* Footer */
-        footer {
-            background-color: #222;
-            color: #fff;
-            padding: 20px 0;
-            text-align: center;
-            margin-top: 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        footer .navigation {
-            display: flex;
-            gap: 15px;
-        }
-
-        footer .navigation a {
-            color: #fff;
-            text-decoration: none;
-            font-size: 1em;
-        }
-
-        /* Modal for Full Sales History */
-        #close-store-modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            padding-top: 60px;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #close-store-modal .modal-content {
-            background-color: #2c2c2c;
-            padding: 20px;
-            border-radius: 8px;
-            max-width: 400px;
-            margin: auto;
-            color: #fff;
-        }
-
-        #close-store-modal h2 {
-            font-size: 1.2em;
-            margin-bottom: 15px;
-        }
-
-        #close-store-modal button {
-            background-color: #e63946;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1em;
-            margin-top: 10px;
-        }
-
-        #close-store-modal button:hover {
-            background-color: #d53b30;
-        }
-
-        /* Cancel Button for Menu (Circular Cross) */
-        .cancel-menu-btn {
-            background: none;
-            border: none;
-            color: #fff;
-            font-size: 2em;
-            cursor: pointer;
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: #e63946;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .cancel-menu-btn:hover {
-            background-color: #d53b30;
-        }
-
-        /* Cancel Button Below Close Store */
-        .cancel-close-store-btn {
-            background-color: #e63946;
-            color: #fff;
-            padding: 12px 18px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1em;
-            display: block;
-            margin: 10px auto 0;
-        }
-
-        .cancel-close-store-btn:hover {
-            background-color: #d53b30;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            header {
-                flex-direction: row;
-                text-align: center;
-            }
-
-            /* Reduce font size for mobile */
-            header .total-sale {
-                font-size: 0.8em;
-            }
-
-            .form-section,
-            .sales-section {
-                padding: 15px;
-            }
-
-            footer {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .menu-content {
-                width: 100%;
-                box-shadow: none;
-                right: 0;
-                top: 0;
-            }
-        }
-    </style>
+    <title>Invoice Manager</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <div class="main-wrapper">
+        <!-- Header Section -->
+        <header>
+            <div class="header-left">
+                <span class="brand-name">Invoice Manager</span>
+            </div>
+            <div class="header-right">
+                <button onclick="openCloseStoreModal()">Close Store</button>
+            </div>
+        </header>
 
-<div class="main-wrapper">
-    <header>
-        <div class="total-sale" id="total-sale">Total Sale: ৳0.00</div>
-        <button class="menu-btn" id="menu-btn">☰</button>
-        <div class="menu-content" id="menu-content">
-            <a href="#" onclick="openCloseStoreModal()">Close Store</a>
+        <!-- Sales Section -->
+        <section class="sales-section">
+            <div id="sale-summary">
+                <h3>No Sales Yet</h3>
+            </div>
+        </section>
+
+        <!-- Add Product Form Section -->
+        <section class="form-section">
+            <h2>Sales</h2>
+            <label for="shop-name">Enter Shop Name</label>
+            <input type="text" id="shop-name" placeholder="Enter Shop Name">
+            <label for="product-name">Enter Product Name</label>
+            <input type="text" id="product-name" placeholder="Enter Product Name" list="suggested-products">
+            <datalist id="suggested-products"></datalist>
+            <label for="product-price">Enter Product Price</label>
+            <input type="number" id="product-price" placeholder="Enter Product Price">
+            <label for="product-quantity">Enter Quantity (Optional)</label>
+            <input type="number" id="product-quantity" placeholder="Enter Quantity">
+            <button onclick="generateSale()">Generate Sale</button>
+        </section>
+
+        <!-- Close Store Modal -->
+        <div id="close-store-modal" class="modal">
+            <div class="modal-content">
+                <h3>Sales History</h3>
+                <ul id="full-sales-list"></ul>
+                <button onclick="downloadSalesHistory()">Download PDF</button>
+                <button onclick="closeStore()">Confirm Close Store</button>
+                <button onclick="cancelStoreClosure()">Cancel</button>
+            </div>
         </div>
-    </header>
-
-    <div class="form-section" id="shop-name-section">
-        <h2>Enter Shop Name</h2>
-        <input type="text" id="shop-name" placeholder="Enter Shop Name" disabled />
-        <button onclick="addProduct()">Add Product</button>
-        <button onclick="generateInvoice()">Generate Invoice</button>
-        <button onclick="showTotalSales()">Total Sales</button>
     </div>
 
-    <div class="sales-section">
-        <h3>Invoice Details</h3>
-        <p id="invoice-details">No products added yet.</p>
-    </div>
+    <script>
+        let salesData = JSON.parse(localStorage.getItem("salesData")) || [];
+        let suggestedProducts = new Set();
 
-    <footer>
-        <div class="navigation">
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Service</a>
-        </div>
-        <div>&copy; 2024 Your Store</div>
-    </footer>
-</div>
+        // Add product and generate sale
+        function generateSale() {
+            const shopName = document.getElementById("shop-name").value;
+            const productName = document.getElementById("product-name").value;
+            const productPrice = parseFloat(document.getElementById("product-price").value);
+            const productQuantity = parseFloat(document.getElementById("product-quantity").value) || 1;
 
-<div id="close-store-modal">
-    <div class="modal-content">
-        <h2>Are you sure you want to close the store?</h2>
-        <button onclick="closeStore()">Yes, Close Store</button>
-        <button onclick="cancelCloseStore()">Cancel</button>
-    </div>
-</div>
+            if (!shopName || !productName || isNaN(productPrice)) {
+                alert("Please fill out all required fields.");
+                return;
+            }
 
-<script>
-    // Initial variables
-    let shopNameEntered = false;
-    let totalSales = 0;
-    let products = [];
+            const product = {
+                shopName,
+                productName,
+                productPrice,
+                productQuantity,
+                total: productPrice * productQuantity,
+            };
 
-    // Menu Button Interaction
-    const menuBtn = document.getElementById('menu-btn');
-    const menuContent = document.getElementById('menu-content');
-    const closeStoreModal = document.getElementById('close-store-modal');
-    const cancelMenuBtn = document.createElement('button');
-    cancelMenuBtn.classList.add('cancel-menu-btn');
-    cancelMenuBtn.innerHTML = '×';
-    cancelMenuBtn.onclick = function() {
-        menuContent.style.display = 'none';
-    };
+            // Update sales data and save to local storage
+            salesData.push(product);
+            localStorage.setItem("salesData", JSON.stringify(salesData));
 
-    menuBtn.onclick = function() {
-        if (menuContent.style.display === 'block') {
-            menuContent.style.display = 'none';
-        } else {
-            menuContent.style.display = 'block';
-            menuContent.appendChild(cancelMenuBtn);  // Add cancel button
+            // Update suggestions and sales display
+            suggestedProducts.add(productName);
+            updateSuggestions();
+            updateLastSaleView(product);
+            resetForm();
         }
-    };
 
-    // Close Store Modal
-    function openCloseStoreModal() {
-        closeStoreModal.style.display = 'flex';
-    }
-
-    function closeStore() {
-        alert('Store Closed');
-        closeStoreModal.style.display = 'none';
-        document.getElementById('shop-name-section').style.display = 'none';  // Hide Shop Name form
-    }
-
-    function cancelCloseStore() {
-        closeStoreModal.style.display = 'none';
-    }
-
-    // Add Product
-    function addProduct() {
-        if (!shopNameEntered) {
-            alert('Please enter the Shop Name first');
-            return;
+        // Update only the last sale view
+        function updateLastSaleView(lastSale) {
+            const saleSummary = document.getElementById("sale-summary");
+            saleSummary.innerHTML = `
+                <h3>Last Sale Summary:</h3>
+                <p><strong>Shop:</strong> ${lastSale.shopName}</p>
+                <p><strong>Product:</strong> ${lastSale.productName}</p>
+                <p><strong>Quantity:</strong> ${lastSale.productQuantity}</p>
+                <p><strong>Total:</strong> ৳${lastSale.total.toFixed(2)}</p>
+            `;
         }
-        let productName = prompt("Enter product name:");
-        let productPrice = parseFloat(prompt("Enter product price:"));
-        if (productName && !isNaN(productPrice) && productPrice > 0) {
-            products.push({ name: productName, price: productPrice });
-            totalSales += productPrice;
-            updateInvoice();
-        } else {
-            alert("Invalid product or price.");
+
+        // Update datalist for suggested products
+        function updateSuggestions() {
+            const datalist = document.getElementById("suggested-products");
+            datalist.innerHTML = "";
+            suggestedProducts.forEach((product) => {
+                const option = document.createElement("option");
+                option.value = product;
+                datalist.appendChild(option);
+            });
         }
-    }
 
-    // Update Invoice Details
-    function updateInvoice() {
-        let invoiceDetails = "Products Added:\n";
-        products.forEach((product, index) => {
-            invoiceDetails += `${index + 1}. ${product.name} - ৳${product.price.toFixed(2)}\n`;
-        });
-        invoiceDetails += `Total Sales: ৳${totalSales.toFixed(2)}`;
-        document.getElementById('invoice-details').innerText = invoiceDetails;
-        document.getElementById('total-sale').innerText = `Total Sale: ৳${totalSales.toFixed(2)}`;
-    }
-
-    // Show Total Sales Button
-    function showTotalSales() {
-        alert(`Total Sales: ৳${totalSales.toFixed(2)}`);
-    }
-
-    // Shop Name Handling
-    document.getElementById('shop-name').addEventListener('input', function(e) {
-        if (!shopNameEntered) {
-            shopNameEntered = true;
-            alert('Shop Name entered successfully.');
+        // Reset input fields
+        function resetForm() {
+            document.getElementById("shop-name").value = "";
+            document.getElementById("product-name").value = "";
+            document.getElementById("product-price").value = "";
+            document.getElementById("product-quantity").value = "";
         }
-    });
 
-</script>
+        // Open close store modal and show full sales history
+        function openCloseStoreModal() {
+            const fullSalesList = document.getElementById("full-sales-list");
+            fullSalesList.innerHTML = "";
 
+            salesData.forEach((sale, index) => {
+                const listItem = document.createElement("li");
+                listItem.innerHTML = `
+                    <strong>${index + 1}.</strong> Shop: ${sale.shopName}, Product: ${sale.productName},
+                    Quantity: ${sale.productQuantity}, Total: ৳${sale.total.toFixed(2)}
+                `;
+                fullSalesList.appendChild(listItem);
+            });
+
+            document.getElementById("close-store-modal").style.display = "block";
+        }
+
+        // Download sales history as PDF
+        function downloadSalesHistory() {
+            const salesSummary = salesData
+                .map(
+                    (sale, index) =>
+                        `${index + 1}. Shop: ${sale.shopName}, Product: ${sale.productName}, Quantity: ${sale.productQuantity}, Total: ৳${sale.total.toFixed(2)}`
+                )
+                .join("\n");
+
+            const blob = new Blob([salesSummary], { type: "application/pdf" });
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = "Sales_History.pdf";
+            link.click();
+
+            URL.revokeObjectURL(url);
+        }
+
+        // Close store and clear sales data
+        function closeStore() {
+            salesData = [];
+            localStorage.removeItem("salesData");
+            document.getElementById("close-store-modal").style.display = "none";
+            alert("Store closed and all sales data cleared!");
+            location.reload();
+        }
+
+        // Cancel store closure
+        function cancelStoreClosure() {
+            document.getElementById("close-store-modal").style.display = "none";
+        }
+
+        // Initialize sales view on page load
+        window.onload = function () {
+            if (salesData.length > 0) {
+                updateLastSaleView(salesData[salesData.length - 1]);
+            }
+        };
+    </script>
 </body>
 </html>

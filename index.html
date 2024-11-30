@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Store</title>
+    <title>Responsive Store</title>
     <style>
-        /* General Styles */
+        /* General Styling */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -20,11 +20,10 @@
             align-items: center;
             background-color: #333;
             color: white;
-            padding: 10px 20px;
+            padding: 15px 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border: 2px solid #444;
             border-radius: 5px;
-            margin: 10px 10px 0;
+            margin: 10px;
         }
 
         .total-sale {
@@ -33,40 +32,34 @@
         }
 
         .menu-btn {
-            font-size: 1.2em;
+            font-size: 1.5em;
             background: none;
             border: none;
             color: white;
             cursor: pointer;
             padding: 10px;
-            border: 1px solid white;
-            border-radius: 3px;
         }
 
-        .menu-btn:hover {
-            background-color: #444;
-        }
-
-        /* Footer Styling */
-        footer {
+        .menu-content {
+            display: none;
+            position: absolute;
+            top: 70px;
+            right: 20px;
             background-color: #333;
             color: white;
-            padding: 15px 20px;
-            text-align: center;
-            margin: 20px 10px 0;
-            border: 2px solid #444;
+            padding: 15px;
             border-radius: 5px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        footer a {
+        .menu-content a {
+            display: block;
             color: white;
             text-decoration: none;
-            margin: 0 10px;
-            font-size: 1em;
+            margin: 5px 0;
         }
 
-        footer a:hover {
+        .menu-content a:hover {
             text-decoration: underline;
         }
 
@@ -78,10 +71,6 @@
             background-color: white;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
-        }
-
-        h2 {
-            color: #333;
         }
 
         input, button {
@@ -102,14 +91,35 @@
             background-color: #444;
         }
 
+        /* Footer Styling */
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 10px 0;
+        }
+
+        footer a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive Behavior */
         @media (max-width: 600px) {
-            header, footer {
+            header {
                 flex-direction: column;
                 text-align: center;
             }
 
             .menu-btn, .total-sale {
-                margin-bottom: 10px;
+                margin: 5px 0;
             }
         }
     </style>
@@ -117,25 +127,117 @@
 <body>
 
 <header>
-    <div class="total-sale">Total Sale: ৳7315632.00</div>
-    <button class="menu-btn">☰ Menu</button>
+    <div class="total-sale" id="total-sale">Total Sale: ৳0.00</div>
+    <button class="menu-btn" id="menu-btn">☰ Menu</button>
+    <div class="menu-content" id="menu-content">
+        <a href="#" onclick="showFullSales()">Full Sales History</a>
+        <a href="#" onclick="downloadSales()">Download Sales History</a>
+        <a href="#" onclick="closeStore()">Close Store</a>
+    </div>
 </header>
 
 <div class="main-wrapper">
     <h2>Product Entry</h2>
-    <input type="text" placeholder="Shop Name">
-    <input type="text" placeholder="Product Name">
-    <input type="number" placeholder="Product Price">
-    <input type="number" placeholder="Product Quantity">
-    <button>Generate Sale</button>
+    <input type="text" id="shop-name" placeholder="Shop Name">
+    <input type="text" id="product-name" placeholder="Product Name">
+    <input type="number" id="product-price" placeholder="Product Price">
+    <input type="number" id="product-quantity" placeholder="Product Quantity">
+    <button onclick="addProduct()">Add Product</button>
+    <p id="sale-summary">No sales yet.</p>
 </div>
 
 <footer>
     <a href="#">Home</a>
     <a href="#">About</a>
     <a href="#">Contact</a>
-    <a href="#">Privacy</a>
 </footer>
+
+<script>
+    let salesData = JSON.parse(localStorage.getItem("salesData")) || [];
+    let shopNameStored = localStorage.getItem("shopName");
+
+    document.getElementById('menu-btn').addEventListener('click', function () {
+        const menuContent = document.getElementById('menu-content');
+        menuContent.style.display = menuContent.style.display === 'block' ? 'none' : 'block';
+    });
+
+    function addProduct() {
+        const shopName = document.getElementById("shop-name").value.trim();
+        const productName = document.getElementById("product-name").value.trim();
+        const productPrice = parseFloat(document.getElementById("product-price").value);
+        const productQuantity = parseFloat(document.getElementById("product-quantity").value) || 1;
+
+        if (!productName || isNaN(productPrice) || productPrice <= 0 || productQuantity <= 0) {
+            alert("Please provide valid product details.");
+            return;
+        }
+
+        if (!shopNameStored && shopName) {
+            localStorage.setItem("shopName", shopName);
+            shopNameStored = shopName;
+            document.getElementById("shop-name").style.display = "none";
+        }
+
+        const sale = {
+            shopName: shopNameStored,
+            productName,
+            productPrice,
+            productQuantity,
+            total: productPrice * productQuantity,
+            time: new Date().toLocaleString(),
+        };
+
+        salesData.push(sale);
+        localStorage.setItem("salesData", JSON.stringify(salesData));
+        updateSaleSummary(sale);
+        updateTotalSales();
+    }
+
+    function updateSaleSummary(sale) {
+        const summary = `
+            Shop: ${sale.shopName}<br>
+            Product: ${sale.productName}<br>
+            Quantity: ${sale.productQuantity}<br>
+            Total: ৳${sale.total.toFixed(2)}<br>
+            Time: ${sale.time}
+        `;
+        document.getElementById("sale-summary").innerHTML = summary;
+    }
+
+    function updateTotalSales() {
+        const total = salesData.reduce((sum, sale) => sum + sale.total, 0);
+        document.getElementById("total-sale").textContent = `Total Sale: ৳${total.toFixed(2)}`;
+    }
+
+    function showFullSales() {
+        alert("Full sales history:\n" + salesData.map(sale => `${sale.productName} - ৳${sale.total}`).join("\n"));
+    }
+
+    function downloadSales() {
+        const data = new Blob([JSON.stringify(salesData, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(data);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'sales_data.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+
+    function closeStore() {
+        salesData = [];
+        localStorage.clear();
+        alert("Store data cleared.");
+        location.reload();
+    }
+
+    window.onload = function () {
+        if (shopNameStored) {
+            document.getElementById("shop-name").style.display = "none";
+        }
+        updateTotalSales();
+    };
+</script>
 
 </body>
 </html>

@@ -3,198 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Responsive Store</title>
+    <title>Mini Store</title>
     <style>
-        /* Global Styling */
         body {
-            font-family: 'Roboto', Arial, sans-serif;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f9;
-            color: #333;
         }
-        .main-wrapper {
-            max-width: 1100px;
-            margin: 0 auto;
+        header, footer {
+            background-color: #004aad;
+            color: white;
+            text-align: center;
+            padding: 10px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
             padding: 20px;
-        }
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #004aad;
-            color: white;
-            padding: 15px 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        .total-sale {
-            font-size: 1.2em;
-        }
-        .menu-btn {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.8em;
-            cursor: pointer;
-        }
-        .menu-content {
-            display: none;
-            position: absolute;
-            background-color: #004aad;
-            color: white;
-            top: 60px;
-            right: 20px;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        .menu-content a {
-            color: white;
-            text-decoration: none;
-            display: block;
-            margin: 8px 0;
-            font-size: 0.9em;
-        }
-        .cancel-menu-btn {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.2em;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        .form-section, .sales-section {
-            margin: 20px 0;
             background: white;
-            padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-        .form-section h2, .sales-section h3 {
-            color: #004aad;
-        }
-        .form-section input {
-            margin: 10px 0;
-            padding: 12px;
+        input, button {
             width: 100%;
+            margin: 10px 0;
+            padding: 10px;
             border: 1px solid #ccc;
-            border-radius: 6px;
+            border-radius: 4px;
             box-sizing: border-box;
-            font-size: 0.9em;
         }
         button {
-            padding: 12px 15px;
             background-color: #004aad;
             color: white;
             border: none;
-            border-radius: 6px;
             cursor: pointer;
-            font-size: 1em;
         }
         button:hover {
             background-color: #003a8c;
         }
-        footer {
-            background-color: #004aad;
-            color: white;
-            padding: 10px 0;
-            text-align: center;
-            border-radius: 8px;
-            margin-top: 20px;
-        }
-        .navigation a {
-            color: white;
-            text-decoration: none;
-            margin: 0 15px;
-            font-size: 0.9em;
-        }
-        #close-store-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-            justify-content: center;
-            align-items: center;
-            z-index: 10;
-        }
-        .modal-content {
-            background-color: white;
-            padding: 25px;
-            border-radius: 10px;
-            width: 80%;
-            max-height: 70%;
-            overflow-y: auto;
-            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
-        }
-        .modal-content h2 {
-            color: #004aad;
-            margin-bottom: 20px;
-        }
-        .cancel-close-store-btn {
-            background: none;
-            border: none;
-            font-size: 1.1em;
-            color: #004aad;
-            cursor: pointer;
-        }
-        .cancel-close-store-btn:hover {
-            text-decoration: underline;
+        .sales-summary {
+            margin: 10px 0;
+            background: #f9f9f9;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
     </style>
 </head>
 <body>
 
-<div class="main-wrapper">
-    <header>
-        <div class="total-sale" id="total-sale">Total Sale: ৳0.00</div>
-        <button class="menu-btn" id="menu-btn">☰</button>
-        <div class="menu-content" id="menu-content">
-            <a href="#" onclick="openCloseStoreModal()">Full Sales History</a>
-            <a href="#" onclick="downloadSalesHistory()">Download Sales History</a>
-            <a href="#" onclick="closeStore()">Close Store</a>
-            <button class="cancel-menu-btn" id="cancel-menu-btn" onclick="cancelMenu()">X</button>
-        </div>
-    </header>
+<header>
+    <h1>Mini Store</h1>
+    <p id="total-sale">Total Sale: ৳0.00</p>
+</header>
 
-    <div class="form-section">
-        <h2>Product Entry</h2>
-        <input type="text" id="shop-name" placeholder="Shop Name">
-        <input type="text" id="product-name" placeholder="Product Name">
-        <input type="number" id="product-price" placeholder="Product Price">
-        <input type="number" id="product-quantity" placeholder="Product Quantity">
-        <button onclick="generateSale()">Generate Sale</button>
-    </div>
-
-    <div class="sales-section">
-        <h3>Last Sale:</h3>
-        <p id="sale-summary">No sales yet.</p>
-    </div>
-
-    <footer>
-        <div class="navigation">
-            <a href="#">Home</a>
-            <a href="#">About</a>
-            <a href="#">Contact</a>
-            <a href="#">Privacy Policy</a>
-        </div>
-    </footer>
+<div class="container">
+    <input type="text" id="shop-name" placeholder="Shop Name">
+    <input type="text" id="product-name" placeholder="Product Name">
+    <input type="number" id="product-price" placeholder="Product Price">
+    <input type="number" id="product-quantity" placeholder="Product Quantity">
+    <button onclick="generateSale()">Add Product</button>
+    <div class="sales-summary" id="sale-summary">No sales yet.</div>
 </div>
 
-<!-- Full Sales History Modal -->
-<div id="close-store-modal">
-    <div class="modal-content">
-        <h2>Full Sales History</h2>
-        <ul id="full-sales-list"></ul>
-        <button class="cancel-close-store-btn" onclick="cancelStoreClosure()">Cancel</button>
-    </div>
-</div>
+<footer>
+    <p>© 2024 Mini Store</p>
+</footer>
 
 <script>
-    // JavaScript Code as provided earlier (unchanged)
+    let salesData = [];
+    let shopNameStored = null;
+
+    // Add a sale and update the UI
+    function generateSale() {
+        const shopName = document.getElementById("shop-name").value.trim();
+        const productName = document.getElementById("product-name").value.trim();
+        const productPrice = parseFloat(document.getElementById("product-price").value);
+        const productQuantity = parseInt(document.getElementById("product-quantity").value);
+
+        if (!shopName || !productName || isNaN(productPrice) || isNaN(productQuantity) || productPrice <= 0 || productQuantity <= 0) {
+            alert("Please provide valid inputs.");
+            return;
+        }
+
+        // Save shop name once
+        if (!shopNameStored) {
+            shopNameStored = shopName;
+            document.getElementById("shop-name").style.display = "none";
+        }
+
+        const sale = {
+            shopName: shopNameStored,
+            productName,
+            productPrice,
+            productQuantity,
+            total: productPrice * productQuantity,
+            time: new Date().toLocaleString()
+        };
+
+        salesData.push(sale);
+        updateUI(sale);
+    }
+
+    // Update UI after a sale
+    function updateUI(lastSale) {
+        document.getElementById("sale-summary").innerHTML = `
+            <strong>Shop:</strong> ${lastSale.shopName}<br>
+            <strong>Product:</strong> ${lastSale.productName}<br>
+            <strong>Quantity:</strong> ${lastSale.productQuantity}<br>
+            <strong>Total:</strong> ৳${lastSale.total.toFixed(2)}<br>
+            <strong>Time:</strong> ${lastSale.time}
+        `;
+
+        const totalSale = salesData.reduce((sum, sale) => sum + sale.total, 0);
+        document.getElementById("total-sale").textContent = `Total Sale: ৳${totalSale.toFixed(2)}`;
+        resetForm();
+    }
+
+    // Reset form fields
+    function resetForm() {
+        document.getElementById("product-name").value = "";
+        document.getElementById("product-price").value = "";
+        document.getElementById("product-quantity").value = "";
+    }
 </script>
 
 </body>

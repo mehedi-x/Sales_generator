@@ -300,165 +300,122 @@
         <div class="total-sale" id="total-sale">Total Sale: ৳0.00</div>
         <button class="menu-btn" id="menu-btn">☰</button>
         <div class="menu-content" id="menu-content">
-            <a href="#" onclick="openCloseStoreModal()">Full Sales History</a>
-            <a href="#" onclick="downloadSalesHistory()">Download Sales History</a>
-            <a href="#" onclick="closeStore()">Close Store</a>
-            <button class="cancel-menu-btn" id="cancel-menu-btn" onclick="cancelMenu()">X</button>
+            <a href="#" onclick="openCloseStoreModal()">Close Store</a>
         </div>
     </header>
 
-    <div class="form-section">
-        <h2>Product Entry</h2>
-        <input type="text" id="shop-name" placeholder="Shop Name">
-        <input type="text" id="product-name" placeholder="Product Name">
-        <input type="number" id="product-price" placeholder="Product Price">
-        <input type="number" id="product-quantity" placeholder="Product Quantity">
-        <button onclick="generateSale()">Generate Sale</button>
+    <div class="form-section" id="shop-name-section">
+        <h2>Enter Shop Name</h2>
+        <input type="text" id="shop-name" placeholder="Enter Shop Name" disabled />
+        <button onclick="addProduct()">Add Product</button>
+        <button onclick="generateInvoice()">Generate Invoice</button>
+        <button onclick="showTotalSales()">Total Sales</button>
     </div>
 
     <div class="sales-section">
-        <h3>Last Sale:</h3>
-        <p id="sale-summary">No sales yet.</p>
+        <h3>Invoice Details</h3>
+        <p id="invoice-details">No products added yet.</p>
     </div>
 
     <footer>
         <div class="navigation">
-            <a href="#">Home</a>
-            <a href="#">About</a>
-            <a href="#">Contact</a>
             <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
         </div>
+        <div>&copy; 2024 Your Store</div>
     </footer>
 </div>
 
-<!-- Full Sales History Modal -->
 <div id="close-store-modal">
     <div class="modal-content">
-        <h2>Full Sales History</h2>
-        <ul id="full-sales-list"></ul>
-        <button class="cancel-close-store-btn" onclick="cancelStoreClosure()">Cancel</button>
+        <h2>Are you sure you want to close the store?</h2>
+        <button onclick="closeStore()">Yes, Close Store</button>
+        <button onclick="cancelCloseStore()">Cancel</button>
     </div>
 </div>
 
 <script>
-    let salesData = JSON.parse(localStorage.getItem("salesData")) || [];
+    // Initial variables
+    let shopNameEntered = false;
+    let totalSales = 0;
+    let products = [];
 
-    // Menu Button Toggle
-    document.getElementById('menu-btn').addEventListener('click', function () {
-        const menuContent = document.getElementById('menu-content');
-        menuContent.style.display = (menuContent.style.display === "block") ? "none" : "block";
-    });
+    // Menu Button Interaction
+    const menuBtn = document.getElementById('menu-btn');
+    const menuContent = document.getElementById('menu-content');
+    const closeStoreModal = document.getElementById('close-store-modal');
+    const cancelMenuBtn = document.createElement('button');
+    cancelMenuBtn.classList.add('cancel-menu-btn');
+    cancelMenuBtn.innerHTML = '×';
+    cancelMenuBtn.onclick = function() {
+        menuContent.style.display = 'none';
+    };
 
-    // Close the menu
-    function cancelMenu() {
-        document.getElementById('menu-content').style.display = "none";
-    }
-
-    // Generate Sale
-    function generateSale() {
-        const shopName = document.getElementById("shop-name").value;
-        const productName = document.getElementById("product-name").value;
-        const productPrice = parseFloat(document.getElementById("product-price").value);
-        const productQuantity = parseFloat(document.getElementById("product-quantity").value) || 1;
-
-        if (!shopName || !productName || isNaN(productPrice) || productPrice <= 0 || productQuantity <= 0) {
-            alert("Please fill out all fields with valid values.");
-            return;
-        }
-
-        const product = {
-            shopName,
-            productName,
-            productPrice,
-            productQuantity,
-            total: productPrice * productQuantity,
-        };
-
-        // Update sales data and save to local storage
-        salesData.push(product);
-        localStorage.setItem("salesData", JSON.stringify(salesData));
-
-        // Update sales display
-        updateLastSaleView(product);
-        updateTotalSale();
-        resetForm();
-    }
-
-    // Update last sale view
-    function updateLastSaleView(lastSale) {
-        const saleSummary = document.getElementById("sale-summary");
-        saleSummary.innerHTML = `
-            <strong>Shop:</strong> ${lastSale.shopName}<br>
-            <strong>Product:</strong> ${lastSale.productName}<br>
-            <strong>Quantity:</strong> ${lastSale.productQuantity}<br>
-            <strong>Total:</strong> ৳${lastSale.total.toFixed(2)}
-        `;
-    }
-
-    // Update total sales
-    function updateTotalSale() {
-        const totalSaleAmount = salesData.reduce((total, sale) => total + sale.total, 0);
-        document.getElementById("total-sale").textContent = `Total Sale: ৳${totalSaleAmount.toFixed(2)}`;
-    }
-
-    // Reset form fields
-    function resetForm() {
-        document.getElementById("shop-name").value = "";
-        document.getElementById("product-name").value = "";
-        document.getElementById("product-price").value = "";
-        document.getElementById("product-quantity").value = "";
-    }
-
-    // Open Close Store Modal
-    function openCloseStoreModal() {
-        const fullSalesList = document.getElementById("full-sales-list");
-        fullSalesList.innerHTML = "";
-
-        salesData.forEach((sale, index) => {
-            const listItem = document.createElement("li");
-            listItem.innerHTML = `
-                <strong>${index + 1}.</strong> Shop: ${sale.shopName}, Product: ${sale.productName},
-                Quantity: ${sale.productQuantity}, Total: ৳${sale.total.toFixed(2)}
-            `;
-            fullSalesList.appendChild(listItem);
-        });
-
-        document.getElementById("close-store-modal").style.display = "flex";
-    }
-
-    // Close Store
-    function closeStore() {
-        salesData = [];
-        localStorage.removeItem("salesData");
-        document.getElementById("close-store-modal").style.display = "none";
-        alert("Store closed and all sales data cleared!");
-        location.reload();
-    }
-
-    // Cancel Store Closure
-    function cancelStoreClosure() {
-        document.getElementById("close-store-modal").style.display = "none";
-    }
-
-    // Download Sales History as CSV
-    function downloadSalesHistory() {
-        const csvContent = "Shop Name, Product Name, Product Price, Quantity, Total\n" +
-            salesData.map(sale => `${sale.shopName}, ${sale.productName}, ${sale.productPrice}, ${sale.productQuantity}, ${sale.total.toFixed(2)}`).join("\n");
-
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = "Sales_History.csv";
-        link.click();
-    }
-
-    // Initialize
-    window.onload = function () {
-        if (salesData.length > 0) {
-            updateLastSaleView(salesData[salesData.length - 1]);
-            updateTotalSale();
+    menuBtn.onclick = function() {
+        if (menuContent.style.display === 'block') {
+            menuContent.style.display = 'none';
+        } else {
+            menuContent.style.display = 'block';
+            menuContent.appendChild(cancelMenuBtn);  // Add cancel button
         }
     };
+
+    // Close Store Modal
+    function openCloseStoreModal() {
+        closeStoreModal.style.display = 'flex';
+    }
+
+    function closeStore() {
+        alert('Store Closed');
+        closeStoreModal.style.display = 'none';
+        document.getElementById('shop-name-section').style.display = 'none';  // Hide Shop Name form
+    }
+
+    function cancelCloseStore() {
+        closeStoreModal.style.display = 'none';
+    }
+
+    // Add Product
+    function addProduct() {
+        if (!shopNameEntered) {
+            alert('Please enter the Shop Name first');
+            return;
+        }
+        let productName = prompt("Enter product name:");
+        let productPrice = parseFloat(prompt("Enter product price:"));
+        if (productName && !isNaN(productPrice) && productPrice > 0) {
+            products.push({ name: productName, price: productPrice });
+            totalSales += productPrice;
+            updateInvoice();
+        } else {
+            alert("Invalid product or price.");
+        }
+    }
+
+    // Update Invoice Details
+    function updateInvoice() {
+        let invoiceDetails = "Products Added:\n";
+        products.forEach((product, index) => {
+            invoiceDetails += `${index + 1}. ${product.name} - ৳${product.price.toFixed(2)}\n`;
+        });
+        invoiceDetails += `Total Sales: ৳${totalSales.toFixed(2)}`;
+        document.getElementById('invoice-details').innerText = invoiceDetails;
+        document.getElementById('total-sale').innerText = `Total Sale: ৳${totalSales.toFixed(2)}`;
+    }
+
+    // Show Total Sales Button
+    function showTotalSales() {
+        alert(`Total Sales: ৳${totalSales.toFixed(2)}`);
+    }
+
+    // Shop Name Handling
+    document.getElementById('shop-name').addEventListener('input', function(e) {
+        if (!shopNameEntered) {
+            shopNameEntered = true;
+            alert('Shop Name entered successfully.');
+        }
+    });
+
 </script>
 
 </body>

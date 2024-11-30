@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Responsive Store</title>
     <style>
-        /* Styling for layout */
+        /* General styling */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -24,9 +24,6 @@
             background-color: #333;
             color: white;
             padding: 10px 20px;
-        }
-        .total-sale {
-            font-size: 1.2em;
         }
         .menu-btn {
             background: none;
@@ -70,7 +67,7 @@
             font-size: 1.5em;
             cursor: pointer;
         }
-        .form-section, .sales-section {
+        .form-section {
             margin: 20px 0;
         }
         .form-section input {
@@ -116,18 +113,25 @@
             max-height: 70%;
             overflow-y: auto;
         }
-        .cancel-close-store-btn {
+        .cancel-close-store-btn, .confirm-close-store-btn {
             background: none;
             border: none;
             font-size: 1.2em;
             cursor: pointer;
+            padding: 10px 20px;
+            margin: 10px 5px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
         }
-        .search-section {
-            margin-bottom: 20px;
+        .cancel-close-store-btn {
+            color: #f44336;
         }
-        .search-section input {
-            padding: 8px;
-            width: 30%;
+        .confirm-close-store-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .cancel-close-store-btn:hover, .confirm-close-store-btn:hover {
+            background-color: #444;
         }
         .sales-history-list {
             list-style-type: none;
@@ -138,6 +142,13 @@
             margin: 5px 0;
             padding: 10px;
             border-radius: 5px;
+        }
+        .search-section {
+            margin-bottom: 20px;
+        }
+        .search-section input {
+            padding: 8px;
+            width: 30%;
         }
     </style>
 </head>
@@ -154,7 +165,7 @@
             </div>
             <a href="#" onclick="openCloseStoreModal()">Full Sales History</a>
             <a href="#" onclick="downloadSalesHistory()">Download Sales History</a>
-            <a href="#" onclick="closeStore()">Close Store</a>
+            <a href="#" onclick="openStoreClosureConfirmation()">Close Store</a>
         </div>
     </header>
 
@@ -165,11 +176,6 @@
         <input type="number" id="product-price" placeholder="Product Price">
         <input type="number" id="product-quantity" placeholder="Product Quantity">
         <button onclick="generateSale()">Generate Sale</button>
-    </div>
-
-    <div class="sales-section">
-        <h3>Last Sale:</h3>
-        <p id="sale-summary">No sales yet.</p>
     </div>
 
     <footer>
@@ -185,12 +191,10 @@
 <!-- Full Sales History Modal -->
 <div id="close-store-modal">
     <div class="modal-content">
-        <h2>Full Sales History</h2>
-        <div class="search-section">
-            <input type="text" id="search-input" placeholder="Search Sales History" onkeyup="searchSalesHistory()">
-        </div>
-        <ul class="sales-history-list" id="full-sales-list"></ul>
+        <h2>Close Store Confirmation</h2>
+        <p>Are you sure you want to close the store? All unsaved data will be lost!</p>
         <button class="cancel-close-store-btn" onclick="cancelStoreClosure()">Cancel</button>
+        <button class="confirm-close-store-btn" onclick="confirmStoreClosure()">Yes, Close Store</button>
     </div>
 </div>
 
@@ -242,75 +246,55 @@
         localStorage.setItem("salesData", JSON.stringify(salesData)); // Save salesData to localStorage
 
         // Update sales display
-        updateLastSaleView(product);
+        updateLastSale(product);
         updateTotalSale();
         resetForm();
     }
 
-    // Update last sale view
-    function updateLastSaleView(lastSale) {
-        const saleSummary = document.getElementById("sale-summary");
-        saleSummary.innerHTML = `
-            <strong>Shop:</strong> ${lastSale.shopName}<br>
-            <strong>Product:</strong> ${lastSale.productName}<br>
-            <strong>Quantity:</strong> ${lastSale.productQuantity}<br>
-            <strong>Total:</strong> ৳${lastSale.total.toFixed(2)}<br>
-            <strong>Time:</strong> ${lastSale.time}  <!-- Displaying the sale time -->
-        `;
-    }
-
-    // Update total sales
+    // Update the total sales
     function updateTotalSale() {
         const totalSaleAmount = salesData.reduce((total, sale) => total + sale.total, 0);
         document.getElementById("total-sale").innerText = `Total Sale: ৳${totalSaleAmount.toFixed(2)}`;
     }
 
-    // Reset form fields after sale
+    // Display the last sale
+    function updateLastSale(product) {
+        const lastSaleDiv = document.getElementById("last-sale");
+        lastSaleDiv.innerHTML = `
+            <strong>Last Sale:</strong><br>
+            Shop: ${product.shopName}<br>
+            Product: ${product.productName}<br>
+            Quantity: ${product.productQuantity}<br>
+            Total: ৳${product.total.toFixed(2)}<br>
+            Time: ${product.time}
+        `;
+    }
+
+    // Reset the form inputs after sale
     function resetForm() {
         document.getElementById("product-name").value = '';
         document.getElementById("product-price").value = '';
         document.getElementById("product-quantity").value = '';
     }
 
-    // Open Full Sales History Modal
-    function openCloseStoreModal() {
+    // Open Close Store Confirmation
+    function openStoreClosureConfirmation() {
         const modal = document.getElementById("close-store-modal");
-        const salesList = document.getElementById("full-sales-list");
-        salesList.innerHTML = salesData.map(sale => `
-            <li>
-                <strong>Shop:</strong> ${sale.shopName}<br>
-                <strong>Product:</strong> ${sale.productName}<br>
-                <strong>Quantity:</strong> ${sale.productQuantity}<br>
-                <strong>Total:</strong> ৳${sale.total.toFixed(2)}<br>
-                <strong>Time:</strong> ${sale.time}
-            </li>
-        `).join("");
         modal.style.display = "flex";
     }
 
-    // Close store modal
+    // Cancel Close Store Confirmation
     function cancelStoreClosure() {
-        document.getElementById("close-store-modal").style.display = "none";
+        const modal = document.getElementById("close-store-modal");
+        modal.style.display = "none";
     }
 
-    // Search Sales History
-    function searchSalesHistory() {
-        const searchQuery = document.getElementById("search-input").value.toLowerCase();
-        const filteredSales = salesData.filter(sale => {
-            return sale.productName.toLowerCase().includes(searchQuery) ||
-                   sale.shopName.toLowerCase().includes(searchQuery);
-        });
-        
-        const salesList = document.getElementById("full-sales-list");
-        salesList.innerHTML = filteredSales.map(sale => `
-            <li>
-                <strong>Shop:</strong> ${sale.shopName}<br>
-                <strong>Product:</strong> ${sale.productName}<br>
-                <strong>Quantity:</strong> ${sale.productQuantity}<br>
-                <strong>Total:</strong> ৳${sale.total.toFixed(2)}<br>
-                <strong>Time:</strong> ${sale.time}
-            </li>
-        `).join("");
+    // Confirm Close Store
+    function confirmStoreClosure() {
+        localStorage.clear();
+        salesData = [];
+        alert("Store has been closed and all data has been cleared.");
+        location.reload();  // Reload to reset everything
     }
 
     // Download Sales History
@@ -321,7 +305,6 @@
         link.download = "sales_history.json";
         link.click();
     }
-
 </script>
 
 </body>

@@ -32,7 +32,8 @@
             background: none;
             border: none;
             color: white;
-            font-size: 1.5em;
+            font-size: 2em;
+            cursor: pointer;
         }
         .menu-content {
             display: none;
@@ -41,14 +42,26 @@
             color: white;
             top: 50px;
             right: 20px;
-            padding: 10px;
+            padding: 20px;
             border-radius: 5px;
+            width: 200px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        .menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         .menu-content a {
             color: white;
             text-decoration: none;
+            margin: 10px 0;
             display: block;
-            margin: 5px 0;
+            padding: 5px 0;
+            transition: background-color 0.3s;
+        }
+        .menu-content a:hover {
+            background-color: #444;
         }
         .cancel-menu-btn {
             background: none;
@@ -118,10 +131,13 @@
         <div class="total-sale" id="total-sale">Total Sale: ৳0.00</div>
         <button class="menu-btn" id="menu-btn">☰</button>
         <div class="menu-content" id="menu-content">
+            <div class="menu-header">
+                <h3>Store Menu</h3>
+                <button class="cancel-menu-btn" id="cancel-menu-btn" onclick="cancelMenu()">X</button>
+            </div>
             <a href="#" onclick="openCloseStoreModal()">Full Sales History</a>
             <a href="#" onclick="downloadSalesHistory()">Download Sales History</a>
             <a href="#" onclick="closeStore()">Close Store</a>
-            <button class="cancel-menu-btn" id="cancel-menu-btn" onclick="cancelMenu()">X</button>
         </div>
     </header>
 
@@ -245,44 +261,27 @@
         document.getElementById("close-store-modal").style.display = "flex";
     }
 
-    // Cancel Close Store
+    // Close Store
+    function closeStore() {
+        localStorage.removeItem("salesData");
+        salesData = [];
+        updateTotalSale();
+        alert("Store is closed and data has been cleared.");
+    }
+
+    // Cancel store closure modal
     function cancelStoreClosure() {
         document.getElementById("close-store-modal").style.display = "none";
     }
 
-    // Close Store and Clear Data
-    function closeStore() {
-        salesData = [];
-        localStorage.removeItem("salesData");
-        localStorage.removeItem("shopName"); // Remove shopName too
-        shopNameStored = null; // Reset stored shop name
-        updateTotalSale();
-        alert("Store is closed and data has been cleared.");
-        document.getElementById("shop-name").style.display = "block";  // Show shop name input after closing
-    }
-
     // Download Sales History
     function downloadSalesHistory() {
-        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(salesData, null, 2));
-        const downloadAnchorNode = document.createElement('a');
-        downloadAnchorNode.setAttribute("href", dataStr);
-        downloadAnchorNode.setAttribute("download", "sales_history.json");
-        document.body.appendChild(downloadAnchorNode);
-        downloadAnchorNode.click();
-        downloadAnchorNode.remove();
+        const blob = new Blob([JSON.stringify(salesData, null, 2)], { type: 'application/json' });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "sales_history.json";
+        link.click();
     }
-
-    // Load data from localStorage on page load
-    window.onload = function () {
-        if (shopNameStored) {
-            document.getElementById("shop-name").style.display = "none"; // Hide shop name input if it's already stored
-            const lastSale = salesData[salesData.length - 1];  // Get the last sale
-            if (lastSale) {
-                updateLastSaleView(lastSale);  // Update the Last Sale view
-            }
-        }
-        updateTotalSale();
-    };
 </script>
 
 </body>

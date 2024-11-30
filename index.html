@@ -26,6 +26,18 @@
             text-align: center;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.8em;
+        }
+
+        .total-sale {
+            font-size: 1.2em;
         }
 
         .menu-btn {
@@ -34,9 +46,6 @@
             color: white;
             font-size: 1.5em;
             cursor: pointer;
-            position: absolute;
-            top: 10px;
-            right: 20px;
         }
 
         .menu-content {
@@ -147,6 +156,7 @@
 <div class="container">
     <header>
         <h1>Store</h1>
+        <div class="total-sale" id="total-sale">Total Sale: 0 টাকা</div>
         <button class="menu-btn" id="menu-btn">☰</button>
         <div class="menu-content" id="menu-content">
             <a href="#" onclick="openCloseStoreModal()">Full Sales History</a>
@@ -245,6 +255,7 @@
     // Update total sales
     function updateTotalSale() {
         const totalSaleAmount = salesData.reduce((total, sale) => total + sale.total, 0);
+        document.getElementById("total-sale").innerText = `Total Sale: ৳${totalSaleAmount.toFixed(2)}`;
     }
 
     // Reset form fields
@@ -266,17 +277,6 @@
     // Cancel Close Store
     function cancelStoreClosure() {
         document.getElementById("close-store-modal").style.display = "none";
-    }
-
-    // Close Store and Clear Data
-    function closeStore() {
-        salesData = [];
-        localStorage.removeItem("salesData");
-        localStorage.removeItem("shopName");
-        shopNameStored = null;
-        updateTotalSale();
-        alert("Store is closed and data has been cleared.");
-        document.getElementById("shop-name").style.display = "block";  
     }
 
     // Download Sales History

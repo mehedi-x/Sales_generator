@@ -5,18 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Responsive Store</title>
     <style>
-        /* Styling for layout */
+        /* General body styling */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f8f8f8;
+            color: #333;
         }
+
         .main-wrapper {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
+
+        /* Header Styling */
         header {
             display: flex;
             justify-content: space-between;
@@ -24,16 +28,22 @@
             background-color: #333;
             color: white;
             padding: 10px 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
+
         .total-sale {
             font-size: 1.2em;
         }
+
         .menu-btn {
             background: none;
             border: none;
             color: white;
             font-size: 1.5em;
+            cursor: pointer;
         }
+
+        /* Menu dropdown styling */
         .menu-content {
             display: none;
             position: absolute;
@@ -44,12 +54,14 @@
             padding: 10px;
             border-radius: 5px;
         }
+
         .menu-content a {
             color: white;
             text-decoration: none;
             display: block;
             margin: 5px 0;
         }
+
         .cancel-menu-btn {
             background: none;
             border: none;
@@ -57,33 +69,56 @@
             font-size: 1.5em;
             cursor: pointer;
         }
+
+        /* Form and Sales Section Styling */
         .form-section, .sales-section {
             margin: 20px 0;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
+
         .form-section input {
-            margin: 5px 0;
-            padding: 8px;
+            margin: 10px 0;
+            padding: 10px;
             width: 100%;
             box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
+
         button {
-            padding: 10px;
+            padding: 10px 20px;
             background-color: #333;
             color: white;
             border: none;
             cursor: pointer;
+            border-radius: 5px;
+            font-size: 1em;
         }
+
+        /* Footer Styling */
         footer {
             background-color: #333;
             color: white;
-            padding: 10px 0;
+            padding: 20px;
             text-align: center;
+            margin-top: 30px;
         }
-        .navigation a {
+
+        footer .navigation a {
             color: white;
             text-decoration: none;
             margin: 0 10px;
+            font-size: 1em;
         }
+
+        footer .navigation a:hover {
+            text-decoration: underline;
+        }
+
+        /* Modal Styling */
         #close-store-modal {
             display: none;
             position: fixed;
@@ -95,6 +130,7 @@
             justify-content: center;
             align-items: center;
         }
+
         .modal-content {
             background-color: white;
             padding: 20px;
@@ -103,11 +139,13 @@
             max-height: 70%;
             overflow-y: auto;
         }
+
         .cancel-close-store-btn {
             background: none;
             border: none;
             font-size: 1.2em;
             cursor: pointer;
+            color: #333;
         }
     </style>
 </head>
@@ -127,10 +165,10 @@
 
     <div class="form-section">
         <h2>Product Entry</h2>
-        <input type="text" id="shop-name" placeholder="Shop Name">
-        <input type="text" id="product-name" placeholder="Product Name">
-        <input type="number" id="product-price" placeholder="Product Price">
-        <input type="number" id="product-quantity" placeholder="Product Quantity">
+        <input type="text" id="shop-name" placeholder="Shop Name" />
+        <input type="text" id="product-name" placeholder="Product Name" />
+        <input type="number" id="product-price" placeholder="Product Price" />
+        <input type="number" id="product-quantity" placeholder="Product Quantity" />
         <button onclick="generateSale()">Generate Sale</button>
     </div>
 
@@ -187,9 +225,9 @@
 
         // Save shop name only once
         if (!shopNameStored && shopName) {
-            localStorage.setItem("shopName", shopName);  // Save the shop name to local storage
-            document.getElementById("shop-name").style.display = "none";  // Hide shop name input after first entry
-            shopNameStored = shopName;  // Assign it to the variable
+            localStorage.setItem("shopName", shopName);
+            document.getElementById("shop-name").style.display = "none";
+            shopNameStored = shopName;
         }
 
         const product = {
@@ -198,14 +236,12 @@
             productPrice,
             productQuantity,
             total: productPrice * productQuantity,
-            time: new Date().toLocaleString(),  // Adding the current time of sale
+            time: new Date().toLocaleString(),
         };
 
-        // Update sales data and save to local storage
         salesData.push(product);
-        localStorage.setItem("salesData", JSON.stringify(salesData)); // Save salesData to localStorage
+        localStorage.setItem("salesData", JSON.stringify(salesData));
 
-        // Update sales display
         updateLastSaleView(product);
         updateTotalSale();
         resetForm();
@@ -219,7 +255,7 @@
             <strong>Product:</strong> ${lastSale.productName}<br>
             <strong>Quantity:</strong> ${lastSale.productQuantity}<br>
             <strong>Total:</strong> ৳${lastSale.total.toFixed(2)}<br>
-            <strong>Time:</strong> ${lastSale.time}  <!-- Displaying the sale time -->
+            <strong>Time:</strong> ${lastSale.time}
         `;
     }
 
@@ -254,11 +290,11 @@
     function closeStore() {
         salesData = [];
         localStorage.removeItem("salesData");
-        localStorage.removeItem("shopName"); // Remove shopName too
-        shopNameStored = null; // Reset stored shop name
+        localStorage.removeItem("shopName");
+        shopNameStored = null;
         updateTotalSale();
         alert("Store is closed and data has been cleared.");
-        document.getElementById("shop-name").style.display = "block";  // Show shop name input after closing
+        document.getElementById("shop-name").style.display = "block";  
     }
 
     // Download Sales History
@@ -272,13 +308,12 @@
         downloadAnchorNode.remove();
     }
 
-    // Load data from localStorage on page load
     window.onload = function () {
         if (shopNameStored) {
-            document.getElementById("shop-name").style.display = "none"; // Hide shop name input if it's already stored
-            const lastSale = salesData[salesData.length - 1];  // Get the last sale
+            document.getElementById("shop-name").style.display = "none";
+            const lastSale = salesData[salesData.length - 1];
             if (lastSale) {
-                updateLastSaleView(lastSale);  // Update the Last Sale view
+                updateLastSaleView(lastSale);
             }
         }
         updateTotalSale();

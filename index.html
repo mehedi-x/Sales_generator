@@ -5,23 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Responsive Store</title>
     <style>
-        /* General Layout */
+        /* Styling for layout */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f8f8f8;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
         }
         .main-wrapper {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
-            width: 100%;
-            box-sizing: border-box;
         }
         header {
             display: flex;
@@ -30,18 +24,15 @@
             background-color: #333;
             color: white;
             padding: 10px 20px;
-            flex-wrap: wrap;
         }
         .total-sale {
             font-size: 1.2em;
-            flex-grow: 1;
         }
         .menu-btn {
             background: none;
             border: none;
             color: white;
             font-size: 1.5em;
-            cursor: pointer;
         }
         .menu-content {
             display: none;
@@ -52,7 +43,6 @@
             right: 20px;
             padding: 10px;
             border-radius: 5px;
-            z-index: 100;
         }
         .menu-content a {
             color: white;
@@ -75,8 +65,6 @@
             padding: 8px;
             width: 100%;
             box-sizing: border-box;
-            border-radius: 5px;
-            border: 1px solid #ccc;
         }
         button {
             padding: 10px;
@@ -84,7 +72,6 @@
             color: white;
             border: none;
             cursor: pointer;
-            border-radius: 5px;
         }
         footer {
             background-color: #333;
@@ -97,7 +84,6 @@
             text-decoration: none;
             margin: 0 10px;
         }
-        /* Modal for full sales history */
         #close-store-modal {
             display: none;
             position: fixed;
@@ -108,7 +94,6 @@
             background-color: rgba(0, 0, 0, 0.5);
             justify-content: center;
             align-items: center;
-            z-index: 101;
         }
         .modal-content {
             background-color: white;
@@ -123,21 +108,6 @@
             border: none;
             font-size: 1.2em;
             cursor: pointer;
-        }
-        /* Responsive Styles */
-        @media (max-width: 768px) {
-            header {
-                flex-direction: column;
-                text-align: center;
-            }
-            .total-sale {
-                font-size: 1em;
-                margin-bottom: 10px;
-            }
-            .form-section input {
-                width: 90%;
-                margin: 5px auto;
-            }
         }
     </style>
 </head>
@@ -157,10 +127,10 @@
 
     <div class="form-section">
         <h2>Product Entry</h2>
-        <input type="text" id="shop-name" placeholder="Shop Name" />
-        <input type="text" id="product-name" placeholder="Product Name" />
-        <input type="number" id="product-price" placeholder="Product Price" />
-        <input type="number" id="product-quantity" placeholder="Product Quantity" />
+        <input type="text" id="shop-name" placeholder="Shop Name">
+        <input type="text" id="product-name" placeholder="Product Name">
+        <input type="number" id="product-price" placeholder="Product Price">
+        <input type="number" id="product-quantity" placeholder="Product Quantity">
         <button onclick="generateSale()">Generate Sale</button>
     </div>
 
@@ -210,6 +180,7 @@
         const productPrice = parseFloat(document.getElementById("product-price").value);
         const productQuantity = parseFloat(document.getElementById("product-quantity").value) || 1;
 
+        // Validate inputs
         if (!productName || isNaN(productPrice) || productPrice <= 0 || productQuantity <= 0) {
             alert("Please fill out all fields with valid values.");
             return;
@@ -217,9 +188,9 @@
 
         // Save shop name only once
         if (!shopNameStored && shopName) {
-            localStorage.setItem("shopName", shopName);
+            localStorage.setItem("shopName", shopName);  // Save the shop name to local storage
             document.getElementById("shop-name").style.display = "none";  // Hide shop name input after first entry
-            shopNameStored = shopName;
+            shopNameStored = shopName;  // Assign it to the variable
         }
 
         const product = {
@@ -233,7 +204,7 @@
 
         // Update sales data and save to local storage
         salesData.push(product);
-        localStorage.setItem("salesData", JSON.stringify(salesData));
+        localStorage.setItem("salesData", JSON.stringify(salesData)); // Save salesData to localStorage
 
         // Update sales display
         updateLastSaleView(product);
@@ -249,7 +220,7 @@
             <strong>Product:</strong> ${lastSale.productName}<br>
             <strong>Quantity:</strong> ${lastSale.productQuantity}<br>
             <strong>Total:</strong> ৳${lastSale.total.toFixed(2)}<br>
-            <strong>Time:</strong> ${lastSale.time}
+            <strong>Time:</strong> ${lastSale.time}  <!-- Displaying the sale time -->
         `;
     }
 
@@ -266,53 +237,51 @@
         document.getElementById("product-quantity").value = "";
     }
 
-    // Open Close Store Modal
+    // Open close store modal
     function openCloseStoreModal() {
-        const fullSalesList = document.getElementById("full-sales-list");
-        fullSalesList.innerHTML = salesData.map(sale => `
-            <li>${sale.productName} (₺${sale.productPrice} x ${sale.productQuantity}) - ${sale.time}</li>
-        `).join("");
         document.getElementById("close-store-modal").style.display = "flex";
+        document.getElementById("menu-content").style.display = "none"; // Hide menu
+        displaySalesHistory();
     }
 
-    // Cancel Close Store
+    // Display full sales history
+    function displaySalesHistory() {
+        const salesList = document.getElementById("full-sales-list");
+        salesList.innerHTML = "";
+        salesData.forEach((sale, index) => {
+            const li = document.createElement("li");
+            li.innerHTML = `<strong>${sale.shopName}</strong>: ${sale.productName} - ৳${sale.total.toFixed(2)} (${sale.time})`;
+            salesList.appendChild(li);
+        });
+    }
+
+    // Download sales history
+    function downloadSalesHistory() {
+        const dataStr = JSON.stringify(salesData, null, 2);
+        const blob = new Blob([dataStr], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "sales_history.json";
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    // Close Store
+    function closeStore() {
+        if (confirm("Are you sure you want to close the store?")) {
+            localStorage.clear();  // Clear all data in local storage
+            location.reload();  // Reload the page to reset everything
+        }
+    }
+
+    // Cancel Store Closure
     function cancelStoreClosure() {
         document.getElementById("close-store-modal").style.display = "none";
     }
 
-    // Close Store and Clear Data
-    function closeStore() {
-        salesData = [];
-        localStorage.removeItem("salesData");
-        localStorage.removeItem("shopName");
-        shopNameStored = null;
-        updateTotalSale();
-        alert("Store is closed and data has been cleared.");
-        document.getElementById("shop-name").style.display = "block";  // Show shop name input again
-    }
-
-    // Download Sales History
-    function downloadSalesHistory() {
-        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(salesData, null, 2));
-        const downloadAnchorNode = document.createElement('a');
-        downloadAnchorNode.setAttribute("href", dataStr);
-        downloadAnchorNode.setAttribute("download", "sales_history.json");
-        document.body.appendChild(downloadAnchorNode);
-        downloadAnchorNode.click();
-        downloadAnchorNode.remove();
-    }
-
-    // Load data from localStorage on page load
-    window.onload = function () {
-        if (shopNameStored) {
-            document.getElementById("shop-name").style.display = "none"; // Hide shop name input if it's already stored
-            const lastSale = salesData[salesData.length - 1];
-            if (lastSale) {
-                updateLastSaleView(lastSale);
-            }
-        }
-        updateTotalSale();
-    };
+    // Initially load total sales
+    updateTotalSale();
 </script>
 
 </body>

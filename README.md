@@ -1,85 +1,43 @@
-# Sale Generator Software
+# রেসপন্সিভ স্টোর ম্যানেজমেন্ট সফটওয়্যার
 
-This software is designed to manage shop invoices and sales efficiently. It includes features like generating invoices, tracking total sales, saving sales history, and providing a professional and responsive user interface. Below is a detailed explanation of the software.
+এটি একটি সিম্পল এবং রেসপন্সিভ ওয়েব-ভিত্তিক স্টোর ম্যানেজমেন্ট সিস্টেম যেখানে ব্যবহারকারীরা বিক্রির ডেটা প্রবেশ করাতে পারেন, মোট বিক্রয় দেখতে পারেন এবং বিক্রয়ের ইতিহাস পরিচালনা করতে পারেন। এটি ডেটা ধারাবাহিকভাবে সঞ্চয় করতে লোকাল স্টোরেজ ব্যবহার করে।
 
----
+## ফিচারসমূহ
 
-## **Features**
+1. **স্টোর নাম ইনপুট**: একবার স্টোর নাম দিন, এবং এটি পুরো সেশন জুড়ে সংরক্ষিত থাকবে।
+2. **প্রোডাক্ট এন্ট্রি**: স্টোরে পণ্যের নাম, মূল্য এবং পরিমাণ দিন।
+3. **বিক্রয় জেনারেট করুন**: একটি বিক্রয় হলে, মোট বিক্রয় পরিমাণ হিসাব করা হয় এবং বিক্রয় ইতিহাসে রেকর্ড করা হয়।
+4. **বিক্রয় সারাংশ**: সর্বশেষ বিক্রয় সম্পর্কে বিস্তারিত দেখায় (স্টোর নাম, পণ্য নাম, পরিমাণ, মোট এবং সময়)।
+5. **মোট বিক্রয় প্রদর্শন**: সমস্ত বিক্রয়ের মোট পরিমাণ দেখায়।
+6. **পূর্ণ বিক্রয় ইতিহাস**: একটি মডাল উইন্ডোতে সমস্ত বিক্রয় ইতিহাস দেখুন।
+7. **বিক্রয় ইতিহাস ডাউনলোড**: বিক্রয় ইতিহাস JSON ফাইল হিসেবে ডাউনলোড করুন।
+8. **স্টোর বন্ধ করুন**: সমস্ত বিক্রয় ডেটা মুছে ফেলা হয়, স্টোর নাম পুনরায় রিসেট করা হয় এবং স্টোর বন্ধ করা হয়।
 
-1. **Shop Management:**
-   - Input the shop name (stored until the store is closed).
-   - Track total sales for the session.
+## কীভাবে ব্যবহার করবেন
 
-2. **Invoice Generation:**
-   - Add products (name, price, quantity) to generate invoices dynamically.
-   - Display the last sale details immediately after the transaction.
+### ১. **স্টোর নাম সেট করুন**
+   - প্রথম ব্যবহারে **স্টোর নাম** প্রবেশ করান এবং **Generate Sale** বোতাম চাপুন।
+   - এরপর, স্টোর নাম ব্রাউজারের লোকাল স্টোরেজে সংরক্ষিত হবে এবং ইনপুট ফিল্ডটি লুকিয়ে যাবে।
 
-3. **Sales History:**
-   - View a complete history of sales for the session.
-   - Download the sales history as a JSON file for records.
+### ২. **পণ্য এন্ট্রি এবং বিক্রয় জেনারেশন**
+   - পণ্য নাম, মূল্য এবং পরিমাণ ইনপুট ফিল্ডে দিন।
+   - **Generate Sale** বোতাম চাপুন বিক্রয় রেকর্ড করার জন্য।
+   - একটি সারাংশ সর্বশেষ বিক্রয় দেখাবে, যার মধ্যে স্টোর নাম, পণ্য বিস্তারিত এবং মোট বিক্রয় পরিমাণ থাকবে।
 
-4. **Close Store:**
-   - Clear all sales data and reset the shop name.
-   - Prepare for a new session.
+### ৩. **মোট বিক্রয় দেখুন**
+   - পৃষ্ঠার উপরের অংশে মোট বিক্রয়ের পরিমাণ দেখানো হবে এবং প্রতিটি বিক্রয়ের পর এটি আপডেট হবে।
 
-5. **Responsive UI:**
-   - Light theme with a clean and modern look.
-   - Mobile and desktop-friendly design.
+### ৪. **পূর্ণ বিক্রয় ইতিহাস**
+   - উপরের ডানদিকে **☰** (মেনু) বোতামটি ক্লিক করে একটি ড্রপডাউন মেনু খুলুন।
+   - মেনু থেকে **Full Sales History** নির্বাচন করুন সমস্ত রেকর্ডকৃত বিক্রয় দেখতে।
+   - প্রতিটি বিক্রয়ে পণ্য নাম, মূল্য, পরিমাণ এবং সময় দেখানো হবে।
 
----
+### ৫. **বিক্রয় ইতিহাস ডাউনলোড করুন**
+   - একই মেনু থেকে **Download Sales History** নির্বাচন করুন বিক্রয় ইতিহাস JSON ফাইল হিসেবে ডাউনলোড করতে।
 
-## **Navigation**
+### ৬. **স্টোর বন্ধ করুন**
+   - মেনু থেকে **Close Store** নির্বাচন করুন সমস্ত বিক্রয় ডেটা মুছে ফেলার জন্য এবং স্টোর নাম রিসেট করার জন্য।
+   - স্টোর বন্ধ করার পর, স্টোর নাম ইনপুট ফিল্ডটি আবার দেখানো হবে।
 
-| Page Link         | Description                                               |
-|-------------------|-----------------------------------------------------------|
-| **Home**          | Redirects to the main product entry page.                 |
-| **About**         | Provides details about the software and its purpose.      |
-| **Contact**       | Displays contact information for support or inquiries.    |
-| **Privacy Policy**| Outlines how data is managed and stored securely.          |
+## ফাইল স্ট্রাকচার
 
----
-
-## **How to Use**
-
-1. **Open the Software:**
-   - Enter the shop name in the "Shop Name" field (only once per session).
-
-2. **Add Products:**
-   - Input product name, price, and quantity.
-   - Click **Generate Sale** to add the sale to the history.
-
-3. **Track Sales:**
-   - The last sale and total sales are displayed in real-time.
-
-4. **View and Download Sales History:**
-   - Click **Menu > Full Sales History** to view session sales.
-   - Click **Menu > Download Sales History** to save the sales record.
-
-5. **Close Store:**
-   - Click **Menu > Close Store** to reset the session and clear all data.
-
----
-
-## **Customization Options**
-
-- **Themes**: The current version supports a light theme. Additional themes can be added by modifying the CSS in the `<style>` section.
-- **Dynamic Shop Name**: You can implement session persistence by storing the shop name in local storage.
-- **Add New Features**: Features like tax calculation or discount handling can be added.
-
----
-
-## **System Requirements**
-
-- **Browser**: Chrome, Firefox, Edge, or Safari (latest versions).
-- **HTML, CSS, JS Support**: No additional dependencies required.
-
----
-
-## **Feedback and Support**
-
-If you encounter any issues or have suggestions, please contact us via the **Contact** section or email us at `mehedi.exx@gmail.com`.
-
----
-
-**Version 1.0.0**  
-Developed by Mehedi Hasan.

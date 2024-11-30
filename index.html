@@ -33,6 +33,7 @@
             border: none;
             color: white;
             font-size: 1.5em;
+            cursor: pointer;
         }
         .menu-content {
             display: none;
@@ -60,14 +61,14 @@
         .form-section, .sales-section {
             margin: 20px 0;
             padding: 15px;
-            border: 2px solid #333; /* Border added */
-            border-radius: 5px; /* Rounded corners */
-            background-color: #fff; /* Background color */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Shadow for better UI */
+            border: 2px solid #333;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-        .form-section input {
+        .form-section input, .form-section button {
             margin: 5px 0;
-            padding: 8px;
+            padding: 10px;
             width: 100%;
             box-sizing: border-box;
         }
@@ -89,31 +90,6 @@
             text-decoration: none;
             margin: 0 10px;
         }
-        #close-store-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: 5px;
-            width: 80%;
-            max-height: 70%;
-            overflow-y: auto;
-        }
-        .cancel-close-store-btn {
-            background: none;
-            border: none;
-            font-size: 1.2em;
-            cursor: pointer;
-        }
     </style>
 </head>
 <body>
@@ -126,7 +102,7 @@
             <a href="#" onclick="openCloseStoreModal()">Full Sales History</a>
             <a href="#" onclick="downloadSalesHistory()">Download Sales History</a>
             <a href="#" onclick="closeStore()">Close Store</a>
-            <button class="cancel-menu-btn" id="cancel-menu-btn" onclick="cancelMenu()">X</button>
+            <button class="cancel-menu-btn" onclick="cancelMenu()">X</button>
         </div>
     </header>
 
@@ -154,17 +130,91 @@
     </footer>
 </div>
 
-<!-- Full Sales History Modal -->
-<div id="close-store-modal">
-    <div class="modal-content">
-        <h2>Full Sales History</h2>
-        <ul id="full-sales-list"></ul>
-        <button class="cancel-close-store-btn" onclick="cancelStoreClosure()">Cancel</button>
-    </div>
-</div>
-
 <script>
-    // Existing JavaScript code remains unchanged...
+    let salesData = JSON.parse(localStorage.getItem("salesData")) || [];
+    let shopNameStored = localStorage.getItem("shopName");
+
+    // Menu Button Toggle
+    document.getElementById('menu-btn').addEventListener('click', function () {
+        const menuContent = document.getElementById('menu-content');
+        menuContent.style.display = (menuContent.style.display === "block") ? "none" : "block";
+    });
+
+    // Close the menu
+    function cancelMenu() {
+        document.getElementById('menu-content').style.display = "none";
+    }
+
+    // Generate Sale
+    function generateSale() {
+        const shopName = document.getElementById("shop-name").value.trim();
+        const productName = document.getElementById("product-name").value.trim();
+        const productPrice = parseFloat(document.getElementById("product-price").value);
+        const productQuantity = parseFloat(document.getElementById("product-quantity").value) || 1;
+
+        if (!productName || isNaN(productPrice) || productPrice <= 0 || productQuantity <= 0) {
+            alert("Please fill out all fields with valid values.");
+            return;
+        }
+
+        if (!shopNameStored && shopName) {
+            localStorage.setItem("shopName", shopName);
+            document.getElementById("shop-name").style.display = "none";
+            shopNameStored = shopName;
+        } else if (!shopNameStored) {
+            alert("Please enter a Shop Name.");
+            return;
+        }
+
+        const product = {
+            shopName: shopNameStored,
+            productName,
+            productPrice,
+            productQuantity,
+            total: productPrice * productQuantity,
+            time: new Date().toLocaleString(),
+        };
+
+        salesData.push(product);
+        localStorage.setItem("salesData", JSON.stringify(salesData));
+
+        updateLastSaleView(product);
+        updateTotalSale();
+        resetForm();
+    }
+
+    // Update last sale view
+    function updateLastSaleView(lastSale) {
+        const saleSummary = document.getElementById("sale-summary");
+        saleSummary.innerHTML = `
+            <strong>Shop:</strong> ${lastSale.shopName}<br>
+            <strong>Product:</strong> ${lastSale.productName}<br>
+            <strong>Quantity:</strong> ${lastSale.productQuantity}<br>
+            <strong>Total:</strong> ৳${lastSale.total.toFixed(2)}<br>
+            <strong>Time:</strong> ${lastSale.time}
+        `;
+    }
+
+    // Update total sales
+    function updateTotalSale() {
+        const totalSaleAmount = salesData.reduce((total, sale) => total + sale.total, 0);
+        document.getElementById("total-sale").textContent = `Total Sale: ৳${totalSaleAmount.toFixed(2)}`;
+    }
+
+    // Reset form fields
+    function resetForm() {
+        document.getElementById("product-name").value = "";
+        document.getElementById("product-price").value = "";
+        document.getElementById("product-quantity").value = "";
+    }
+
+    // Load data on page load
+    window.onload = function () {
+        if (shopNameStored) {
+            document.getElementById("shop-name").style.display = "none";
+        }
+        updateTotalSale();
+    };
 </script>
 
 </body>

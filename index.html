@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Responsive Store</title>
     <style>
-        /* General Layout */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -14,7 +13,6 @@
             box-sizing: border-box;
         }
 
-        /* Header & Menu */
         header {
             display: flex;
             justify-content: space-between;
@@ -62,7 +60,6 @@
             margin: 20px;
         }
 
-        /* Button Styling */
         button {
             padding: 10px;
             background-color: #333;
@@ -72,7 +69,6 @@
             border-radius: 5px;
         }
 
-        /* Footer */
         footer {
             background-color: #333;
             color: white;
@@ -86,7 +82,6 @@
             margin: 0 10px;
         }
 
-        /* Modal */
         #close-store-modal {
             display: none;
             position: fixed;
@@ -108,11 +103,11 @@
             overflow-y: auto;
         }
 
-        /* Responsive Design */
         @media (max-width: 768px) {
             header, footer {
                 padding: 10px;
             }
+
             .form-section input, button {
                 width: 100%;
             }
@@ -157,7 +152,6 @@
     </footer>
 </div>
 
-<!-- Full Sales History Modal -->
 <div id="close-store-modal">
     <div class="modal-content">
         <h2>Full Sales History</h2>
@@ -170,18 +164,15 @@
     let salesData = JSON.parse(localStorage.getItem("salesData")) || [];
     let shopNameStored = localStorage.getItem("shopName");
 
-    // Menu Button Toggle
     document.getElementById('menu-btn').addEventListener('click', function () {
         const menuContent = document.getElementById('menu-content');
         menuContent.style.display = (menuContent.style.display === "block") ? "none" : "block";
     });
 
-    // Close the menu
     function cancelMenu() {
         document.getElementById('menu-content').style.display = "none";
     }
 
-    // Generate Sale
     function generateSale() {
         const shopName = document.getElementById("shop-name").value;
         const productName = document.getElementById("product-name").value;
@@ -193,7 +184,6 @@
             return;
         }
 
-        // Save shop name only once
         if (!shopNameStored && shopName) {
             localStorage.setItem("shopName", shopName);
             document.getElementById("shop-name").style.display = "none";
@@ -209,7 +199,6 @@
             time: new Date().toLocaleString(),
         };
 
-        // Save and display sales data
         salesData.push(product);
         localStorage.setItem("salesData", JSON.stringify(salesData));
 
@@ -240,7 +229,6 @@
         document.getElementById("product-quantity").value = "";
     }
 
-    // Full Sales History Modal
     function openCloseStoreModal() {
         const fullSalesList = document.getElementById("full-sales-list");
         fullSalesList.innerHTML = salesData.map(sale => `
@@ -263,7 +251,6 @@
         document.getElementById("shop-name").style.display = "block";
     }
 
-    // Download Sales History
     function downloadSalesHistory() {
         const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(salesData, null, 2));
         const downloadAnchorNode = document.createElement('a');

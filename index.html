@@ -5,109 +5,291 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Responsive Store</title>
     <style>
-        /* Styling for layout */
+        /* General Styles */
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f8f8f8;
+            background-color: #1e1e1e; /* Default Dark Mode background */
+            color: #f0f0f0; /* Light text color */
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
+
+        /* Main Wrapper */
         .main-wrapper {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
+
+        /* Header Styles */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             background-color: #333;
-            color: white;
-            padding: 10px 20px;
+            color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
         }
-        .total-sale {
-            font-size: 1.2em;
+
+        /* Total Sale Styling */
+        header .total-sale {
+            font-size: 1em;
+            font-weight: bold;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
+
+        /* Menu Button */
         .menu-btn {
             background: none;
             border: none;
-            color: white;
+            color: #e0e0e0;
             font-size: 1.5em;
+            cursor: pointer;
+            transition: color 0.3s;
         }
+
+        .menu-btn:hover {
+            color: #f39c12;
+        }
+
+        /* Menu */
         .menu-content {
             display: none;
             position: absolute;
             background-color: #333;
-            color: white;
-            top: 50px;
-            right: 20px;
-            padding: 10px;
+            min-width: 200px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            right: 0;
             border-radius: 5px;
+            transition: opacity 0.3s ease;
         }
+
         .menu-content a {
-            color: white;
+            color: #fff;
+            padding: 12px;
             text-decoration: none;
             display: block;
-            margin: 5px 0;
         }
-        .cancel-menu-btn {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5em;
-            cursor: pointer;
+
+        .menu-content a:hover {
+            background-color: #575757;
         }
-        .form-section, .sales-section {
-            margin: 20px 0;
+
+        /* Form Section */
+        .form-section {
+            background-color: #2c2c2c;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
         }
+
+        .form-section h2 {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            color: #f0f0f0;
+            text-align: left;
+            font-weight: 600;
+        }
+
         .form-section input {
-            margin: 5px 0;
-            padding: 8px;
             width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
             box-sizing: border-box;
+            background-color: #444;
+            color: #f0f0f0;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
         }
-        button {
-            padding: 10px;
+
+        .form-section input:focus {
+            border-color: #e63946;
+            outline: none;
             background-color: #333;
-            color: white;
+        }
+
+        .form-section button {
+            background-color: #e63946;
+            color: #fff;
+            padding: 12px 18px;
             border: none;
+            border-radius: 5px;
             cursor: pointer;
+            font-size: 1em;
+            display: block;
+            margin: 0 auto;
         }
+
+        .form-section button:hover {
+            background-color: #d53b30;
+        }
+
+        /* Sales Section */
+        .sales-section {
+            background-color: #2c2c2c;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .sales-section h3 {
+            text-align: left;
+            color: #f0f0f0;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .sales-section p {
+            text-align: left;
+            font-size: 1.1em;
+            color: #f0f0f0;
+        }
+
+        /* Footer */
         footer {
-            background-color: #333;
-            color: white;
-            padding: 10px 0;
+            background-color: #222;
+            color: #fff;
+            padding: 20px 0;
             text-align: center;
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .navigation a {
-            color: white;
+
+        footer .navigation {
+            display: flex;
+            gap: 15px;
+        }
+
+        footer .navigation a {
+            color: #fff;
             text-decoration: none;
-            margin: 0 10px;
+            font-size: 1em;
         }
+
+        /* Modal for Full Sales History */
         #close-store-modal {
             display: none;
             position: fixed;
-            top: 0;
+            z-index: 1;
             left: 0;
+            top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.7);
+            padding-top: 60px;
             justify-content: center;
             align-items: center;
         }
-        .modal-content {
-            background-color: white;
+
+        #close-store-modal .modal-content {
+            background-color: #2c2c2c;
             padding: 20px;
-            border-radius: 5px;
-            width: 80%;
-            max-height: 70%;
-            overflow-y: auto;
+            border-radius: 8px;
+            max-width: 400px;
+            margin: auto;
+            color: #fff;
         }
-        .cancel-close-store-btn {
+
+        #close-store-modal h2 {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+
+        #close-store-modal button {
+            background-color: #e63946;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 10px;
+        }
+
+        #close-store-modal button:hover {
+            background-color: #d53b30;
+        }
+
+        /* Cancel Button for Menu (Circular Cross) */
+        .cancel-menu-btn {
             background: none;
             border: none;
-            font-size: 1.2em;
+            color: #fff;
+            font-size: 2em;
             cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #e63946;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .cancel-menu-btn:hover {
+            background-color: #d53b30;
+        }
+
+        /* Cancel Button Below Close Store */
+        .cancel-close-store-btn {
+            background-color: #e63946;
+            color: #fff;
+            padding: 12px 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            display: block;
+            margin: 10px auto 0;
+        }
+
+        .cancel-close-store-btn:hover {
+            background-color: #d53b30;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: row;
+                text-align: center;
+            }
+
+            /* Reduce font size for mobile */
+            header .total-sale {
+                font-size: 0.8em;
+            }
+
+            .form-section,
+            .sales-section {
+                padding: 15px;
+            }
+
+            footer {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .menu-content {
+                width: 100%;
+                box-shadow: none;
+                right: 0;
+                top: 0;
+            }
         }
     </style>
 </head>
@@ -160,7 +342,6 @@
 
 <script>
     let salesData = JSON.parse(localStorage.getItem("salesData")) || [];
-    let shopNameStored = localStorage.getItem("shopName");
 
     // Menu Button Toggle
     document.getElementById('menu-btn').addEventListener('click', function () {
@@ -180,31 +361,22 @@
         const productPrice = parseFloat(document.getElementById("product-price").value);
         const productQuantity = parseFloat(document.getElementById("product-quantity").value) || 1;
 
-        // Validate inputs
-        if (!productName || isNaN(productPrice) || productPrice <= 0 || productQuantity <= 0) {
+        if (!shopName || !productName || isNaN(productPrice) || productPrice <= 0 || productQuantity <= 0) {
             alert("Please fill out all fields with valid values.");
             return;
         }
 
-        // Save shop name only once
-        if (!shopNameStored && shopName) {
-            localStorage.setItem("shopName", shopName);  // Save the shop name to local storage
-            document.getElementById("shop-name").style.display = "none";  // Hide shop name input after first entry
-            shopNameStored = shopName;  // Assign it to the variable
-        }
-
         const product = {
-            shopName: shopNameStored,
+            shopName,
             productName,
             productPrice,
             productQuantity,
             total: productPrice * productQuantity,
-            time: new Date().toLocaleString(),  // Adding the current time of sale
         };
 
         // Update sales data and save to local storage
         salesData.push(product);
-        localStorage.setItem("salesData", JSON.stringify(salesData)); // Save salesData to localStorage
+        localStorage.setItem("salesData", JSON.stringify(salesData));
 
         // Update sales display
         updateLastSaleView(product);
@@ -219,8 +391,7 @@
             <strong>Shop:</strong> ${lastSale.shopName}<br>
             <strong>Product:</strong> ${lastSale.productName}<br>
             <strong>Quantity:</strong> ${lastSale.productQuantity}<br>
-            <strong>Total:</strong> ৳${lastSale.total.toFixed(2)}<br>
-            <strong>Time:</strong> ${lastSale.time}  <!-- Displaying the sale time -->
+            <strong>Total:</strong> ৳${lastSale.total.toFixed(2)}
         `;
     }
 
@@ -232,47 +403,36 @@
 
     // Reset form fields
     function resetForm() {
+        document.getElementById("shop-name").value = "";
         document.getElementById("product-name").value = "";
         document.getElementById("product-price").value = "";
         document.getElementById("product-quantity").value = "";
     }
 
-    // Open close store modal
+    // Open Close Store Modal
     function openCloseStoreModal() {
-        document.getElementById("close-store-modal").style.display = "flex";
-        document.getElementById("menu-content").style.display = "none"; // Hide menu
-        displaySalesHistory();
-    }
+        const fullSalesList = document.getElementById("full-sales-list");
+        fullSalesList.innerHTML = "";
 
-    // Display full sales history
-    function displaySalesHistory() {
-        const salesList = document.getElementById("full-sales-list");
-        salesList.innerHTML = "";
         salesData.forEach((sale, index) => {
-            const li = document.createElement("li");
-            li.innerHTML = `<strong>${sale.shopName}</strong>: ${sale.productName} - ৳${sale.total.toFixed(2)} (${sale.time})`;
-            salesList.appendChild(li);
+            const listItem = document.createElement("li");
+            listItem.innerHTML = `
+                <strong>${index + 1}.</strong> Shop: ${sale.shopName}, Product: ${sale.productName},
+                Quantity: ${sale.productQuantity}, Total: ৳${sale.total.toFixed(2)}
+            `;
+            fullSalesList.appendChild(listItem);
         });
-    }
 
-    // Download sales history
-    function downloadSalesHistory() {
-        const dataStr = JSON.stringify(salesData, null, 2);
-        const blob = new Blob([dataStr], { type: "application/json" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "sales_history.json";
-        a.click();
-        URL.revokeObjectURL(url);
+        document.getElementById("close-store-modal").style.display = "flex";
     }
 
     // Close Store
     function closeStore() {
-        if (confirm("Are you sure you want to close the store?")) {
-            localStorage.clear();  // Clear all data in local storage
-            location.reload();  // Reload the page to reset everything
-        }
+        salesData = [];
+        localStorage.removeItem("salesData");
+        document.getElementById("close-store-modal").style.display = "none";
+        alert("Store closed and all sales data cleared!");
+        location.reload();
     }
 
     // Cancel Store Closure
@@ -280,8 +440,25 @@
         document.getElementById("close-store-modal").style.display = "none";
     }
 
-    // Initially load total sales
-    updateTotalSale();
+    // Download Sales History as CSV
+    function downloadSalesHistory() {
+        const csvContent = "Shop Name, Product Name, Product Price, Quantity, Total\n" +
+            salesData.map(sale => `${sale.shopName}, ${sale.productName}, ${sale.productPrice}, ${sale.productQuantity}, ${sale.total.toFixed(2)}`).join("\n");
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "Sales_History.csv";
+        link.click();
+    }
+
+    // Initialize
+    window.onload = function () {
+        if (salesData.length > 0) {
+            updateLastSaleView(salesData[salesData.length - 1]);
+            updateTotalSale();
+        }
+    };
 </script>
 
 </body>

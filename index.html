@@ -202,7 +202,7 @@
 
         // Update sales data and save to local storage
         salesData.push(product);
-        localStorage.setItem("salesData", JSON.stringify(salesData));
+        localStorage.setItem("salesData", JSON.stringify(salesData)); // Save salesData to localStorage
 
         // Update sales display
         updateLastSaleView(product);
@@ -255,9 +255,8 @@
     function closeStore() {
         salesData = [];
         localStorage.removeItem("salesData");
-        localStorage.removeItem("shopName");  // Clear shop name when closing store
-        document.getElementById("close-store-modal").style.display = "none";
-        alert("Store closed and all sales data cleared!");
+        updateTotalSale();
+        alert("Store is closed and data has been cleared.");
     }
 
     // Cancel Store Closure
@@ -275,6 +274,14 @@
         downloadAnchorNode.click();
         downloadAnchorNode.remove();
     }
+
+    // Load data from localStorage on page load
+    window.onload = function () {
+        if (shopNameStored) {
+            document.getElementById("shop-name").style.display = "none"; // Hide shop name input if it's already stored
+        }
+        updateTotalSale();
+    };
 </script>
 
 </body>

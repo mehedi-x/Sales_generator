@@ -4,22 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Responsive Store</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.3.0/chart.min.css">
     <style>
+        /* General Styles */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f8f8f8;
+            background-color: #f9f9f9;
             color: #333;
         }
         .dark-mode {
             background-color: #121212;
             color: #e0e0e0;
-        }
-        .main-wrapper {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
         }
         header {
             display: flex;
@@ -28,32 +25,47 @@
             background-color: #333;
             color: white;
             padding: 10px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
         .menu-btn {
+            display: none;
             background: none;
             border: none;
-            color: white;
             font-size: 1.5em;
-            cursor: pointer;
+            color: white;
+        }
+        nav {
+            display: flex;
+            gap: 20px;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
         }
         .dark-mode-btn {
-            cursor: pointer;
-            font-size: 0.9em;
             padding: 5px 10px;
-            border: 1px solid #fff;
-            border-radius: 5px;
             background-color: #444;
+            border: none;
             color: white;
+            cursor: pointer;
+            border-radius: 5px;
         }
-        .form-section, .sales-section {
+        .main-wrapper {
+            padding: 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+        .form-section, .sales-section, .graph-section {
             margin: 20px 0;
             padding: 15px;
             border: 2px solid #333;
             border-radius: 5px;
-            background-color: #fff;
+            background-color: white;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-        .form-section input, .form-section button {
+        .form-section input, .form-section select, .form-section button {
             margin: 10px 0;
             padding: 10px;
             width: 100%;
@@ -62,19 +74,16 @@
         .sales-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
         }
         .sales-table th, .sales-table td {
-            border: 1px solid #333;
             padding: 10px;
+            border: 1px solid #ccc;
             text-align: left;
         }
-        button {
-            padding: 10px;
-            background-color: #333;
-            color: white;
-            border: none;
-            cursor: pointer;
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
         }
         footer {
             background-color: #333;
@@ -82,36 +91,63 @@
             padding: 10px 0;
             text-align: center;
         }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav {
+                display: none;
+                flex-direction: column;
+                gap: 0;
+                background-color: #333;
+                position: absolute;
+                top: 60px;
+                right: 0;
+                width: 200px;
+            }
+            nav a {
+                padding: 10px;
+                border-bottom: 1px solid #444;
+            }
+            .menu-btn {
+                display: block;
+                cursor: pointer;
+            }
+        }
     </style>
 </head>
 <body>
+<header>
+    <h1>Responsive Store</h1>
+    <button class="menu-btn" id="menu-btn">☰</button>
+    <nav id="navbar">
+        <a href="#">Home</a>
+        <a href="#">Sales</a>
+        <a href="#">Reports</a>
+    </nav>
+    <button class="dark-mode-btn" id="dark-mode-btn">Enable Dark Mode</button>
+</header>
 
 <div class="main-wrapper">
-    <header>
-        <h1>Responsive Store</h1>
-        <button class="menu-btn" id="menu-btn">☰ Menu</button>
-        <button class="dark-mode-btn" id="dark-mode-btn">Enable Dark Mode</button>
-    </header>
-
+    <!-- Form Section -->
     <div class="form-section">
-        <h2>Product Entry</h2>
-        <input type="text" id="shop-name" placeholder="Enter Shop Name">
+        <h2>Enter Product</h2>
+        <select id="shop-select">
+            <option value="" disabled selected>Select Shop</option>
+        </select>
         <input type="text" id="product-name" placeholder="Enter Product Name">
         <input type="number" id="product-price" placeholder="Enter Product Price">
         <input type="number" id="product-quantity" placeholder="Enter Product Quantity" oninput="calculateTotal()">
-        <p><strong>Live Total:</strong> ৳<span id="live-total">0.00</span></p>
-        <button onclick="generateSale()">Generate Sale</button>
+        <p><strong>Total:</strong> ৳<span id="live-total">0.00</span></p>
+        <button onclick="addSale()">Add Sale</button>
     </div>
 
+    <!-- Sales Section -->
     <div class="sales-section">
-        <h2>Last Sale:</h2>
-        <p id="sale-summary">No sales yet.</p>
-
-        <h3>Sales History</h3>
+        <h2>Sales Table</h2>
         <table class="sales-table" id="sales-table">
             <thead>
                 <tr>
-                    <th>Shop Name</th>
+                    <th>Shop</th>
                     <th>Product</th>
                     <th>Price</th>
                     <th>Quantity</th>
@@ -120,111 +156,94 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Sales will be dynamically populated here -->
+                <!-- Sales Data Will Appear Here -->
             </tbody>
         </table>
     </div>
 
-    <footer>
-        <p>&copy; 2024 Responsive Store. All rights reserved.</p>
-    </footer>
+    <!-- Graph Section -->
+    <div class="graph-section">
+        <h2>Sales Graph</h2>
+        <div class="chart-container">
+            <canvas id="sales-chart"></canvas>
+        </div>
+    </div>
 </div>
 
+<footer>
+    <p>&copy; 2024 Responsive Store. All rights reserved.</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.3.0/chart.min.js"></script>
 <script>
-    let salesData = JSON.parse(localStorage.getItem("salesData")) || [];
-    let shopNameStored = localStorage.getItem("shopName");
+    const salesData = [];
+    const shopSelect = document.getElementById('shop-select');
+    const salesTable = document.getElementById('sales-table').querySelector('tbody');
+    const chartCtx = document.getElementById('sales-chart').getContext('2d');
+    let salesChart;
 
-    // Initialize Dark Mode
-    const darkModeBtn = document.getElementById('dark-mode-btn');
-    darkModeBtn.addEventListener('click', toggleDarkMode);
-
-    function toggleDarkMode() {
+    // Dark Mode Toggle
+    document.getElementById('dark-mode-btn').addEventListener('click', () => {
         document.body.classList.toggle('dark-mode');
-        darkModeBtn.textContent = document.body.classList.contains('dark-mode') ? 'Disable Dark Mode' : 'Enable Dark Mode';
-    }
+    });
 
-    // Generate Sale
-    function generateSale() {
-        const shopName = document.getElementById("shop-name").value.trim();
-        const productName = document.getElementById("product-name").value.trim();
-        const productPrice = parseFloat(document.getElementById("product-price").value);
-        const productQuantity = parseFloat(document.getElementById("product-quantity").value);
+    // Responsive Navbar
+    document.getElementById('menu-btn').addEventListener('click', () => {
+        const navbar = document.getElementById('navbar');
+        navbar.style.display = navbar.style.display === 'flex' ? 'none' : 'flex';
+    });
 
-        if (!shopName || !productName || isNaN(productPrice) || productPrice <= 0 || isNaN(productQuantity) || productQuantity <= 0) {
-            alert("Please fill out all fields correctly.");
+    // Add New Sale
+    function addSale() {
+        const shop = shopSelect.value;
+        const product = document.getElementById('product-name').value;
+        const price = parseFloat(document.getElementById('product-price').value);
+        const quantity = parseInt(document.getElementById('product-quantity').value);
+        const total = price * quantity;
+
+        if (!shop || !product || isNaN(price) || isNaN(quantity)) {
+            alert('Please fill all fields correctly.');
             return;
         }
 
-        if (!shopNameStored) {
-            localStorage.setItem("shopName", shopName);
-            shopNameStored = shopName;
-        }
-
-        const product = {
-            shopName: shopNameStored,
-            productName,
-            productPrice,
-            productQuantity,
-            total: productPrice * productQuantity,
-            time: new Date().toLocaleString(),
-        };
-
-        salesData.push(product);
-        localStorage.setItem("salesData", JSON.stringify(salesData));
-
-        updateLastSaleView(product);
+        const sale = { shop, product, price, quantity, total, time: new Date().toLocaleString() };
+        salesData.push(sale);
         updateSalesTable();
-        resetForm();
-    }
-
-    function calculateTotal() {
-        const productPrice = parseFloat(document.getElementById("product-price").value) || 0;
-        const productQuantity = parseFloat(document.getElementById("product-quantity").value) || 0;
-        const total = productPrice * productQuantity;
-        document.getElementById("live-total").textContent = total.toFixed(2);
-    }
-
-    function updateLastSaleView(lastSale) {
-        const saleSummary = document.getElementById("sale-summary");
-        saleSummary.innerHTML = `
-            <strong>Shop:</strong> ${lastSale.shopName}<br>
-            <strong>Product:</strong> ${lastSale.productName}<br>
-            <strong>Quantity:</strong> ${lastSale.productQuantity}<br>
-            <strong>Total:</strong> ৳${lastSale.total.toFixed(2)}<br>
-            <strong>Time:</strong> ${lastSale.time}
-        `;
+        updateSalesGraph();
     }
 
     function updateSalesTable() {
-        const salesTableBody = document.getElementById("sales-table").querySelector("tbody");
-        salesTableBody.innerHTML = salesData.map(sale => `
+        salesTable.innerHTML = salesData.map(sale => `
             <tr>
-                <td>${sale.shopName}</td>
-                <td>${sale.productName}</td>
-                <td>৳${sale.productPrice.toFixed(2)}</td>
-                <td>${sale.productQuantity}</td>
-                <td>৳${sale.total.toFixed(2)}</td>
+                <td>${sale.shop}</td>
+                <td>${sale.product}</td>
+                <td>${sale.price}</td>
+                <td>${sale.quantity}</td>
+                <td>${sale.total}</td>
                 <td>${sale.time}</td>
             </tr>
-        `).join("");
+        `).join('');
     }
 
-    function resetForm() {
-        document.getElementById("product-name").value = "";
-        document.getElementById("product-price").value = "";
-        document.getElementById("product-quantity").value = "";
-        document.getElementById("live-total").textContent = "0.00";
-    }
+    function updateSalesGraph() {
+        const labels = salesData.map(sale => sale.time);
+        const data = salesData.map(sale => sale.total);
 
-    // Initialize on load
-    window.onload = function () {
-        if (shopNameStored) {
-            document.getElementById("shop-name").value = shopNameStored;
-            document.getElementById("shop-name").disabled = true;
-        }
-        updateSalesTable();
-    };
+        if (salesChart) salesChart.destroy();
+
+        salesChart = new Chart(chartCtx, {
+            type: 'line',
+            data: {
+                labels,
+                datasets: [{
+                    label: 'Total Sales',
+                    data,
+                    borderColor: 'blue',
+                    tension: 0.1
+                }]
+            }
+        });
+    }
 </script>
-
 </body>
 </html>

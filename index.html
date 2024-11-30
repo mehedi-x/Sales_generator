@@ -198,6 +198,7 @@
             productPrice,
             productQuantity,
             total: productPrice * productQuantity,
+            time: new Date().toLocaleString(),  // Adding the current time of sale
         };
 
         // Update sales data and save to local storage
@@ -217,7 +218,8 @@
             <strong>Shop:</strong> ${lastSale.shopName}<br>
             <strong>Product:</strong> ${lastSale.productName}<br>
             <strong>Quantity:</strong> ${lastSale.productQuantity}<br>
-            <strong>Total:</strong> ৳${lastSale.total.toFixed(2)}
+            <strong>Total:</strong> ৳${lastSale.total.toFixed(2)}<br>
+            <strong>Time:</strong> ${lastSale.time}  <!-- Displaying the sale time -->
         `;
     }
 
@@ -238,7 +240,7 @@
     function openCloseStoreModal() {
         const fullSalesList = document.getElementById("full-sales-list");
         fullSalesList.innerHTML = salesData.map(sale => `
-            <li>${sale.productName} (₺${sale.productPrice} x ${sale.productQuantity})</li>
+            <li>${sale.productName} (₺${sale.productPrice} x ${sale.productQuantity}) - ${sale.time}</li>
         `).join("");
         document.getElementById("close-store-modal").style.display = "flex";
     }
@@ -274,6 +276,10 @@
     window.onload = function () {
         if (shopNameStored) {
             document.getElementById("shop-name").style.display = "none"; // Hide shop name input if it's already stored
+            const lastSale = salesData[salesData.length - 1];  // Get the last sale
+            if (lastSale) {
+                updateLastSaleView(lastSale);  // Update the Last Sale view
+            }
         }
         updateTotalSale();
     };

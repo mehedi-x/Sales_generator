@@ -114,8 +114,31 @@ function cancelStoreClosure() {
     document.getElementById("close-store-modal").style.display = "none";
 }
 
-// Initialize sales view on page load
+// Save shop name to localStorage
+function saveShopName() {
+    const shopName = document.getElementById("shop-name-input").value;
+    if (!shopName) {
+        alert("Please enter a shop name.");
+        return;
+    }
+
+    localStorage.setItem("shopName", shopName);
+    document.getElementById("shop-name-modal").style.display = "none"; // Hide the modal after saving
+    document.getElementById("shop-name").value = shopName; // Display the shop name in the input field
+}
+
+// Initialize shop name modal and sales view on page load
 window.onload = function () {
+    const savedShopName = localStorage.getItem("shopName");
+
+    // Check if a shop name is saved in localStorage
+    if (savedShopName) {
+        document.getElementById("shop-name").value = savedShopName; // Display saved shop name in the field
+    } else {
+        document.getElementById("shop-name-modal").style.display = "block"; // Show the modal if no shop name is saved
+    }
+
+    // If there are sales data, update the last sale view
     if (salesData.length > 0) {
         updateLastSaleView(salesData[salesData.length - 1]);
     }

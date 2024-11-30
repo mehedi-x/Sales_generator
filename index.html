@@ -48,24 +48,6 @@
             cursor: pointer;
         }
 
-        .menu-content {
-            display: none;
-            position: absolute;
-            background-color: #333;
-            color: white;
-            top: 50px;
-            right: 20px;
-            padding: 10px;
-            border-radius: 5px;
-        }
-
-        .menu-content a {
-            color: white;
-            text-decoration: none;
-            display: block;
-            margin: 5px 0;
-        }
-
         .form-section, .sales-section {
             margin: 20px 0;
         }
@@ -93,16 +75,6 @@
             margin-left: 10px;
         }
 
-        .online-support {
-            display: inline-block;
-            background-color: #28a745;
-            padding: 10px;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            margin-top: 10px;
-        }
-
         footer {
             background-color: #333;
             color: white;
@@ -120,34 +92,6 @@
             padding: 8px;
             width: 100%;
             box-sizing: border-box;
-        }
-
-        #close-store-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: 5px;
-            width: 80%;
-            max-height: 70%;
-            overflow-y: auto;
-        }
-
-        .cancel-close-store-btn {
-            background: none;
-            border: none;
-            font-size: 1.2em;
-            cursor: pointer;
         }
 
         /* Media Queries for Responsiveness */
@@ -177,12 +121,6 @@
     <header>
         <div class="total-sale" id="total-sale">Total Sale: ৳0.00</div>
         <button class="menu-btn" id="menu-btn">☰</button>
-        <div class="menu-content" id="menu-content">
-            <a href="#" onclick="openCloseStoreModal()">Full Sales History</a>
-            <a href="#" onclick="downloadSalesHistory()">Download Sales History</a>
-            <a href="#" onclick="closeStore()">Close Store</a>
-            <button class="cancel-menu-btn" id="cancel-menu-btn" onclick="cancelMenu()">X</button>
-        </div>
         <button class="dark-mode-btn" id="dark-mode-btn" onclick="toggleDarkMode()">Toggle Dark Mode</button>
     </header>
 
@@ -196,7 +134,6 @@
         <input type="text" id="product-name" placeholder="Product Name">
         <input type="number" id="product-price" placeholder="Product Price">
         <input type="number" id="product-quantity" placeholder="Product Quantity">
-        <input type="file" id="product-image" placeholder="Upload Product Image">
         <select id="product-category">
             <option value="">Select Category</option>
             <option value="Electronics">Electronics</option>
@@ -221,19 +158,9 @@
     </footer>
 </div>
 
-<!-- Full Sales History Modal -->
-<div id="close-store-modal">
-    <div class="modal-content">
-        <h2>Full Sales History</h2>
-        <ul id="full-sales-list"></ul>
-        <button class="cancel-close-store-btn" onclick="cancelStoreClosure()">Cancel</button>
-    </div>
-</div>
-
 <script>
     // Retrieve stored sales data from localStorage
     let salesData = JSON.parse(localStorage.getItem("salesData")) || [];
-    let shopNameStored = localStorage.getItem("shopName");
 
     // Toggle Dark Mode
     function toggleDarkMode() {
@@ -243,14 +170,8 @@
 
     // Menu Button Toggle
     document.getElementById('menu-btn').addEventListener('click', function () {
-        const menuContent = document.getElementById('menu-content');
-        menuContent.style.display = (menuContent.style.display === "block") ? "none" : "block";
+        alert("Menu options coming soon.");
     });
-
-    // Close the menu
-    function cancelMenu() {
-        document.getElementById('menu-content').style.display = "none";
-    }
 
     // Generate Sale
     function generateSale() {
@@ -259,7 +180,6 @@
         const productPrice = parseFloat(document.getElementById("product-price").value);
         const productQuantity = parseInt(document.getElementById("product-quantity").value);
         const productCategory = document.getElementById("product-category").value;
-        const productImage = document.getElementById("product-image").files[0];
 
         if (!shopName || !productName || !productPrice || !productQuantity) {
             alert("Please fill in all fields.");
@@ -272,7 +192,6 @@
             quantity: productQuantity,
             total: productPrice * productQuantity,
             category: productCategory,
-            image: productImage ? URL.createObjectURL(productImage) : "",
             time: new Date().toLocaleString(),
         };
 
@@ -297,55 +216,10 @@
             <strong>Category:</strong> ${product.category}<br>
             <strong>Total:</strong> ৳${product.total.toFixed(2)}<br>
             <strong>Time:</strong> ${product.time}<br>
-            <img src="${product.image}" alt="${product.name}" />
         `;
     }
 
-    // Open Close Store Modal
-    function openCloseStoreModal() {
-        const modal = document.getElementById("close-store-modal");
-        const salesList = document.getElementById("full-sales-list");
-        salesList.innerHTML = "";
-        salesData.forEach((sale, index) => {
-            const listItem = document.createElement("li");
-            listItem.innerHTML = `
-                <strong>Product:</strong> ${sale.name}<br>
-                <strong>Total Sale:</strong> ৳${sale.total.toFixed(2)}<br>
-                <strong>Time:</strong> ${sale.time}<br>
-            `;
-            salesList.appendChild(listItem);
-        });
-        modal.style.display = "flex";
-    }
-
-    // Close Store
-    function closeStore() {
-        localStorage.clear();
-        salesData = [];
-        updateTotalSale();
-        alert("Store has been closed!");
-    }
-
-    // Download Sales History
-    function downloadSalesHistory() {
-        const blob = new Blob([JSON.stringify(salesData)], { type: "application/json" });
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = "sales-history.json";
-        link.click();
-    }
-
-    // Cancel Store Closure Modal
-    function cancelStoreClosure() {
-        document.getElementById("close-store-modal").style.display = "none";
-    }
-
     // Initialize the store with the stored data
-    if (shopNameStored) {
-        document.getElementById("shop-name").value = shopNameStored;
-        document.getElementById("shop-name").style.display = "none"; // Hide after first entry
-    }
-
     updateTotalSale();
 </script>
 

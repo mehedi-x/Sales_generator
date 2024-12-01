@@ -1,148 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Responsive Store</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f8f8f8;
-        }
-        .main-wrapper {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #333;
-            color: white;
-            padding: 10px 20px;
-        }
-        .total-sale {
-            font-size: 1.2em;
-        }
-        .menu-btn {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5em;
-            cursor: pointer;
-        }
-        .menu-popup {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            color: white;
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-        .menu-popup a {
-            color: white;
-            text-decoration: none;
-            font-size: 1.5em;
-            margin: 10px 0;
-        }
-        .menu-popup button {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 2em;
-            margin-top: 20px;
-            cursor: pointer;
-        }
-        .form-section, .sales-section {
-            margin: 20px 0;
-        }
-        .form-section input {
-            margin: 5px 0;
-            padding: 8px;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        button {
-            padding: 10px;
-            background-color: #333;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        footer {
-            background-color: #333;
-            color: white;
-            padding: 20px 0;
-            text-align: center;
-        }
-        footer nav ul {
-            display: flex;
-            justify-content: center;
-            list-style: none;
-            padding: 0;
-            margin: 0 0 10px;
-        }
-        footer nav ul li {
-            margin: 0 15px;
-        }
-        footer nav ul li a {
-            text-decoration: none;
-            color: white;
-        }
-    </style>
-</head>
-<body>
-<div class="main-wrapper">
-    <header>
-        <div class="total-sale" id="total-sale">Total Sale: ৳0.00</div>
-        <button class="menu-btn" id="menu-btn">☰</button>
-    </header>
-    <div class="form-section">
-        <h2>Product Entry</h2>
-        <input type="text" id="shop-name" placeholder="Shop Name">
-        <input type="text" id="product-name" placeholder="Product Name">
-        <input type="number" id="product-price" placeholder="Product Price">
-        <input type="number" id="product-quantity" placeholder="Product Quantity">
-        <button onclick="generateSale()">Generate Sale</button>
-    </div>
-    <div class="sales-section">
-        <h3>Last Sale:</h3>
-        <p id="sale-summary">No sales yet.</p>
-    </div>
-    <footer>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="contact.html">Contact</a></li>
-                <li><a href="privacy-policy.html">Privacy Policy</a></li>
-            </ul>
-        </nav>
-    </footer>
-</div>
-
-<!-- Menu Popup -->
-<div id="menu-popup" class="menu-popup">
-    <a href="#" onclick="openFullSalesHistory()">Full Sales History</a>
-    <a href="#" onclick="downloadSalesHistory()">Download Sales History</a>
-    <a href="#" onclick="closeStore()">Close Store</a>
-    <button onclick="closeMenu()">✖</button>
-</div>
-
 <script>
     let salesData = JSON.parse(localStorage.getItem("salesData")) || [];
     let shopNameStored = localStorage.getItem("shopName");
 
-    // Menu toggle logic
+    // মেনু টগল লজিক
     const menuBtn = document.getElementById('menu-btn');
     const menuPopup = document.getElementById('menu-popup');
 
@@ -154,15 +14,16 @@
         menuPopup.style.display = 'none';
     }
 
-    // Generate Sale
+    // সেল জেনারেট
     function generateSale() {
-        const shopName = document.getElementById("shop-name").value;
-        const productName = document.getElementById("product-name").value;
+        const shopName = document.getElementById("shop-name").value.trim();
+        const productName = document.getElementById("product-name").value.trim();
         const productPrice = parseFloat(document.getElementById("product-price").value);
         const productQuantity = parseFloat(document.getElementById("product-quantity").value) || 1;
 
+        // ইনপুট ভ্যালিডেশন
         if (!productName || isNaN(productPrice) || productPrice <= 0 || productQuantity <= 0) {
-            alert("Please fill out all fields with valid values.");
+            alert("সকল ফিল্ড সঠিকভাবে পূরণ করুন।");
             return;
         }
 
@@ -211,10 +72,11 @@
 
     function closeStore() {
         salesData = [];
-        localStorage.clear();
+        localStorage.removeItem("salesData");
+        localStorage.removeItem("shopName");
         shopNameStored = null;
         updateTotalSale();
-        alert("Store is closed and data has been cleared.");
+        alert("স্টোর বন্ধ এবং ডেটা সাফ করা হয়েছে।");
         document.getElementById("shop-name").style.display = "block";
     }
 
@@ -227,5 +89,3 @@
         updateTotalSale();
     };
 </script>
-</body>
-</html>

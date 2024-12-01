@@ -139,11 +139,17 @@
     <button onclick="closeMenu()">✖</button>
 </div>
 
+<!-- Full Sales History Modal -->
+<div id="sales-history-modal" style="display:none; position:fixed; top:10%; left:10%; right:10%; background:white; border:2px solid #333; padding:20px; overflow:auto; max-height:80%; z-index:2000;">
+    <h2>Full Sales History</h2>
+    <ul id="sales-history-list" style="list-style:none; padding:0;"></ul>
+    <button onclick="closeSalesHistoryModal()" style="margin-top:20px;">Close</button>
+</div>
+
 <script>
     let salesData = JSON.parse(localStorage.getItem("salesData")) || [];
     let shopNameStored = localStorage.getItem("shopName");
 
-    // Menu toggle logic
     const menuBtn = document.getElementById('menu-btn');
     const menuPopup = document.getElementById('menu-popup');
 
@@ -155,7 +161,6 @@
         menuPopup.style.display = 'none';
     }
 
-    // Generate Sale
     function generateSale() {
         const shopName = document.getElementById("shop-name").value;
         const productName = document.getElementById("product-name").value;
@@ -211,12 +216,60 @@
     }
 
     function closeStore() {
-        salesData = [];
-        localStorage.clear();
-        shopNameStored = null;
-        updateTotalSale();
-        alert("Store is closed and data has been cleared.");
-        document.getElementById("shop-name").style.display = "block";
+        if (confirm("Are you sure you want to close the store? All data will be cleared.")) {
+            salesData = [];
+            localStorage.clear();
+            shopNameStored = null;
+            updateTotalSale();
+            alert("Store is closed and all data has been cleared.");
+            document.getElementById("shop-name").style.display = "block";
+            document.getElementById("sale-summary").innerHTML = "No sales yet.";
+        }
+    }
+
+    function downloadSalesHistory() {
+        if (salesData.length === 0) {
+            alert("No sales data available to download.");
+            return;
+        }
+
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(salesData, null, 2));
+        const downloadAnchorNode = document.createElement('a');
+        downloadAnchorNode.setAttribute("href", dataStr);
+        downloadAnchorNode.setAttribute("download", "sales_history.json");
+        document.body.appendChild(downloadAnchorNode);
+        downloadAnchorNode.click();
+        downloadAnchorNode.remove();
+    }
+
+    function openFullSalesHistory() {
+        if (salesData.length === 0) {
+            alert("No sales history available.");
+            return;
+        }
+
+        const salesHistoryList = document.getElementById("sales-history-list");
+        salesHistoryList.innerHTML = "";
+
+        salesData.forEach((sale, index) => {
+            const saleItem = document.createElement("li");
+            saleItem.style.marginBottom = "10px";
+            saleItem.innerHTML = `
+                <strong>#${index + 1}</strong> - 
+                <strong>Shop:</strong> ${sale.shopName}, 
+                <strong>Product:</strong> ${sale.productName}, 
+                <strong>Quantity:</strong> ${sale.productQuantity}, 
+                <strong>Total:</strong> ৳${sale.total.toFixed(2)}, 
+                <strong>Time:</strong> ${sale.time}
+            `;
+            salesHistoryList.appendChild(saleItem);
+        });
+
+        document.getElementById("sales-history-modal").style.display = "block";
+    }
+
+    function closeSalesHistoryModal() {
+        document.getElementById("sales-history-modal").style.display = "none";
     }
 
     window.onload = function () {

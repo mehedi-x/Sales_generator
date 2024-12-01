@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Responsive Store</title>
     <style>
-        /* Styling for layout */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -33,28 +32,34 @@
             border: none;
             color: white;
             font-size: 1.5em;
+            cursor: pointer;
         }
-        .menu-content {
+        .menu-popup {
             display: none;
-            position: absolute;
-            background-color: #333;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
             color: white;
-            top: 50px;
-            right: 20px;
-            padding: 10px;
-            border-radius: 5px;
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
         }
-        .menu-content a {
+        .menu-popup a {
             color: white;
             text-decoration: none;
-            display: block;
-            margin: 5px 0;
+            font-size: 1.5em;
+            margin: 10px 0;
         }
-        .cancel-menu-btn {
+        .menu-popup button {
             background: none;
             border: none;
             color: white;
-            font-size: 1.5em;
+            font-size: 2em;
+            margin-top: 20px;
             cursor: pointer;
         }
         .form-section, .sales-section {
@@ -79,36 +84,6 @@
             padding: 10px 0;
             text-align: center;
         }
-        .navigation a {
-            color: white;
-            text-decoration: none;
-            margin: 0 10px;
-        }
-        #close-store-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: 5px;
-            width: 80%;
-            max-height: 70%;
-            overflow-y: auto;
-        }
-        .cancel-close-store-btn {
-            background: none;
-            border: none;
-            font-size: 1.2em;
-            cursor: pointer;
-        }
     </style>
 </head>
 <body>
@@ -116,12 +91,6 @@
     <header>
         <div class="total-sale" id="total-sale">Total Sale: ৳0.00</div>
         <button class="menu-btn" id="menu-btn">☰</button>
-        <div class="menu-content" id="menu-content">
-            <a href="#" onclick="openCloseStoreModal()">Full Sales History</a>
-            <a href="#" onclick="downloadSalesHistory()">Download Sales History</a>
-            <a href="#" onclick="closeStore()">Close Store</a>
-            <button class="cancel-menu-btn" id="cancel-menu-btn" onclick="cancelMenu()">X</button>
-        </div>
     </header>
     <div class="form-section">
         <h2>Product Entry</h2>
@@ -136,33 +105,120 @@
         <p id="sale-summary">No sales yet.</p>
     </div>
     <footer>
-        <div class="navigation">
-            <a href="#">Home</a>
-            <a href="#">About</a>
-            <a href="#">Contact</a>
-            <a href="#">Privacy Policy</a>
-        </div>
+        <p>© 2024 Store Management System</p>
     </footer>
 </div>
+
+<!-- Menu Popup -->
+<div id="menu-popup" class="menu-popup">
+    <a href="#" onclick="openCloseStoreModal()">Full Sales History</a>
+    <a href="#" onclick="downloadSalesHistory()">Download Sales History</a>
+    <a href="#" onclick="closeStore()">Close Store</a>
+    <button onclick="closeMenu()">✖</button>
+</div>
+
 <script>
     let salesData = JSON.parse(localStorage.getItem("salesData")) || [];
     let shopNameStored = localStorage.getItem("shopName");
+
+    // Show menu popup
     document.getElementById('menu-btn').addEventListener('click', function () {
-        const menuContent = document.getElementById('menu-content');
-        menuContent.style.display = (menuContent.style.display === "block") ? "none" : "block";
+        document.getElementById('menu-popup').style.display = 'flex';
     });
-    function cancelMenu() {
-        document.getElementById('menu-content').style.display = "none";
+
+    // Close menu popup
+    function closeMenu() {
+        document.getElementById('menu-popup').style.display = 'none';
     }
-    function generateSale() { /* কোড */ }
-    function updateLastSaleView(lastSale) { /* কোড */ }
-    function updateTotalSale() { /* কোড */ }
-    function resetForm() { /* কোড */ }
-    function openCloseStoreModal() { /* কোড */ }
-    function cancelStoreClosure() { /* কোড */ }
-    function closeStore() { /* কোড */ }
-    function downloadSalesHistory() { /* কোড */ }
-    window.onload = function () { /* কোড */ }
+
+    // Generate Sale
+    function generateSale() {
+        const shopName = document.getElementById("shop-name").value;
+        const productName = document.getElementById("product-name").value;
+        const productPrice = parseFloat(document.getElementById("product-price").value);
+        const productQuantity = parseFloat(document.getElementById("product-quantity").value) || 1;
+
+        if (!productName || isNaN(productPrice) || productPrice <= 0 || productQuantity <= 0) {
+            alert("Please fill out all fields with valid values.");
+            return;
+        }
+
+        if (!shopNameStored && shopName) {
+            localStorage.setItem("shopName", shopName);
+            document.getElementById("shop-name").style.display = "none";
+            shopNameStored = shopName;
+        }
+
+        const product = {
+            shopName: shopNameStored,
+            productName,
+            productPrice,
+            productQuantity,
+            total: productPrice * productQuantity,
+            time: new Date().toLocaleString(),
+        };
+
+        salesData.push(product);
+        localStorage.setItem("salesData", JSON.stringify(salesData));
+        updateLastSaleView(product);
+        updateTotalSale();
+        resetForm();
+    }
+
+    // Update last sale view
+    function updateLastSaleView(lastSale) {
+        document.getElementById("sale-summary").innerHTML = `
+            <strong>Shop:</strong> ${lastSale.shopName}<br>
+            <strong>Product:</strong> ${lastSale.productName}<br>
+            <strong>Quantity:</strong> ${lastSale.productQuantity}<br>
+            <strong>Total:</strong> ৳${lastSale.total.toFixed(2)}<br>
+            <strong>Time:</strong> ${lastSale.time}
+        `;
+    }
+
+    // Update total sales
+    function updateTotalSale() {
+        const totalSaleAmount = salesData.reduce((total, sale) => total + sale.total, 0);
+        document.getElementById("total-sale").textContent = `Total Sale: ৳${totalSaleAmount.toFixed(2)}`;
+    }
+
+    // Reset form fields
+    function resetForm() {
+        document.getElementById("product-name").value = "";
+        document.getElementById("product-price").value = "";
+        document.getElementById("product-quantity").value = "";
+    }
+
+    // Close Store
+    function closeStore() {
+        salesData = [];
+        localStorage.clear();
+        shopNameStored = null;
+        updateTotalSale();
+        alert("Store is closed and data has been cleared.");
+        document.getElementById("shop-name").style.display = "block";
+    }
+
+    // Download Sales History
+    function downloadSalesHistory() {
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(salesData, null, 2));
+        const downloadAnchorNode = document.createElement('a');
+        downloadAnchorNode.setAttribute("href", dataStr);
+        downloadAnchorNode.setAttribute("download", "sales_history.json");
+        document.body.appendChild(downloadAnchorNode);
+        downloadAnchorNode.click();
+        downloadAnchorNode.remove();
+    }
+
+    // On page load
+    window.onload = function () {
+        if (shopNameStored) {
+            document.getElementById("shop-name").style.display = "none";
+            const lastSale = salesData[salesData.length - 1];
+            if (lastSale) updateLastSaleView(lastSale);
+        }
+        updateTotalSale();
+    };
 </script>
 </body>
 </html>

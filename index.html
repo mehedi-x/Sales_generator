@@ -131,18 +131,31 @@
     </footer>
 </div>
 
+<!-- Menu Popup -->
+<div id="menu-popup" class="menu-popup">
+    <a href="#" onclick="openFullSalesHistory()">Full Sales History</a>
+    <a href="#" onclick="downloadSalesHistory()">Download Sales History</a>
+    <a href="#" onclick="closeStore()">Close Store</a>
+    <button onclick="closeMenu()">✖</button>
+</div>
+
 <script>
     let salesData = JSON.parse(localStorage.getItem("salesData")) || [];
     let shopNameStored = localStorage.getItem("shopName");
 
-    document.getElementById('menu-btn').addEventListener('click', function () {
-        document.getElementById('menu-popup').style.display = 'flex';
+    // Menu toggle logic
+    const menuBtn = document.getElementById('menu-btn');
+    const menuPopup = document.getElementById('menu-popup');
+
+    menuBtn.addEventListener('click', function () {
+        menuPopup.style.display = menuPopup.style.display === 'flex' ? 'none' : 'flex';
     });
 
     function closeMenu() {
-        document.getElementById('menu-popup').style.display = 'none';
+        menuPopup.style.display = 'none';
     }
 
+    // Generate Sale
     function generateSale() {
         const shopName = document.getElementById("shop-name").value;
         const productName = document.getElementById("product-name").value;

@@ -98,6 +98,45 @@
             text-decoration: none;
             color: white;
         }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .total-sale {
+                font-size: 1em;
+                margin-bottom: 10px;
+            }
+            .menu-btn {
+                font-size: 1.2em;
+            }
+            .form-section input {
+                width: 100%;
+                font-size: 1em;
+            }
+            button {
+                width: 100%;
+                padding: 8px;
+                font-size: 1em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .form-section input, button {
+                font-size: 0.9em;
+            }
+            .menu-popup a {
+                font-size: 1.2em;
+            }
+            footer nav ul {
+                flex-direction: column;
+            }
+            footer nav ul li {
+                margin: 10px 0;
+            }
+        }
     </style>
 </head>
 <body>

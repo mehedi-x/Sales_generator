@@ -84,6 +84,51 @@
             padding: 10px 0;
             text-align: center;
         }
+
+        /* Full Sales History Modal Styling */
+        .sales-history-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            max-width: 800px;
+            background-color: #fff;
+            color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            overflow-y: auto;
+            max-height: 70vh;
+        }
+
+        .sales-history-modal h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .sales-history-modal ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sales-history-modal ul li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .sales-history-modal button {
+            background-color: #333;
+            color: white;
+            font-size: 1.2em;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            cursor: pointer;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -111,10 +156,17 @@
 
 <!-- Menu Popup -->
 <div id="menu-popup" class="menu-popup">
-    <a href="#" onclick="openCloseStoreModal()">Full Sales History</a>
+    <a href="#" onclick="openFullSalesHistory()">Full Sales History</a>
     <a href="#" onclick="downloadSalesHistory()">Download Sales History</a>
     <a href="#" onclick="closeStore()">Close Store</a>
     <button onclick="closeMenu()">✖</button>
+</div>
+
+<!-- Full Sales History Modal -->
+<div id="sales-history-modal" class="sales-history-modal">
+    <h2>Full Sales History</h2>
+    <ul id="sales-history-list"></ul>
+    <button onclick="closeSalesHistoryModal()">Close</button>
 </div>
 
 <script>
@@ -210,21 +262,30 @@
         downloadAnchorNode.remove();
     }
 
-    // Open Close Store Modal
-    function openCloseStoreModal() {
-        const fullSalesList = document.createElement('ul');
+    // Show Full Sales History
+    function openFullSalesHistory() {
+        const salesHistoryList = document.getElementById("sales-history-list");
+        salesHistoryList.innerHTML = "";
+
         salesData.forEach(sale => {
-            const listItem = document.createElement('li');
-            listItem.textContent = `${sale.productName} (₺${sale.productPrice} x ${sale.productQuantity}) - ${sale.time}`;
-            fullSalesList.appendChild(listItem);
+            const li = document.createElement("li");
+            li.innerHTML = `
+                <strong>Shop:</strong> ${sale.shopName}<br>
+                <strong>Product:</strong> ${sale.productName}<br>
+                <strong>Quantity:</strong> ${sale.productQuantity}<br>
+                <strong>Total:</strong> ৳${sale.total.toFixed(2)}<br>
+                <strong>Time:</strong> ${sale.time}
+            `;
+            salesHistoryList.appendChild(li);
         });
-        const modalContent = document.createElement('div');
-        modalContent.className = 'modal-content';
-        modalContent.innerHTML = '<h2>Full Sales History</h2>';
-        modalContent.appendChild(fullSalesList);
-        modalContent.innerHTML += '<button onclick="closeMenu()">Close</button>';
-        document.body.appendChild(modalContent);
-        modalContent.style.display = 'block';
+
+        document.getElementById("sales-history-modal").style.display = 'block';
+        document.getElementById("menu-popup").style.display = 'none';
+    }
+
+    // Close Sales History Modal
+    function closeSalesHistoryModal() {
+        document.getElementById("sales-history-modal").style.display = 'none';
     }
 
     // On page load

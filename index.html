@@ -1,651 +1,427 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Responsive Store</title>
-
     <style>
-
         body {
-
             font-family: Arial, sans-serif;
-
             margin: 0;
-
             padding: 0;
-
             background-color: #f4f4f9;
-
         }
 
         .main-wrapper {
-
             max-width: 1100px;
-
             margin: 20px auto;
-
             padding: 20px;
-
             background-color: #ffffff;
-
             border-radius: 10px;
-
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-
         }
 
         header {
-
             display: flex;
-
             justify-content: space-between;
-
             align-items: center;
-
             background-color: #4CAF50;
-
             color: white;
-
             padding: 10px 20px;
-
             border-radius: 10px;
-
             margin-bottom: 15px;
-
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-
         }
 
         .total-sale {
-
             font-size: 1.2em;
-
             font-weight: bold;
-
         }
 
         .menu-btn {
-
             background: none;
-
             border: none;
-
             color: white;
-
             font-size: 1.8em;
-
             cursor: pointer;
-
             transition: transform 0.2s ease-in-out;
-
         }
 
         .menu-btn:hover {
-
             transform: scale(1.1);
-
         }
 
         .form-section {
-
             background-color: #ffffff;
-
             padding: 15px;
-
             border-radius: 10px;
-
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-
             margin-bottom: 15px;
-
         }
 
         .form-section h2 {
-
             font-size: 1.4em;
-
             margin-bottom: 10px;
-
             color: #333;
-
             text-align: center;
-
         }
 
         .form-section input {
-
             margin: 8px 0;
-
             padding: 12px;
-
             width: 100%;
-
             box-sizing: border-box;
-
             border: 1px solid #ddd;
-
             border-radius: 5px;
-
             font-size: 1em;
-
         }
 
         .form-section button {
-
             padding: 12px 20px;
-
             background-color: #4CAF50;
-
             color: white;
-
             border: none;
-
             border-radius: 5px;
-
             font-size: 1.2em;
-
             cursor: pointer;
-
             transition: all 0.3s ease-in-out;
-
         }
 
         .form-section button:hover {
-
             background-color: #45a049;
-
             transform: translateY(-3px);
-
         }
 
         .sales-section {
-
             background-color: #eaf9ea;
-
             border: 1px solid #4CAF50;
-
             padding: 10px;
-
             border-radius: 10px;
-
             margin-bottom: 15px;
-
             text-align: center;
-
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-
         }
 
         .sales-section h3 {
-
             font-size: 1.5em;
-
             color: #333;
-
             margin: 0 0 10px 0;
-
         }
 
         .sale-summary {
-
             font-size: 1.0em;
-
             color: #4CAF50;
-
             font-weight: bold;
-
         }
 
         .sale-summary strong {
-
             font-size: 0.9em;
-
         }
 
         footer {
-
             background-color: #4CAF50;
-
             color: white;
-
             padding: 15px 0;
-
             text-align: center;
-
             border-radius: 10px;
-
             margin-top: 20px;
-
         }
 
         footer nav ul {
-
             display: flex;
-
             justify-content: center;
-
             list-style: none;
-
             padding: 0;
-
             margin: 0 0 10px;
-
         }
 
         footer nav ul li {
-
             margin: 0 15px;
-
         }
 
         footer nav ul li a {
-
             text-decoration: none;
-
             color: white;
-
             font-size: 1.1em;
-
             transition: color 0.3s ease-in-out;
-
         }
 
         footer nav ul li a:hover {
-
             color: #a7ffae;
-
         }
 
         /* Menu Popup */
-
         .menu-popup {
-
             display: none;
-
             position: fixed;
-
             top: 0;
-
             left: 0;
-
             width: 100%;
-
             height: 100%;
-
             background-color: rgba(0, 0, 0, 0.8);
-
             color: white;
-
             z-index: 1000;
-
             justify-content: center;
-
             align-items: center;
-
             flex-direction: column;
-
             text-align: center;
-
+            padding: 20px;
         }
 
-        .menu-popup a {
-
-            color: white;
-
+        .menu-items a {
+            color: #ff9800;
             text-decoration: none;
-
             font-size: 1.5em;
-
-            margin: 10px 0;
-
+            margin: 15px 0;
+            transition: all 0.3s ease;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #333;
+            width: 80%;
         }
 
-        .menu-popup button {
+        .menu-items a:hover {
+            background-color: #e91e63;
+            transform: scale(1.05);
+        }
 
+        .close-btn {
             background: none;
-
             border: none;
-
             color: white;
-
-            font-size: 2em;
-
-            margin-top: 20px;
-
+            font-size: 2.5em;
+            margin-top: 30px;
             cursor: pointer;
+            transition: transform 0.2s ease;
+        }
 
+        .close-btn:hover {
+            transform: scale(1.2);
         }
 
         /* Responsive design */
-
         @media screen and (max-width: 768px) {
-
             header {
-
                 flex-direction: row;
-
                 padding: 15px;
-
             }
 
             .menu-btn {
-
                 font-size: 1.5em;
-
             }
 
             .form-section input {
-
                 padding: 10px;
-
             }
 
             .form-section button {
-
                 width: 100%;
-
             }
-
         }
 
         @media screen and (max-width: 480px) {
-
             .main-wrapper {
-
                 padding: 15px;
-
             }
 
-            .form-section h2, .sales-section h3 {
-
+            .form-section h2,
+            .sales-section h3 {
                 font-size: 1.3em;
-
             }
 
-            .form-section input, .form-section button {
-
+            .form-section input,
+            .form-section button {
                 padding: 10px;
-
                 font-size: 1em;
-
             }
-
         }
 
     </style>
-
 </head>
 
 <body>
 
-<div class="main-wrapper">
+    <div class="main-wrapper">
 
-    <!-- Header -->
+        <!-- Header -->
+        <header>
+            <div class="header-left">
+                <button class="menu-btn" id="menu-btn">☰</button>
+            </div>
+            <div class="header-right">
+                <div class="total-sale" id="total-sale">Total Sale: ৳0.00</div>
+            </div>
+        </header>
 
-    <header>
-
-        <div class="header-left">
-
-            <button class="menu-btn" id="menu-btn">☰</button>
-
+        <!-- Last Sale (Calculator View) -->
+        <div class="sales-section">
+            <h3>Last Sale</h3>
+            <div class="sale-summary" id="sale-summary">No sales yet.</div>
         </div>
 
-        <div class="header-right">
-
-            <div class="total-sale" id="total-sale">Total Sale: ৳0.00</div>
-
+        <!-- Product Entry -->
+        <div class="form-section">
+            <h2>Product Entry</h2>
+            <input type="text" id="shop-name" placeholder="Shop Name">
+            <input type="text" id="product-name" placeholder="Product Name">
+            <input type="number" id="product-price" placeholder="Product Price">
+            <input type="number" id="product-quantity" placeholder="Product Quantity">
+            <button onclick="generateSale()">Generate Sale</button>
         </div>
 
-    </header>
-
-    <!-- Last Sale (Calculator View) -->
-
-    <div class="sales-section">
-
-        <h3>Last Sale</h3>
-
-        <div class="sale-summary" id="sale-summary">No sales yet.</div>
+        <!-- Footer -->
+        <footer>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="privacy-policy.html">Policy</a></li>
+                </ul>
+            </nav>
+        </footer>
 
     </div>
 
-    <!-- Product Entry -->
-
-    <div class="form-section">
-
-        <h2>Product Entry</h2>
-
-        <input type="text" id="shop-name" placeholder="Shop Name">
-
-        <input type="text" id="product-name" placeholder="Product Name">
-
-        <input type="number" id="product-price" placeholder="Product Price">
-
-        <input type="number" id="product-quantity" placeholder="Product Quantity">
-
-        <button onclick="generateSale()">Generate Sale</button>
-
+    <!-- Menu Popup -->
+    <div id="menu-popup" class="menu-popup">
+        <div class="menu-items">
+            <a href="#" onclick="openFullSalesHistory()">📜 Full Sales History</a>
+            <a href="#" onclick="downloadSalesHistory()">💾 Download Sales History</a>
+            <a href="#" onclick="closeStore()">❌ Close Store</a>
+        </div>
+        <button class="close-btn" onclick="closeMenu()">✖</button>
     </div>
 
-    <!-- Footer -->
+    <script>
+        let salesData = JSON.parse(localStorage.getItem("salesData")) || [];
+        let shopNameStored = localStorage.getItem("shopName");
 
-    <footer>
+        // Menu toggle logic
+        const menuBtn = document.getElementById('menu-btn');
+        const menuPopup = document.getElementById('menu-popup');
+        menuBtn.addEventListener('click', function () {
+            menuPopup.style.display = menuPopup.style.display === 'flex' ? 'none' : 'flex';
+        });
 
-        <nav>
-
-            <ul>
-
-                <li><a href="index.html">Home</a></li>
-
-                <li><a href="about.html">About</a></li>
-
-                <li><a href="contact.html">Contact</a></li>
-
-                <li><a href="privacy-policy.html">Policy</a></li>
-
-            </ul>
-
-        </nav>
-
-    </footer>
-
-</div>
-
-<!-- Menu Popup -->
-
-<div id="menu-popup" class="menu-popup">
-
-    <a href="#" onclick="openFullSalesHistory()">Full Sales History</a>
-
-    <a href="#" onclick="downloadSalesHistory()">Download Sales History</a>
-
-    <a href="#" onclick="closeStore()">Close Store</a>
-
-    <button onclick="closeMenu()">✖</button>
-
-</div>
-
-<script>
-
-    let salesData = JSON.parse(localStorage.getItem("salesData")) || [];
-
-    let shopNameStored = localStorage.getItem("shopName");
-
-    // Menu toggle logic
-
-    const menuBtn = document.getElementById('menu-btn');
-
-    const menuPopup = document.getElementById('menu-popup');
-
-    menuBtn.addEventListener('click', function () {
-
-        menuPopup.style.display = menuPopup.style.display === 'flex' ? 'none' : 'flex';
-
-    });
-
-    function closeMenu() {
-
-        menuPopup.style.display = 'none';
-
-    }
-
-    function openFullSalesHistory() {
-
-        const salesHistory = salesData.map(sale => `
-
-            Shop: ${sale.shopName}, Product: ${sale.productName}, 
-
-            Quantity: ${sale.productQuantity}, Total: ৳${sale.total.toFixed(2)}, 
-
-            Time: ${sale.time}
-
-        `).join('<br>');
-
-        alert("Full Sales History: \n" + salesHistory);
-
-    }
-
-    function downloadSalesHistory() {
-
-        const data = JSON.stringify(salesData, null, 2);
-
-        const blob = new Blob([data], { type: 'application/json' });
-
-        const link = document.createElement('a');
-
-        link.href = URL.createObjectURL(blob);
-
-        link.download = 'sales-history.json';
-
-        link.click();
-
-    }
-
-    function closeStore() {
-
-        localStorage.removeItem("salesData");
-
-        localStorage.removeItem("shopName");
-
-        alert("Store has been closed. All sales data has been cleared.");
-
-    }
-
-    function generateSale() {
-
-        const shopName = document.getElementById("shop-name").value;
-
-        const productName = document.getElementById("product-name").value;
-
-        const productPrice = parseFloat(document.getElementById("product-price").value);
-
-        const productQuantity = parseFloat(document.getElementById("product-quantity").value) || 1;
-
-        if (!productName || isNaN(productPrice) || productPrice <= 0 || productQuantity <= 0) {
-
-            alert("Please fill out all fields with valid values.");
-
-            return;
-
+        function closeMenu() {
+            menuPopup.style.display = 'none';
         }
 
-        if (!shopNameStored && shopName) {
+        // Generate Sale
+        function generateSale() {
+            const shopName = document.getElementById("shop-name").value;
+            const productName = document.getElementById("product-name").value;
+            const productPrice = parseFloat(document.getElementById("product-price").value);
+            const productQuantity = parseInt(document.getElementById("product-quantity").value);
 
-            localStorage.setItem("shopName", shopName);
+            if (!shopName || !productName || !productPrice || !productQuantity) {
+                alert("All fields must be filled out!");
+                return;
+            }
 
-            document.getElementById("shop-name").style.display = "none";
+            const sale = {
+                shopName,
+                productName,
+                productPrice,
+                productQuantity,
+                total: productPrice * productQuantity,
+                time: new Date().toLocaleString()
+            };
 
-            shopNameStored = shopName;
+            salesData.push(sale);
+            localStorage.setItem("salesData", JSON.stringify(salesData));
 
+            updateTotalSales();
+            displayLastSale(sale);
         }
 
-        const product = {
-
-            shopName: shopNameStored,
-
-            productName,
-
-            productPrice,
-
-            productQuantity,
-
-            total: productPrice * productQuantity,
-
-            time: new Date().toLocaleString(),
-
-        };
-
-        salesData.push(product);
-
-        localStorage.setItem("salesData", JSON.stringify(salesData));
-
-        updateLastSaleView(product);
-
-        updateTotalSale();
-
-        resetForm();
-
-    }
-
-    function updateLastSaleView(lastSale) {
-
-        document.getElementById("sale-summary").innerHTML = `
-
-            <strong>Shop:</strong> ${lastSale.shopName}<br>
-
-            <strong>Product:</strong> ${lastSale.productName}<br>
-
-            <strong>Quantity:</strong> ${lastSale.productQuantity}<br>
-
-            <strong>Total:</strong> ৳${lastSale.total.toFixed(2)}<br>
-
-            <strong>Time:</strong> ${lastSale.time}
-
-        `;
-
-    }
-
-    function updateTotalSale() {
-
-        const totalSaleAmount = salesData.reduce((total, sale) => total + sale.total, 0);
-
-        document.getElementById("total-sale").textContent = `Total Sale: ৳${totalSaleAmount.toFixed(2)}`;
-
-    }
-
-    function resetForm() {
-
-        document.getElementById("product-name").value = "";
-
-        document.getElementById("product-price").value = "";
-
-        document.getElementById("product-quantity").value = "";
-
-    }
-
-    window.onload = function () {
-
-        if (shopNameStored) {
-
-            document.getElementById("shop-name").style.display = "none";
-
-            const lastSale = salesData[salesData.length - 1];
-
-            if (lastSale) updateLastSaleView(lastSale);
-
+        // Update Total Sales
+        function updateTotalSales() {
+            const totalSale = salesData.reduce((total, sale) => total + sale.total, 0);
+            document.getElementById("total-sale").textContent = `Total Sale: ৳${totalSale.toFixed(2)}`;
         }
 
-        updateTotalSale();
+        // Display Last Sale
+        function displayLastSale(sale) {
+            const saleSummary = document.getElementById("sale-summary");
+            saleSummary.innerHTML = `
+                Shop: ${sale.shopName}<br>
+                Product: ${sale.productName}<br>
+                Quantity: ${sale.productQuantity}<br>
+                Total: ৳${sale.total.toFixed(2)}<br>
+                Time: ${sale.time}
+            `;
+        }
 
-    };
+        // Open Full Sales History
+        function openFullSalesHistory() {
+            if (salesData.length === 0) {
+                alert("No sales recorded yet.");
+                return;
+            }
 
-</script>
+            const salesHistory = salesData.map(sale => `
+                <div>
+                    <strong>Shop:</strong> ${sale.shopName}<br>
+                    <strong>Product:</strong> ${sale.productName}<br>
+                    <strong>Quantity:</strong> ${sale.productQuantity}<br>
+                    <strong>Total:</strong> ৳${sale.total.toFixed(2)}<br>
+                    <strong>Time:</strong> ${sale.time}
+                </div>
+                <hr>
+            `).join('');
 
+            const salesHistoryHTML = `<div style="text-align: left; padding: 20px;">${salesHistory}</div>`;
+            
+            const modal = document.createElement('div');
+            modal.style.background = 'rgba(0, 0, 0, 0.9)';
+            modal.style.color = 'white';
+            modal.style.padding = '30px';
+            modal.style.borderRadius = '10px';
+            modal.innerHTML = salesHistoryHTML;
+            const closeBtn = document.createElement('button');
+            closeBtn.textContent = "Close";
+            closeBtn.style.background = '#ff5722';
+            closeBtn.style.color = 'white';
+            closeBtn.style.border = 'none';
+            closeBtn.style.padding = '10px 20px';
+            closeBtn.style.cursor = 'pointer';
+            closeBtn.onclick = () => document.body.removeChild(modal);
+            modal.appendChild(closeBtn);
+            document.body.appendChild(modal);
+        }
+
+        // Download Sales History
+        function downloadSalesHistory() {
+            if (salesData.length === 0) {
+                alert("No sales recorded to download.");
+                return;
+            }
+
+            const data = JSON.stringify(salesData, null, 2);
+            const blob = new Blob([data], { type: 'application/json' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'sales-history.json';
+            link.click();
+        }
+
+        // Close Store
+        function closeStore() {
+            const confirmClose = confirm("Are you sure you want to close the store? All sales data will be cleared.");
+            if (confirmClose) {
+                localStorage.removeItem("salesData");
+                localStorage.removeItem("shopName");
+                alert("Store has been closed. All sales data has been cleared.");
+                window.location.reload();
+            }
+        }
+
+        // Initialize the store
+        updateTotalSales();
+    </script>
 </body>
 
 </html>

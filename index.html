@@ -259,24 +259,29 @@
     }
 
     function openFullSalesHistory() {
-        alert("Full Sales History will be displayed here.");
+        const salesHistory = salesData.map(sale => `
+            Shop: ${sale.shopName}, Product: ${sale.productName}, 
+            Quantity: ${sale.productQuantity}, Total: ৳${sale.total.toFixed(2)}, 
+            Time: ${sale.time}
+        `).join('<br>');
+        alert("Full Sales History: \n" + salesHistory);
     }
 
     function downloadSalesHistory() {
-        alert("Sales History will be downloaded here.");
+        const data = JSON.stringify(salesData, null, 2);
+        const blob = new Blob([data], { type: 'application/json' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'sales-history.json';
+        link.click();
     }
 
     function closeStore() {
-        salesData = [];
-        localStorage.clear();
-        shopNameStored = null;
-        updateTotalSale();
-        alert("Store is closed and data has been cleared.");
-        document.getElementById("shop-name").style.display = "block";
-        closeMenu();
+        localStorage.removeItem("salesData");
+        localStorage.removeItem("shopName");
+        alert("Store has been closed. All sales data has been cleared.");
     }
 
-    // Generate Sale
     function generateSale() {
         const shopName = document.getElementById("shop-name").value;
         const productName = document.getElementById("product-name").value;

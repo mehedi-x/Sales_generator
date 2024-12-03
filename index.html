@@ -166,38 +166,22 @@
             align-items: center;
             flex-direction: column;
             text-align: center;
-            padding: 20px;
         }
 
-        .menu-items a {
-            color: #ff9800;
+        .menu-popup a {
+            color: white;
             text-decoration: none;
             font-size: 1.5em;
-            margin: 15px 0;
-            transition: all 0.3s ease;
-            padding: 10px;
-            border-radius: 5px;
-            background-color: #333;
-            width: 80%;
+            margin: 10px 0;
         }
 
-        .menu-items a:hover {
-            background-color: #e91e63;
-            transform: scale(1.05);
-        }
-
-        .close-btn {
+        .menu-popup button {
             background: none;
             border: none;
             color: white;
-            font-size: 2.5em;
-            margin-top: 30px;
+            font-size: 2em;
+            margin-top: 20px;
             cursor: pointer;
-            transition: transform 0.2s ease;
-        }
-
-        .close-btn:hover {
-            transform: scale(1.2);
         }
 
         /* Responsive design */
@@ -236,7 +220,6 @@
                 font-size: 1em;
             }
         }
-
     </style>
 </head>
 
@@ -286,12 +269,10 @@
 
     <!-- Menu Popup -->
     <div id="menu-popup" class="menu-popup">
-        <div class="menu-items">
-            <a href="#" onclick="openFullSalesHistory()">📜 Full Sales History</a>
-            <a href="#" onclick="downloadSalesHistory()">💾 Download Sales History</a>
-            <a href="#" onclick="closeStore()">❌ Close Store</a>
-        </div>
-        <button class="close-btn" onclick="closeMenu()">✖</button>
+        <a href="#" onclick="openFullSalesHistory()">Full Sales History</a>
+        <a href="#" onclick="downloadSalesHistory()">Download Sales History</a>
+        <a href="#" onclick="closeStore()">Close Store</a>
+        <button onclick="closeMenu()">✖</button>
     </div>
 
     <script>
@@ -301,6 +282,7 @@
         // Menu toggle logic
         const menuBtn = document.getElementById('menu-btn');
         const menuPopup = document.getElementById('menu-popup');
+
         menuBtn.addEventListener('click', function () {
             menuPopup.style.display = menuPopup.style.display === 'flex' ? 'none' : 'flex';
         });
@@ -309,97 +291,16 @@
             menuPopup.style.display = 'none';
         }
 
-        // Generate Sale
-        function generateSale() {
-            const shopName = document.getElementById("shop-name").value;
-            const productName = document.getElementById("product-name").value;
-            const productPrice = parseFloat(document.getElementById("product-price").value);
-            const productQuantity = parseInt(document.getElementById("product-quantity").value);
-
-            if (!shopName || !productName || !productPrice || !productQuantity) {
-                alert("All fields must be filled out!");
-                return;
-            }
-
-            const sale = {
-                shopName,
-                productName,
-                productPrice,
-                productQuantity,
-                total: productPrice * productQuantity,
-                time: new Date().toLocaleString()
-            };
-
-            salesData.push(sale);
-            localStorage.setItem("salesData", JSON.stringify(salesData));
-
-            updateTotalSales();
-            displayLastSale(sale);
-        }
-
-        // Update Total Sales
-        function updateTotalSales() {
-            const totalSale = salesData.reduce((total, sale) => total + sale.total, 0);
-            document.getElementById("total-sale").textContent = `Total Sale: ৳${totalSale.toFixed(2)}`;
-        }
-
-        // Display Last Sale
-        function displayLastSale(sale) {
-            const saleSummary = document.getElementById("sale-summary");
-            saleSummary.innerHTML = `
-                Shop: ${sale.shopName}<br>
-                Product: ${sale.productName}<br>
-                Quantity: ${sale.productQuantity}<br>
-                Total: ৳${sale.total.toFixed(2)}<br>
-                Time: ${sale.time}
-            `;
-        }
-
-        // Open Full Sales History
         function openFullSalesHistory() {
-            if (salesData.length === 0) {
-                alert("No sales recorded yet.");
-                return;
-            }
-
             const salesHistory = salesData.map(sale => `
-                <div>
-                    <strong>Shop:</strong> ${sale.shopName}<br>
-                    <strong>Product:</strong> ${sale.productName}<br>
-                    <strong>Quantity:</strong> ${sale.productQuantity}<br>
-                    <strong>Total:</strong> ৳${sale.total.toFixed(2)}<br>
-                    <strong>Time:</strong> ${sale.time}
-                </div>
-                <hr>
-            `).join('');
-
-            const salesHistoryHTML = `<div style="text-align: left; padding: 20px;">${salesHistory}</div>`;
-            
-            const modal = document.createElement('div');
-            modal.style.background = 'rgba(0, 0, 0, 0.9)';
-            modal.style.color = 'white';
-            modal.style.padding = '30px';
-            modal.style.borderRadius = '10px';
-            modal.innerHTML = salesHistoryHTML;
-            const closeBtn = document.createElement('button');
-            closeBtn.textContent = "Close";
-            closeBtn.style.background = '#ff5722';
-            closeBtn.style.color = 'white';
-            closeBtn.style.border = 'none';
-            closeBtn.style.padding = '10px 20px';
-            closeBtn.style.cursor = 'pointer';
-            closeBtn.onclick = () => document.body.removeChild(modal);
-            modal.appendChild(closeBtn);
-            document.body.appendChild(modal);
+                Shop: ${sale.shopName}, Product: ${sale.productName}, 
+                Quantity: ${sale.productQuantity}, Total: ৳${sale.total.toFixed(2)}, 
+                Time: ${sale.time}
+            `).join('<br>');
+            alert("Full Sales History: \n" + salesHistory);
         }
 
-        // Download Sales History
         function downloadSalesHistory() {
-            if (salesData.length === 0) {
-                alert("No sales recorded to download.");
-                return;
-            }
-
             const data = JSON.stringify(salesData, null, 2);
             const blob = new Blob([data], { type: 'application/json' });
             const link = document.createElement('a');
@@ -408,20 +309,50 @@
             link.click();
         }
 
-        // Close Store
         function closeStore() {
-            const confirmClose = confirm("Are you sure you want to close the store? All sales data will be cleared.");
-            if (confirmClose) {
-                localStorage.removeItem("salesData");
-                localStorage.removeItem("shopName");
-                alert("Store has been closed. All sales data has been cleared.");
-                window.location.reload();
+            if (confirm("Are you sure you want to close the store?")) {
+                window.location.href = 'index.html';
             }
         }
 
-        // Initialize the store
-        updateTotalSales();
+        // Generate sale
+        function generateSale() {
+            const shopName = document.getElementById("shop-name").value;
+            const productName = document.getElementById("product-name").value;
+            const productPrice = parseFloat(document.getElementById("product-price").value);
+            const productQuantity = parseInt(document.getElementById("product-quantity").value);
+
+            if (!shopName || !productName || isNaN(productPrice) || isNaN(productQuantity) || productPrice <= 0 || productQuantity <= 0) {
+                alert("Please enter valid information.");
+                return;
+            }
+
+            const sale = {
+                shopName: shopName,
+                productName: productName,
+                productQuantity: productQuantity,
+                total: productPrice * productQuantity,
+                time: new Date().toLocaleString()
+            };
+
+            salesData.push(sale);
+            localStorage.setItem("salesData", JSON.stringify(salesData));
+
+            // Update the total sale on header
+            const totalSale = salesData.reduce((sum, sale) => sum + sale.total, 0);
+            document.getElementById("total-sale").innerText = `Total Sale: ৳${totalSale.toFixed(2)}`;
+
+            // Display the last sale in sales section
+            const lastSale = salesData[salesData.length - 1];
+            document.getElementById("sale-summary").innerHTML = `
+                Shop: ${lastSale.shopName}, 
+                Product: ${lastSale.productName}, 
+                Quantity: ${lastSale.productQuantity}, 
+                Total: ৳${lastSale.total.toFixed(2)}
+            `;
+        }
     </script>
+
 </body>
 
 </html>

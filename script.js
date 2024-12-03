@@ -140,3 +140,12 @@ window.onload = function () {
         updateLastSaleView(salesData[salesData.length - 1]);
     }
 };
+
+function closeStore() {
+    const isConfirmed = confirm("Are you sure you want to close the store?");
+    if (isConfirmed) {
+        localStorage.removeItem("salesData");
+        localStorage.removeItem("shopName");
+        alert("Store has been closed. All sales data has been cleared.");
+    }
+}

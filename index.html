@@ -1,107 +1,108 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Responsive Store</title>
+
     <style>
-        /* Global styles */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f0f8ff; /* Softer background color */
+            background-color: #f4f4f9;
         }
 
-        /* Wrapper styles */
         .main-wrapper {
-            max-width: 1200px;
+            max-width: 1100px;
             margin: 20px auto;
             padding: 20px;
             background-color: #ffffff;
+            border: 1px solid #ddd;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
-        /* Header styles */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #0288d1; /* Slightly deeper blue */
+            background-color: #4CAF50;
             color: white;
-            padding: 15px 20px;
+            padding: 10px 20px;
+            border: 1px solid #4CAF50;
             border-radius: 10px;
-            margin-bottom: 20px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
 
         .total-sale {
-            font-size: 1.4em;
+            font-size: 1.2em;
             font-weight: bold;
-            margin-right: 10px;
         }
 
         .menu-btn {
             background: none;
             border: none;
             color: white;
-            font-size: 2em;
+            font-size: 1.8em;
             cursor: pointer;
-            transition: transform 0.3s ease-in-out;
+            transition: transform 0.2s ease-in-out;
         }
 
         .menu-btn:hover {
-            transform: rotate(90deg); /* Smooth rotation for hover */
+            transform: scale(1.1);
         }
 
-        /* Form section styles */
         .form-section {
-            background-color: #f9f9f9; /* Softer background */
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
+            background-color: #ffffff;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
         }
 
         .form-section h2 {
-            font-size: 1.6em;
+            font-size: 1.4em;
+            margin-bottom: 10px;
             color: #333;
-            margin-bottom: 15px;
             text-align: center;
         }
 
         .form-section input {
-            margin: 10px 0;
+            margin: 8px 0;
             padding: 12px;
             width: 100%;
-            border: 1px solid #ccc;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
             border-radius: 5px;
-            font-size: 1.1em;
+            font-size: 1em;
         }
 
         .form-section button {
-            padding: 12px;
-            background-color: #0288d1; /* Match header color */
+            padding: 12px 20px;
+            background-color: #4CAF50;
             color: white;
             border: none;
             border-radius: 5px;
             font-size: 1.2em;
             cursor: pointer;
-            transition: background-color 0.3s ease-in-out, transform 0.2s;
+            transition: all 0.3s ease-in-out;
         }
 
         .form-section button:hover {
-            background-color: #0277bd; /* Slightly darker on hover */
-            transform: translateY(-2px);
+            background-color: #45a049;
+            transform: translateY(-3px);
         }
 
-        /* Sales section styles */
         .sales-section {
-            background-color: #e1f5fe; /* Light blue for contrast */
-            border: 1px solid #0288d1;
-            padding: 15px;
+            background-color: #eaf9ea;
+            border: 2px solid #4CAF50;
+            padding: 10px;
             border-radius: 10px;
+            margin-bottom: 15px;
             text-align: center;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
@@ -109,30 +110,35 @@
         .sales-section h3 {
             font-size: 1.5em;
             color: #333;
-            margin-bottom: 10px;
+            margin: 0 0 10px 0;
         }
 
         .sale-summary {
-            font-size: 1.1em;
-            color: #0288d1;
+            font-size: 1.0em;
+            color: #4CAF50;
             font-weight: bold;
         }
 
-        /* Footer styles */
+        .sale-summary strong {
+            font-size: 0.9em;
+        }
+
         footer {
-            background-color: #0288d1;
+            background-color: #4CAF50;
             color: white;
-            padding: 20px 0;
+            padding: 15px 0;
             text-align: center;
+            border-top: 2px solid #4CAF50;
             border-radius: 10px;
+            margin-top: 20px;
         }
 
         footer nav ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
             display: flex;
             justify-content: center;
+            list-style: none;
+            padding: 0;
+            margin: 0 0 10px;
         }
 
         footer nav ul li {
@@ -147,10 +153,10 @@
         }
 
         footer nav ul li a:hover {
-            color: #b3e5fc; /* Lighter color on hover */
+            color: #a7ffae;
         }
 
-        /* Menu popup styles */
+        /* Menu Popup */
         .menu-popup {
             display: none;
             position: fixed;
@@ -165,6 +171,8 @@
             align-items: center;
             flex-direction: column;
             text-align: center;
+            border: 2px solid white;
+            border-radius: 10px;
         }
 
         .menu-popup a {
@@ -184,69 +192,167 @@
         }
 
         /* Responsive design */
-        @media (max-width: 768px) {
+        @media screen and (max-width: 768px) {
             header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .menu-btn {
-                margin-bottom: 10px;
-            }
-
-            .form-section input, .form-section button {
-                font-size: 1em;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .form-section {
+                flex-direction: row;
                 padding: 15px;
             }
 
-            .form-section h2 {
+            .menu-btn {
+                font-size: 1.5em;
+            }
+
+            .form-section input {
+                padding: 10px;
+            }
+
+            .form-section button {
+                width: 100%;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .main-wrapper {
+                padding: 15px;
+            }
+
+            .form-section h2,
+            .sales-section h3 {
                 font-size: 1.3em;
+            }
+
+            .form-section input,
+            .form-section button {
+                padding: 10px;
+                font-size: 1em;
             }
         }
     </style>
 </head>
+
 <body>
-<div class="main-wrapper">
-    <header>
-        <button class="menu-btn" id="menu-btn">☰</button>
-        <div class="total-sale" id="total-sale">Total Sale: ৳0.00</div>
-    </header>
-    <div class="sales-section">
-        <h3>Last Sale</h3>
-        <div class="sale-summary" id="sale-summary">No sales yet.</div>
+    <div class="main-wrapper">
+        <!-- Header -->
+        <header>
+            <div class="header-left">
+                <button class="menu-btn" id="menu-btn">☰</button>
+            </div>
+            <div class="header-right">
+                <div class="total-sale" id="total-sale">Total Sale: ৳0.00</div>
+            </div>
+        </header>
+
+        <!-- Last Sale (Calculator View) -->
+        <div class="sales-section">
+            <h3>Last Sale</h3>
+            <div class="sale-summary" id="sale-summary">No sales yet.</div>
+        </div>
+
+        <!-- Product Entry -->
+        <div class="form-section">
+            <h2>Product Entry</h2>
+            <input type="text" id="shop-name" placeholder="Shop Name">
+            <input type="text" id="product-name" placeholder="Product Name">
+            <input type="number" id="product-price" placeholder="Product Price">
+            <input type="number" id="product-quantity" placeholder="Product Quantity">
+            <button onclick="generateSale()">Generate Sale</button>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="privacy-policy.html">Privacy Policy</a></li>
+                </ul>
+            </nav>
+        </footer>
     </div>
-    <div class="form-section">
-        <h2>Product Entry</h2>
-        <input type="text" id="shop-name" placeholder="Shop Name">
-        <input type="text" id="product-name" placeholder="Product Name">
-        <input type="number" id="product-price" placeholder="Product Price">
-        <input type="number" id="product-quantity" placeholder="Product Quantity">
-        <button onclick="generateSale()">Generate Sale</button>
+
+    <!-- Menu Popup -->
+    <div id="menu-popup" class="menu-popup">
+        <a href="#" onclick="openFullSalesHistory()">Full Sales History</a>
+        <a href="#" onclick="downloadSalesHistory()">Download Sales History</a>
+        <a href="#" onclick="closeStore()">Close Store</a>
+        <button onclick="closeMenu()">✖</button>
     </div>
-    <footer>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="contact.html">Contact</a></li>
-                <li><a href="privacy-policy.html">Privacy Policy</a></li>
-            </ul>
-        </nav>
-    </footer>
-</div>
-<div id="menu-popup" class="menu-popup">
-    <a href="#" onclick="openFullSalesHistory()">Full Sales History</a>
-    <a href="#" onclick="downloadSalesHistory()">Download Sales History</a>
-    <a href="#" onclick="closeStore()">Close Store</a>
-    <button onclick="closeMenu()">✖</button>
-</div>
-<script>
-    // Keep your existing JavaScript logic
-</script>
+
+    <script>
+        // JavaScript Code (unchanged)
+        let salesData = JSON.parse(localStorage.getItem("salesData")) || [];
+        let shopNameStored = localStorage.getItem("shopName");
+
+        const menuBtn = document.getElementById('menu-btn');
+        const menuPopup = document.getElementById('menu-popup');
+
+        menuBtn.addEventListener('click', function () {
+            menuPopup.style.display = menuPopup.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        function closeMenu() {
+            menuPopup.style.display = 'none';
+        }
+
+        function openFullSalesHistory() {
+            const salesHistory = salesData.map(sale => `
+                Shop: ${sale.shopName}, Product: ${sale.productName}, 
+                Quantity: ${sale.productQuantity}, Total: ৳${sale.total.toFixed(2)}, 
+                Time: ${sale.time}
+            `).join('<br>');
+            alert("Full Sales History:\n" + salesHistory);
+        }
+
+        function downloadSalesHistory() {
+            const blob = new Blob([JSON.stringify(salesData, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'salesHistory.json';
+            a.click();
+        }
+
+        function closeStore() {
+            localStorage.clear();
+            location.reload();
+        }
+
+        function generateSale() {
+            const shopName = document.getElementById("shop-name").value;
+            const productName = document.getElementById("product-name").value;
+            const productPrice = parseFloat(document.getElementById("product-price").value) || 0;
+            const productQuantity = parseInt(document.getElementById("product-quantity").value) || 0;
+
+            if (!shopName || !productName || productPrice <= 0 || productQuantity <= 0) {
+                alert("Please fill in all fields with valid data.");
+                return;
+            }
+
+            if (!shopNameStored) {
+                localStorage.setItem("shopName", shopName);
+            }
+
+            const total = productPrice * productQuantity;
+            const saleRecord = {
+                shopName,
+                productName,
+                productPrice,
+                productQuantity,
+                total,
+                time: new Date().toLocaleString()
+            };
+
+            salesData.push(saleRecord);
+            localStorage.setItem("salesData", JSON.stringify(salesData));
+
+            document.getElementById("sale-summary").innerText = `
+                Shop: ${shopName}, Product: ${productName}, Quantity: ${productQuantity}, Total: ৳${total.toFixed(2)}
+            `;
+
+            const totalSales = salesData.reduce((acc, sale) => acc + sale.total, 0);
+            document.getElementById("total-sale").innerText = `Total Sale: ৳${totalSales.toFixed(2)}`;
+        }
+    </script>
 </body>
+
 </html>

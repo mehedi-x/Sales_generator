@@ -147,7 +147,7 @@
     const menuPopup = document.getElementById('menu-popup');
 
     menuBtn.addEventListener('click', function () {
-        menuPopup.style.display = menuPopup.style.display === 'flex' ? 'none' : 'flex';
+        menuPopup.style.display = menuPopup.style.display === 'none' || menuPopup.style.display === '' ? 'flex' : 'none';
     });
 
     function closeMenu() {

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Responsive Store</title>
+    <title>Store Management</title>
     <style>
         /* General Styles */
         * {
@@ -98,6 +98,21 @@
             padding: 10px;
             width: 100%;
         }
+        .sales-section {
+            margin-top: 20px;
+            background-color: #f4f4f9;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .sales-section h3 {
+            color: #4CAF50;
+        }
+        .sale-summary {
+            margin-top: 10px;
+            background-color: #e0e0e0;
+            padding: 10px;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -121,10 +136,10 @@
 
     <!-- Product Entry Form -->
     <div class="form-section">
-        <input type="text" id="shop-name" placeholder="Shop Name">
-        <input type="text" id="product-name" placeholder="Product Name">
-        <input type="number" id="product-price" placeholder="Product Price">
-        <input type="number" id="product-quantity" placeholder="Product Quantity">
+        <input type="text" id="shop-name" placeholder="Shop Name" required>
+        <input type="text" id="product-name" placeholder="Product Name" required>
+        <input type="number" id="product-price" placeholder="Product Price" required>
+        <input type="number" id="product-quantity" placeholder="Product Quantity" required>
         <button onclick="generateSale()">Generate Sale</button>
     </div>
 
@@ -153,16 +168,19 @@
     let salesData = JSON.parse(localStorage.getItem("salesData")) || [];
     let shopNameStored = localStorage.getItem("shopName");
 
+    // Toggle menu popup
     const menuBtn = document.getElementById('menu-btn');
     const menuPopup = document.getElementById('menu-popup');
     menuBtn.addEventListener('click', function () {
         menuPopup.style.display = menuPopup.style.display === 'flex' ? 'none' : 'flex';
     });
 
+    // Close the menu popup
     function closeMenu() {
         menuPopup.style.display = 'none';
     }
 
+    // Show full sales history
     function openFullSalesHistory() {
         const salesHistory = salesData.map(sale => `
             Shop: ${sale.shopName}, Product: ${sale.productName}, 
@@ -172,6 +190,7 @@
         alert("Full Sales History: \n" + salesHistory);
     }
 
+    // Download sales history as JSON file
     function downloadSalesHistory() {
         const data = JSON.stringify(salesData, null, 2);
         const blob = new Blob([data], { type: 'application/json' });
@@ -181,28 +200,33 @@
         link.click();
     }
 
+    // Close the store and clear data
     function closeStore() {
         localStorage.removeItem("salesData");
         localStorage.removeItem("shopName");
         alert("Store has been closed. All sales data has been cleared.");
     }
 
+    // Generate a sale
     function generateSale() {
         const shopName = document.getElementById("shop-name").value;
         const productName = document.getElementById("product-name").value;
         const productPrice = parseFloat(document.getElementById("product-price").value);
         const productQuantity = parseFloat(document.getElementById("product-quantity").value) || 1;
 
+        // Validate inputs
         if (!productName || isNaN(productPrice) || productPrice <= 0 || productQuantity <= 0) {
             alert("Please fill out all fields with valid values.");
             return;
         }
 
+        // Store shop name if not already stored
         if (!shopNameStored && shopName) {
             localStorage.setItem("shopName", shopName);
             shopNameStored = shopName;
         }
 
+        // Create a sale object
         const product = {
             shopName: shopNameStored,
             productName,
@@ -212,13 +236,17 @@
             time: new Date().toLocaleString(),
         };
 
+        // Save sale data to localStorage
         salesData.push(product);
         localStorage.setItem("salesData", JSON.stringify(salesData));
+
+        // Update the UI
         updateLastSaleView(product);
         updateTotalSale();
         resetForm();
     }
 
+    // Update the last sale summary
     function updateLastSaleView(lastSale) {
         document.getElementById("sale-summary").innerHTML = `
             Last Sale: ${lastSale.productName}, 
@@ -227,11 +255,13 @@
         `;
     }
 
+    // Update the total sale amount
     function updateTotalSale() {
         const totalSale = salesData.reduce((total, sale) => total + sale.total, 0);
         document.getElementById("total-sale").innerText = `Total Sale: ৳${totalSale.toFixed(2)}`;
     }
 
+    // Reset form fields
     function resetForm() {
         document.getElementById("shop-name").value = "";
         document.getElementById("product-name").value = "";

@@ -278,17 +278,13 @@
     <script>
         let salesData = JSON.parse(localStorage.getItem("salesData")) || [];
 
-        const menuBtn = document.getElementById('menu-btn');
-        const menuPopup = document.getElementById('menu-popup');
-
-        menuBtn.addEventListener('click', function () {
+        // Open and Close Menu Popup
+        function toggleMenu() {
+            const menuPopup = document.getElementById('menu-popup');
             menuPopup.style.display = menuPopup.style.display === 'flex' ? 'none' : 'flex';
-        });
-
-        function closeMenu() {
-            menuPopup.style.display = 'none';
         }
 
+        // Open Full Sales History
         function openFullSalesHistory() {
             const salesHistory = salesData.map(sale => `
                 <div>
@@ -304,7 +300,12 @@
             fullHistoryWindow.document.write(`<h1>Sales History</h1>${salesHistory}`);
         }
 
+        // Download Sales History
         function downloadSalesHistory() {
+            if (salesData.length === 0) {
+                alert('No sales data available to download!');
+                return;
+            }
             const salesHistoryJSON = JSON.stringify(salesData);
             const blob = new Blob([salesHistoryJSON], { type: 'application/json' });
             const link = document.createElement('a');
@@ -313,13 +314,16 @@
             link.click();
         }
 
+        // Close Store and Clear Sales Data
         function closeStore() {
             if (confirm('Are you sure you want to close the store? This will clear all sales data.')) {
                 localStorage.removeItem("salesData");
-                location.reload(); // Reload the page to reflect changes
+                salesData = [];
+                location.reload();
             }
         }
 
+        // Generate Sale (Add New Sale)
         function generateSale() {
             const shopName = document.getElementById('shop-name').value;
             const productName = document.getElementById('product-name').value;
@@ -350,12 +354,20 @@
             }
         }
 
+        // Update Total Sale Display
         function updateTotalSale() {
             const totalSale = salesData.reduce((sum, sale) => sum + sale.totalSale, 0);
             document.getElementById('total-sale').innerText = `Total Sale: ৳${totalSale.toFixed(2)}`;
         }
-    </script>
 
+        // Close Menu Popup
+        function closeMenu() {
+            document.getElementById('menu-popup').style.display = 'none';
+        }
+
+        // Event Listener for Menu Button
+        document.getElementById('menu-btn').addEventListener('click', toggleMenu);
+    </script>
 </body>
 
 </html>

@@ -13,8 +13,11 @@
         }
         .main-wrapper {
             max-width: 1200px;
-            margin: 0 auto;
+            margin: 20px auto;
             padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
         header {
             display: flex;
@@ -22,44 +25,19 @@
             align-items: center;
             background-color: #333;
             color: white;
-            padding: 10px 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
         }
         .total-sale {
             font-size: 1.2em;
+            font-weight: bold;
         }
         .menu-btn {
             background: none;
             border: none;
             color: white;
             font-size: 1.5em;
-            cursor: pointer;
-        }
-        .menu-popup {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            color: white;
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-        .menu-popup a {
-            color: white;
-            text-decoration: none;
-            font-size: 1.5em;
-            margin: 10px 0;
-        }
-        .menu-popup button {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 2em;
-            margin-top: 20px;
             cursor: pointer;
         }
         .sales-section {
@@ -69,39 +47,60 @@
             justify-content: center;
             background-color: #fff;
             border: 1px solid #ddd;
-            padding: 15px;
+            padding: 20px;
             margin-bottom: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
         .sales-section h3 {
             margin: 0 0 10px;
+            font-size: 1.5em;
+            color: #333;
         }
         .sale-summary {
             font-size: 1.2em;
             color: #555;
         }
         .form-section {
-            margin: 20px 0;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .form-section h2 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: #333;
         }
         .form-section input {
-            margin: 5px 0;
-            padding: 8px;
+            margin: 10px 0;
+            padding: 12px;
             width: 100%;
             box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
         }
-        button {
-            padding: 10px;
+        .form-section button {
+            padding: 12px 20px;
             background-color: #333;
             color: white;
             border: none;
+            border-radius: 5px;
+            font-size: 1em;
             cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+        .form-section button:hover {
+            background-color: #555;
         }
         footer {
             background-color: #333;
             color: white;
             padding: 20px 0;
             text-align: center;
+            border-radius: 8px;
         }
         footer nav ul {
             display: flex;
@@ -153,30 +152,9 @@
         </nav>
     </footer>
 </div>
-
-<!-- Menu Popup -->
-<div id="menu-popup" class="menu-popup">
-    <a href="#" onclick="openFullSalesHistory()">Full Sales History</a>
-    <a href="#" onclick="downloadSalesHistory()">Download Sales History</a>
-    <a href="#" onclick="closeStore()">Close Store</a>
-    <button onclick="closeMenu()">✖</button>
-</div>
-
 <script>
     let salesData = JSON.parse(localStorage.getItem("salesData")) || [];
     let shopNameStored = localStorage.getItem("shopName");
-
-    // Menu toggle logic
-    const menuBtn = document.getElementById('menu-btn');
-    const menuPopup = document.getElementById('menu-popup');
-
-    menuBtn.addEventListener('click', function () {
-        menuPopup.style.display = menuPopup.style.display === 'none' || menuPopup.style.display === '' ? 'flex' : 'none';
-    });
-
-    function closeMenu() {
-        menuPopup.style.display = 'none';
-    }
 
     // Generate Sale
     function generateSale() {
@@ -231,15 +209,6 @@
         document.getElementById("product-name").value = "";
         document.getElementById("product-price").value = "";
         document.getElementById("product-quantity").value = "";
-    }
-
-    function closeStore() {
-        salesData = [];
-        localStorage.clear();
-        shopNameStored = null;
-        updateTotalSale();
-        alert("Store is closed and data has been cleared.");
-        document.getElementById("shop-name").style.display = "block";
     }
 
     window.onload = function () {

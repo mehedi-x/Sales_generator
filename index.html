@@ -62,7 +62,26 @@
             margin-top: 20px;
             cursor: pointer;
         }
-        .form-section, .sales-section {
+        .sales-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .sales-section h3 {
+            margin: 0 0 10px;
+        }
+        .sale-summary {
+            font-size: 1.2em;
+            color: #555;
+        }
+        .form-section {
             margin: 20px 0;
         }
         .form-section input {
@@ -106,6 +125,14 @@
         <div class="total-sale" id="total-sale">Total Sale: ৳0.00</div>
         <button class="menu-btn" id="menu-btn">☰</button>
     </header>
+
+    <!-- Last Sale (Calculator View) -->
+    <div class="sales-section">
+        <h3>Last Sale</h3>
+        <div class="sale-summary" id="sale-summary">No sales yet.</div>
+    </div>
+
+    <!-- Product Entry -->
     <div class="form-section">
         <h2>Product Entry</h2>
         <input type="text" id="shop-name" placeholder="Shop Name">
@@ -114,10 +141,7 @@
         <input type="number" id="product-quantity" placeholder="Product Quantity">
         <button onclick="generateSale()">Generate Sale</button>
     </div>
-    <div class="sales-section">
-        <h3>Last Sale:</h3>
-        <p id="sale-summary">No sales yet.</p>
-    </div>
+
     <footer>
         <nav>
             <ul>

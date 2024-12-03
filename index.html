@@ -1,651 +1,339 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Responsive Store</title>
-
     <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
-
             font-family: Arial, sans-serif;
-
-            margin: 0;
-
-            padding: 0;
-
-            background-color: #f4f4f9;
-
+            background-color: #121212; /* Dark background */
+            color: #fff; /* Light text color */
         }
 
         .main-wrapper {
-
-            max-width: 1100px;
-
-            margin: 20px auto;
-
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
             padding: 20px;
-
-            background-color: #ffffff;
-
-            border-radius: 10px;
-
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-
         }
 
+        /* Header Section */
         header {
-
             display: flex;
-
             justify-content: space-between;
-
-            align-items: center;
-
-            background-color: #4CAF50;
-
-            color: white;
-
-            padding: 10px 20px;
-
-            border-radius: 10px;
-
-            margin-bottom: 15px;
-
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-
+            padding: 20px;
+            background-color: #1e1e1e; /* Darker header */
+            border-bottom: 1px solid #333;
         }
 
-        .total-sale {
-
-            font-size: 1.2em;
-
+        .header-left .brand-name {
+            font-size: 24px;
             font-weight: bold;
-
         }
 
-        .menu-btn {
-
-            background: none;
-
+        .header-right button {
+            background-color: #e91e63; /* Bright color for buttons */
+            color: #fff;
             border: none;
-
-            color: white;
-
-            font-size: 1.8em;
-
+            padding: 10px 15px;
             cursor: pointer;
-
-            transition: transform 0.2s ease-in-out;
-
+            font-size: 16px;
+            border-radius: 5px;
         }
 
-        .menu-btn:hover {
-
-            transform: scale(1.1);
-
+        header button:hover {
+            background-color: #c2185b; /* Darker shade for hover effect */
         }
 
+        /* Sales Section */
+        .sales-section {
+            background-color: #2c2c2c;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        #sale-summary h3 {
+            font-size: 20px;
+            color: #ff9800; /* High contrast color for section titles */
+        }
+
+        #sale-summary p {
+            font-size: 16px;
+        }
+
+        /* Form Section */
         .form-section {
-
-            background-color: #ffffff;
-
-            padding: 15px;
-
-            border-radius: 10px;
-
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-
-            margin-bottom: 15px;
-
+            background-color: #2c2c2c;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
         }
 
-        .form-section h2 {
-
-            font-size: 1.4em;
-
-            margin-bottom: 10px;
-
-            color: #333;
-
-            text-align: center;
-
+        .form-section label {
+            font-size: 16px;
+            margin-top: 10px;
+            display: block;
         }
 
         .form-section input {
-
-            margin: 8px 0;
-
-            padding: 12px;
-
             width: 100%;
-
-            box-sizing: border-box;
-
-            border: 1px solid #ddd;
-
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #444;
+            background-color: #333;
+            color: #fff;
+            font-size: 16px;
             border-radius: 5px;
+        }
 
-            font-size: 1em;
-
+        .form-section input:focus {
+            border-color: #e91e63;
+            outline: none;
         }
 
         .form-section button {
-
-            padding: 12px 20px;
-
-            background-color: #4CAF50;
-
-            color: white;
-
+            background-color: #4caf50; /* Green for generate button */
+            color: #fff;
+            padding: 10px 15px;
             border: none;
-
-            border-radius: 5px;
-
-            font-size: 1.2em;
-
             cursor: pointer;
-
-            transition: all 0.3s ease-in-out;
-
+            font-size: 16px;
+            border-radius: 5px;
+            margin-top: 10px;
         }
 
         .form-section button:hover {
-
-            background-color: #45a049;
-
-            transform: translateY(-3px);
-
+            background-color: #388e3c; /* Darker green for hover */
         }
 
-        .sales-section {
-
-            background-color: #eaf9ea;
-
-            border: 1px solid #4CAF50;
-
-            padding: 10px;
-
-            border-radius: 10px;
-
-            margin-bottom: 15px;
-
-            text-align: center;
-
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            align-items: center;
+            justify-content: center;
         }
 
-        .sales-section h3 {
-
-            font-size: 1.5em;
-
-            color: #333;
-
-            margin: 0 0 10px 0;
-
+        .modal-content {
+            background-color: #333;
+            padding: 30px;
+            border-radius: 5px;
+            width: 60%;
+            max-width: 600px;
+            color: #fff;
         }
 
-        .sale-summary {
-
-            font-size: 1.0em;
-
-            color: #4CAF50;
-
-            font-weight: bold;
-
+        .modal-content button {
+            background-color: #ff5722; /* Red for close/cancel buttons */
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            margin-top: 10px;
         }
 
-        .sale-summary strong {
-
-            font-size: 0.9em;
-
+        .modal-content button:hover {
+            background-color: #d84315;
         }
 
-        footer {
-
-            background-color: #4CAF50;
-
-            color: white;
-
-            padding: 15px 0;
-
-            text-align: center;
-
-            border-radius: 10px;
-
+        #full-sales-list {
             margin-top: 20px;
+            padding: 0;
+        }
 
+        #full-sales-list li {
+            list-style-type: none;
+            padding: 10px;
+            background-color: #444;
+            margin-bottom: 5px;
+            border-radius: 5px;
+        }
+
+        #full-sales-list li strong {
+            color: #ff9800;
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 0.9em; /* Reduced font size */
         }
 
         footer nav ul {
-
             display: flex;
-
             justify-content: center;
-
             list-style: none;
-
             padding: 0;
-
-            margin: 0 0 10px;
-
+            margin: 0;
         }
 
         footer nav ul li {
-
             margin: 0 15px;
-
         }
 
         footer nav ul li a {
-
             text-decoration: none;
-
             color: white;
-
-            font-size: 1.1em;
-
+            font-size: 1em; /* Reduced font size */
             transition: color 0.3s ease-in-out;
-
         }
 
         footer nav ul li a:hover {
-
             color: #a7ffae;
-
         }
-
-        /* Menu Popup */
-
-        .menu-popup {
-
-            display: none;
-
-            position: fixed;
-
-            top: 0;
-
-            left: 0;
-
-            width: 100%;
-
-            height: 100%;
-
-            background-color: rgba(0, 0, 0, 0.8);
-
-            color: white;
-
-            z-index: 1000;
-
-            justify-content: center;
-
-            align-items: center;
-
-            flex-direction: column;
-
-            text-align: center;
-
-        }
-
-        .menu-popup a {
-
-            color: white;
-
-            text-decoration: none;
-
-            font-size: 1.5em;
-
-            margin: 10px 0;
-
-        }
-
-        .menu-popup button {
-
-            background: none;
-
-            border: none;
-
-            color: white;
-
-            font-size: 2em;
-
-            margin-top: 20px;
-
-            cursor: pointer;
-
-        }
-
-        /* Responsive design */
-
-        @media screen and (max-width: 768px) {
-
-            header {
-
-                flex-direction: row;
-
-                padding: 15px;
-
-            }
-
-            .menu-btn {
-
-                font-size: 1.5em;
-
-            }
-
-            .form-section input {
-
-                padding: 10px;
-
-            }
-
-            .form-section button {
-
-                width: 100%;
-
-            }
-
-        }
-
-        @media screen and (max-width: 480px) {
-
-            .main-wrapper {
-
-                padding: 15px;
-
-            }
-
-            .form-section h2, .sales-section h3 {
-
-                font-size: 1.3em;
-
-            }
-
-            .form-section input, .form-section button {
-
-                padding: 10px;
-
-                font-size: 1em;
-
-            }
-
-        }
-
     </style>
-
 </head>
-
 <body>
-
 <div class="main-wrapper">
 
     <!-- Header -->
-
     <header>
-
         <div class="header-left">
-
             <button class="menu-btn" id="menu-btn">☰</button>
-
         </div>
-
         <div class="header-right">
-
             <div class="total-sale" id="total-sale">Total Sale: ৳0.00</div>
-
         </div>
-
     </header>
 
     <!-- Last Sale (Calculator View) -->
-
     <div class="sales-section">
-
         <h3>Last Sale</h3>
-
         <div class="sale-summary" id="sale-summary">No sales yet.</div>
-
     </div>
 
     <!-- Product Entry -->
-
     <div class="form-section">
-
         <h2>Product Entry</h2>
-
         <input type="text" id="shop-name" placeholder="Shop Name">
-
         <input type="text" id="product-name" placeholder="Product Name">
-
         <input type="number" id="product-price" placeholder="Product Price">
-
         <input type="number" id="product-quantity" placeholder="Product Quantity">
-
         <button onclick="generateSale()">Generate Sale</button>
-
     </div>
 
     <!-- Footer -->
-
     <footer>
-
         <nav>
-
             <ul>
-
                 <li><a href="index.html">Home</a></li>
-
                 <li><a href="about.html">About</a></li>
-
                 <li><a href="contact.html">Contact</a></li>
-
                 <li><a href="privacy-policy.html">Privacy Policy</a></li>
-
             </ul>
-
         </nav>
-
     </footer>
 
 </div>
 
 <!-- Menu Popup -->
-
 <div id="menu-popup" class="menu-popup">
-
     <a href="#" onclick="openFullSalesHistory()">Full Sales History</a>
-
     <a href="#" onclick="downloadSalesHistory()">Download Sales History</a>
-
     <a href="#" onclick="closeStore()">Close Store</a>
-
     <button onclick="closeMenu()">✖</button>
-
 </div>
 
 <script>
-
     let salesData = JSON.parse(localStorage.getItem("salesData")) || [];
-
     let shopNameStored = localStorage.getItem("shopName");
 
     // Menu toggle logic
-
     const menuBtn = document.getElementById('menu-btn');
-
     const menuPopup = document.getElementById('menu-popup');
-
     menuBtn.addEventListener('click', function () {
-
         menuPopup.style.display = menuPopup.style.display === 'flex' ? 'none' : 'flex';
-
     });
 
     function closeMenu() {
-
         menuPopup.style.display = 'none';
-
     }
 
     function openFullSalesHistory() {
-
         const salesHistory = salesData.map(sale => `
-
             Shop: ${sale.shopName}, Product: ${sale.productName}, 
-
             Quantity: ${sale.productQuantity}, Total: ৳${sale.total.toFixed(2)}, 
-
             Time: ${sale.time}
-
         `).join('<br>');
-
         alert("Full Sales History: \n" + salesHistory);
-
     }
 
     function downloadSalesHistory() {
-
         const data = JSON.stringify(salesData, null, 2);
-
         const blob = new Blob([data], { type: 'application/json' });
-
         const link = document.createElement('a');
-
         link.href = URL.createObjectURL(blob);
-
         link.download = 'sales-history.json';
-
         link.click();
-
     }
 
     function closeStore() {
-
         localStorage.removeItem("salesData");
-
         localStorage.removeItem("shopName");
-
         alert("Store has been closed. All sales data has been cleared.");
-
     }
 
     function generateSale() {
-
         const shopName = document.getElementById("shop-name").value;
-
         const productName = document.getElementById("product-name").value;
-
         const productPrice = parseFloat(document.getElementById("product-price").value);
-
         const productQuantity = parseFloat(document.getElementById("product-quantity").value) || 1;
 
-        if (!productName || isNaN(productPrice) || productPrice <= 0 || productQuantity <= 0) {
-
-            alert("Please fill out all fields with valid values.");
-
+        if (!productName || isNaN(productPrice) || isNaN(productQuantity)) {
+            alert("Please enter valid product details.");
             return;
-
         }
 
-        if (!shopNameStored && shopName) {
-
-            localStorage.setItem("shopName", shopName);
-
-            document.getElementById("shop-name").style.display = "none";
-
-            shopNameStored = shopName;
-
-        }
-
-        const product = {
-
-            shopName: shopNameStored,
-
+        const total = productPrice * productQuantity;
+        const sale = {
+            shopName,
             productName,
-
             productPrice,
-
             productQuantity,
-
-            total: productPrice * productQuantity,
-
-            time: new Date().toLocaleString(),
-
+            total,
+            time: new Date().toLocaleString()
         };
 
-        salesData.push(product);
-
+        salesData.push(sale);
         localStorage.setItem("salesData", JSON.stringify(salesData));
 
-        updateLastSaleView(product);
-
-        updateTotalSale();
-
-        resetForm();
-
-    }
-
-    function updateLastSaleView(lastSale) {
-
         document.getElementById("sale-summary").innerHTML = `
-
-            <strong>Shop:</strong> ${lastSale.shopName}<br>
-
-            <strong>Product:</strong> ${lastSale.productName}<br>
-
-            <strong>Quantity:</strong> ${lastSale.productQuantity}<br>
-
-            <strong>Total:</strong> ৳${lastSale.total.toFixed(2)}<br>
-
-            <strong>Time:</strong> ${lastSale.time}
-
+            <strong>${productName}</strong> 
+            Quantity: ${productQuantity} 
+            Total: ৳${total.toFixed(2)}
         `;
-
+        document.getElementById("total-sale").textContent = `Total Sale: ৳${calculateTotalSales().toFixed(2)}`;
     }
 
-    function updateTotalSale() {
-
-        const totalSaleAmount = salesData.reduce((total, sale) => total + sale.total, 0);
-
-        document.getElementById("total-sale").textContent = `Total Sale: ৳${totalSaleAmount.toFixed(2)}`;
-
+    function calculateTotalSales() {
+        return salesData.reduce((acc, sale) => acc + sale.total, 0);
     }
 
-    function resetForm() {
-
-        document.getElementById("product-name").value = "";
-
-        document.getElementById("product-price").value = "";
-
-        document.getElementById("product-quantity").value = "";
-
+    // Load saved shop name
+    if (shopNameStored) {
+        document.getElementById("shop-name").value = shopNameStored;
     }
-
-    window.onload = function () {
-
-        if (shopNameStored) {
-
-            document.getElementById("shop-name").style.display = "none";
-
-            const lastSale = salesData[salesData.length - 1];
-
-            if (lastSale) updateLastSaleView(lastSale);
-
-        }
-
-        updateTotalSale();
-
-    };
-
 </script>
-
 </body>
-
 </html>

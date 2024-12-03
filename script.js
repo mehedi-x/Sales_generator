@@ -63,31 +63,44 @@ function resetForm() {
     document.getElementById("product-quantity").value = "";
 }
 
-// Open close store modal and show full sales history
+// Open full sales history modal
 function openCloseStoreModal() {
     const fullSalesList = document.getElementById("full-sales-list");
-    fullSalesList.innerHTML = "";
+    fullSalesList.innerHTML = ""; // Clear existing list
+    
+    if (salesData.length > 0) {
+        salesData.forEach((sale, index) => {
+            const listItem = document.createElement("li");
+            listItem.innerHTML = `
+                <strong>Sale #${index + 1}:</strong><br>
+                <strong>Shop:</strong> ${sale.shopName}<br>
+                <strong>Product:</strong> ${sale.productName}<br>
+                <strong>Quantity:</strong> ${sale.productQuantity}<br>
+                <strong>Unit Price:</strong> ৳${sale.productPrice.toFixed(2)}<br>
+                <strong>Total:</strong> ৳${sale.total.toFixed(2)}<br>
+                <hr>
+            `;
+            fullSalesList.appendChild(listItem);
+        });
+    } else {
+        fullSalesList.innerHTML = "<p>No sales history available.</p>";
+    }
 
-    salesData.forEach((sale, index) => {
-        const listItem = document.createElement("li");
-        listItem.innerHTML = `
-            <strong>${index + 1}.</strong> Shop: ${sale.shopName}, Product: ${sale.productName},
-            Quantity: ${sale.productQuantity}, Total: ৳${sale.total.toFixed(2)}
-        `;
-        fullSalesList.appendChild(listItem);
-    });
-
-    document.getElementById("close-store-modal").style.display = "block";
+    document.getElementById("close-store-modal").style.display = "block"; // Open the modal
 }
 
 // Download sales history as PDF
 function downloadSalesHistory() {
-    const salesSummary = salesData
-        .map(
-            (sale, index) =>
-                `${index + 1}. Shop: ${sale.shopName}, Product: ${sale.productName}, Quantity: ${sale.productQuantity}, Total: ৳${sale.total.toFixed(2)}`
-        )
-        .join("\n");
+    let salesSummary = salesData.map((sale, index) => {
+        return `
+            Sale #${index + 1}:
+            Shop: ${sale.shopName}
+            Product: ${sale.productName}
+            Quantity: ${sale.productQuantity}
+            Unit Price: ৳${sale.productPrice.toFixed(2)}
+            Total: ৳${sale.total.toFixed(2)}
+        `;
+    }).join("\n\n");
 
     const blob = new Blob([salesSummary], { type: "application/pdf" });
     const url = URL.createObjectURL(blob);
@@ -95,18 +108,25 @@ function downloadSalesHistory() {
     const link = document.createElement("a");
     link.href = url;
     link.download = "Sales_History.pdf";
-    link.click();
+    link.click(); // Trigger the download
 
     URL.revokeObjectURL(url);
 }
 
-// Close store and clear sales data
+// Close store and clear sales data with confirmation
 function closeStore() {
-    salesData = [];
-    localStorage.removeItem("salesData");
-    document.getElementById("close-store-modal").style.display = "none";
-    alert("Store closed and all sales data cleared!");
-    location.reload();
+    // Display confirmation modal
+    const confirmation = confirm("Are you sure you want to close the store? This will delete all sales data.");
+    
+    if (confirmation) {
+        salesData = []; // Clear sales data
+        localStorage.removeItem("salesData"); // Remove from local storage
+        alert("Store closed and all sales data cleared!");
+        document.getElementById("close-store-modal").style.display = "none"; // Close the modal
+        location.reload(); // Reload the page to reset the state
+    } else {
+        alert("Store closure canceled.");
+    }
 }
 
 // Cancel store closure

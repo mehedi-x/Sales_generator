@@ -1,13 +1,8 @@
-নিচে **README.md** ফাইলের পুরো কন্টেন্ট দেওয়া হলো, যা আপনি `.md` ফাইলে সেভ করে ব্যবহার করতে পারবেন:
-
-```markdown
 # Sales Generator 💼📊
 
 Welcome to **Sales Generator**, a powerful and responsive sales management tool designed to simplify your store’s sales tracking and management. Whether you're a small shop owner or managing a larger business, **Sales Generator** makes it easy to manage product sales, track your store’s total revenue, and keep a historical record of your transactions.
 
 This web-based tool is built with modern technologies to ensure ease of use, efficiency, and accessibility across all devices.
-
----
 
 ## Features 🚀
 

@@ -12,33 +12,37 @@
             box-sizing: border-box;
         }
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f1f1f1;
             color: #333;
         }
         .main-wrapper {
             max-width: 1200px;
-            margin: 0 auto;
+            margin: 50px auto;
             padding: 20px;
             background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
         }
         header {
             display: flex;
             justify-content: space-between;
-            background-color: #4CAF50;
+            background: linear-gradient(135deg, #4CAF50, #388e3c);
             color: white;
-            padding: 10px 20px;
+            padding: 15px 30px;
             border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
         }
-        .menu-btn {
+        header .menu-btn {
+            font-size: 2em;
             background: none;
             border: none;
             color: white;
-            font-size: 2em;
             cursor: pointer;
+        }
+        .total-sale {
+            font-size: 1.2em;
+            font-weight: bold;
         }
         .menu-popup {
             display: none;
@@ -47,7 +51,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
+            background-color: rgba(0, 0, 0, 0.7);
             color: white;
             z-index: 1000;
             justify-content: center;
@@ -60,6 +64,10 @@
             text-decoration: none;
             font-size: 1.5em;
             margin: 10px 0;
+            transition: color 0.3s;
+        }
+        .menu-popup a:hover {
+            color: #4CAF50;
         }
         .menu-popup button {
             background: none;
@@ -72,7 +80,7 @@
         footer {
             background-color: #4CAF50;
             color: white;
-            padding: 10px 0;
+            padding: 15px 0;
             text-align: center;
             border-radius: 10px;
             margin-top: 20px;
@@ -81,37 +89,67 @@
             display: flex;
             justify-content: center;
             list-style: none;
+            padding: 0;
         }
         footer nav ul li {
-            margin: 0 15px;
+            margin: 0 20px;
         }
         footer nav ul li a {
             text-decoration: none;
             color: white;
-            font-size: 1em;
+            font-size: 1.1em;
+            transition: color 0.3s ease-in-out;
         }
         footer nav ul li a:hover {
             color: #a7ffae;
         }
-        .form-section input,
-        .form-section button {
-            padding: 10px;
-            width: 100%;
-        }
-        .sales-section {
-            margin-top: 20px;
-            background-color: #f4f4f9;
+        .form-section {
+            background-color: #fff;
             padding: 20px;
             border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+        .form-section input,
+        .form-section button {
+            padding: 12px;
+            width: 100%;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+        .form-section button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+        .form-section button:hover {
+            background-color: #388e3c;
+        }
+        .sales-section {
+            margin-top: 30px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         .sales-section h3 {
-            color: #4CAF50;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #388e3c;
         }
         .sale-summary {
-            margin-top: 10px;
-            background-color: #e0e0e0;
-            padding: 10px;
+            background-color: #e8f5e9;
+            padding: 15px;
             border-radius: 5px;
+            margin-top: 10px;
+        }
+        .sale-summary span {
+            font-weight: bold;
         }
     </style>
 </head>
@@ -215,50 +253,30 @@
         const productQuantity = parseFloat(document.getElementById("product-quantity").value) || 1;
 
         // Validate inputs
-        if (!productName || isNaN(productPrice) || productPrice <= 0 || productQuantity <= 0) {
-            alert("Please fill out all fields with valid values.");
+        if (!shopName || !productName || isNaN(productPrice) || isNaN(productQuantity)) {
+            alert("Please fill in all fields correctly.");
             return;
         }
 
-        // Store shop name if not already stored
-        if (!shopNameStored && shopName) {
-            localStorage.setItem("shopName", shopName);
-            shopNameStored = shopName;
-        }
+        const total = productPrice * productQuantity;
+        const saleTime = new Date().toLocaleString();
 
-        // Create a sale object
-        const product = {
-            shopName: shopNameStored,
-            productName,
-            productPrice,
-            productQuantity,
-            total: productPrice * productQuantity,
-            time: new Date().toLocaleString(),
-        };
-
-        // Save sale data to localStorage
-        salesData.push(product);
+        // Save the sale to localStorage
+        salesData.push({ shopName, productName, productPrice, productQuantity, total, time: saleTime });
         localStorage.setItem("salesData", JSON.stringify(salesData));
+        localStorage.setItem("shopName", shopName);
 
-        // Update the UI
-        updateLastSaleView(product);
-        updateTotalSale();
-        resetForm();
-    }
-
-    // Update the last sale summary
-    function updateLastSaleView(lastSale) {
+        // Update sale summary
         document.getElementById("sale-summary").innerHTML = `
-            Last Sale: ${lastSale.productName}, 
-            Quantity: ${lastSale.productQuantity}, 
-            Total: ৳${lastSale.total.toFixed(2)}
+            Last Sale: ${productName} (x${productQuantity}) for ৳${total.toFixed(2)} at ${saleTime}.
         `;
-    }
 
-    // Update the total sale amount
-    function updateTotalSale() {
-        const totalSale = salesData.reduce((total, sale) => total + sale.total, 0);
-        document.getElementById("total-sale").innerText = `Total Sale: ৳${totalSale.toFixed(2)}`;
+        // Update total sale
+        const totalSales = salesData.reduce((acc, sale) => acc + sale.total, 0);
+        document.getElementById("total-sale").innerText = `Total Sale: ৳${totalSales.toFixed(2)}`;
+
+        // Reset form
+        resetForm();
     }
 
     // Reset form fields

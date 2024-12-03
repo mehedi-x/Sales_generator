@@ -161,35 +161,3 @@ header button:hover {
 #full-sales-list li strong {
     color: #ff9800;
 }
-footer {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 0;
-    text-align: center;
-    border-radius: 10px;
-    margin-top: 20px;
-    font-size: 0.9em; /* Reduced font size */
-}
-
-footer nav ul {
-    display: flex;
-    justify-content: center;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-footer nav ul li {
-    margin: 0 15px;
-}
-
-footer nav ul li a {
-    text-decoration: none;
-    color: white;
-    font-size: 1em; /* Reduced font size */
-    transition: color 0.3s ease-in-out;
-}
-
-footer nav ul li a:hover {
-    color: #a7ffae;
-}

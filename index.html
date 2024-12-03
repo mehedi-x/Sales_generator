@@ -238,21 +238,23 @@
         link.click();
     }
 
-    // Close the store and clear data
+    // Close the store (clear data)
     function closeStore() {
-        localStorage.removeItem("salesData");
-        localStorage.removeItem("shopName");
-        alert("Store has been closed. All sales data has been cleared.");
+        if (confirm('Are you sure you want to close the store? All data will be cleared.')) {
+            localStorage.clear();
+            salesData = [];
+            alert('Store is closed. All data has been cleared.');
+            location.reload();
+        }
     }
 
-    // Generate a sale
+    // Generate Sale
     function generateSale() {
-        const shopName = document.getElementById("shop-name").value;
-        const productName = document.getElementById("product-name").value;
-        const productPrice = parseFloat(document.getElementById("product-price").value);
-        const productQuantity = parseFloat(document.getElementById("product-quantity").value) || 1;
+        const shopName = document.getElementById('shop-name').value;
+        const productName = document.getElementById('product-name').value;
+        const productPrice = parseFloat(document.getElementById('product-price').value);
+        const productQuantity = parseInt(document.getElementById('product-quantity').value);
 
-        // Validate inputs
         if (!shopName || !productName || isNaN(productPrice) || isNaN(productQuantity)) {
             alert("Please fill in all fields correctly.");
             return;
@@ -286,6 +288,14 @@
         document.getElementById("product-price").value = "";
         document.getElementById("product-quantity").value = "";
     }
+
+    // On load, check if there's any previous sale data
+    window.onload = function() {
+        if (salesData.length > 0) {
+            const totalSales = salesData.reduce((acc, sale) => acc + sale.total, 0);
+            document.getElementById("total-sale").innerText = `Total Sale: ৳${totalSales.toFixed(2)}`;
+        }
+    };
 </script>
 
 </body>

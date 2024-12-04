@@ -11,10 +11,11 @@ body {
     color: #fff; /* Light text color */
 }
 
-/* Dark mode toggle */
-body.dark-mode {
-    background-color: #121212;
-    color: #fff;
+.main-wrapper {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
 }
 
 /* Header Section */
@@ -62,6 +63,16 @@ header button:hover {
     font-size: 16px;
 }
 
+/* Calculator Video Section */
+#calculator-video-container {
+    margin-top: 20px;
+}
+
+iframe {
+    max-width: 100%;
+    border-radius: 10px;
+}
+
 /* Form Section */
 .form-section {
     background-color: #2c2c2c;
@@ -107,7 +118,7 @@ header button:hover {
     background-color: #388e3c; /* Darker green for hover */
 }
 
-/* Menu Modal Styles */
+/* Modal Styles */
 .modal {
     display: none;
     position: fixed;
@@ -127,44 +138,36 @@ header button:hover {
     width: 60%;
     max-width: 600px;
     color: #fff;
-    position: relative;
 }
 
-.close-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: none;
+.modal-content button {
+    background-color: #ff5722; /* Red for close/cancel buttons */
     color: #fff;
+    padding: 10px 15px;
     border: none;
-    font-size: 20px;
     cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    margin-top: 10px;
 }
 
-.menu-items label,
-.menu-items button {
-    display: block;
+.modal-content button:hover {
+    background-color: #d84315;
+}
+
+#full-sales-list {
     margin-top: 20px;
-    font-size: 16px;
+    padding: 0;
 }
 
-.menu-items input,
-.menu-items button {
-    width: 100%;
+#full-sales-list li {
+    list-style-type: none;
     padding: 10px;
-    margin-top: 5px;
-    border: 1px solid #444;
-    background-color: #333;
-    color: #fff;
-    font-size: 16px;
+    background-color: #444;
+    margin-bottom: 5px;
     border-radius: 5px;
 }
 
-.menu-items button:hover {
-    background-color: #4caf50;
-}
-
-/* Hide the menu modal by default */
-#menu-modal {
-    display: none;
+#full-sales-list li strong {
+    color: #ff9800;
 }

@@ -1,160 +1,163 @@
-/* General Styles */
+/* Global Styles */
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-  color: #333;
+    font-family: Arial, sans-serif;
+    background-color: #121212; /* Dark background */
+    color: #fff; /* Light text color */
 }
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
+.main-wrapper {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
 }
 
+/* Header Section */
 header {
-  display: flex;
-  justify-content: space-between;
-  background-color: #2c3e50;
-  padding: 15px;
-  color: white;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: #1e1e1e; /* Darker header */
+    border-bottom: 1px solid #333;
 }
 
-header .total-sales {
-  font-size: 18px;
-  color: white;
+.header-left .brand-name {
+    font-size: 24px;
+    font-weight: bold;
 }
 
-header .header-right button {
-  background-color: #e91e63;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  cursor: pointer;
+.header-right button {
+    background-color: #e91e63; /* Bright color for buttons */
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
 }
 
-header .header-right button:hover {
-  background-color: #c2185b;
+header button:hover {
+    background-color: #c2185b; /* Darker shade for hover effect */
 }
 
-header .header-middle {
-  flex-grow: 1; /* Empty space in the center */
+/* Sales Section */
+.sales-section {
+    background-color: #2c2c2c;
+    padding: 20px;
+    border-radius: 5px;
+    margin-top: 20px;
 }
 
-.side-menu {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 250px;
-  height: 100%;
-  background-color: #34495e;
-  color: white;
-  display: none;
-  padding: 20px;
+#sale-summary h3 {
+    font-size: 20px;
+    color: #ff9800; /* High contrast color for section titles */
 }
 
-.side-menu ul {
-  list-style-type: none;
+#sale-summary p {
+    font-size: 16px;
 }
 
-.side-menu ul li {
-  margin: 10px 0;
+/* Form Section */
+.form-section {
+    background-color: #2c2c2c;
+    padding: 20px;
+    border-radius: 5px;
+    margin-top: 20px;
 }
 
-.side-menu ul li a {
-  color: white;
-  text-decoration: none;
+.form-section label {
+    font-size: 16px;
+    margin-top: 10px;
+    display: block;
 }
 
-.side-menu.hidden {
-  display: none;
+.form-section input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #444;
+    background-color: #333;
+    color: #fff;
+    font-size: 16px;
+    border-radius: 5px;
 }
 
-#dashboard, #salesHistoryContainer, #addSale, #settingsContainer {
-  display: none;
+.form-section input:focus {
+    border-color: #e91e63;
+    outline: none;
 }
 
-#dashboard {
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.form-section button {
+    background-color: #4caf50; /* Green for generate button */
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    margin-top: 10px;
 }
 
-.sales-summary {
-  display: flex;
-  justify-content: space-between;
+.form-section button:hover {
+    background-color: #388e3c; /* Darker green for hover */
 }
 
-.sales-summary div {
-  text-align: center;
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    align-items: center;
+    justify-content: center;
 }
 
-.sales-history, .add-sale, .settings {
-  background-color: #ffffff;
-  padding: 20px;
-  margin-top: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.modal-content {
+    background-color: #333;
+    padding: 30px;
+    border-radius: 5px;
+    width: 60%;
+    max-width: 600px;
+    color: #fff;
 }
 
-footer {
-  text-align: center;
-  margin-top: 20px;
+.modal-content button {
+    background-color: #ff5722; /* Red for close/cancel buttons */
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    margin-top: 10px;
 }
 
-footer p {
-  font-size: 14px;
+.modal-content button:hover {
+    background-color: #d84315;
 }
 
-button {
-  margin-top: 10px;
-  padding: 10px 20px;
-  background-color: #e91e63;
-  color: white;
-  border: none;
-  cursor: pointer;
+#full-sales-list {
+    margin-top: 20px;
+    padding: 0;
 }
 
-button:hover {
-  background-color: #c2185b;
+#full-sales-list li {
+    list-style-type: none;
+    padding: 10px;
+    background-color: #444;
+    margin-bottom: 5px;
+    border-radius: 5px;
 }
 
-/* Fullscreen Modal */
-.fullscreen-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.8);
-  display: none;
-  align-items: center;
-  justify-content: center;
-}
-
-.fullscreen-modal.active {
-  display: flex;
-}
-
-.fullscreen-modal .modal-content {
-  background-color: white;
-  padding: 30px;
-  border-radius: 8px;
-  width: 80%;
-  max-height: 80%;
-  overflow-y: auto;
-}
-
-.fullscreen-modal .close-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 30px;
-  cursor: pointer;
+#full-sales-list li strong {
+    color: #ff9800;
 }

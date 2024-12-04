@@ -1,117 +1,122 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const shopNameInput = document.getElementById('shopNameInput');
-  const activateShopBtn = document.getElementById('activateShopBtn');
-  const dashboard = document.getElementById('dashboard');
-  const menuBtn = document.getElementById('menuBtn');
-  const sideMenu = document.getElementById('sideMenu');
-  const closeMenuBtn = document.getElementById('closeMenuBtn');
-  const salesHistoryBtn = document.getElementById('viewSalesBtn');
-  const salesHistoryContainer = document.getElementById('salesHistoryContainer');
-  const closeSalesHistory = document.getElementById('closeSalesHistory');
-  const changeShopNameBtn = document.getElementById('changeShopNameBtn');
-  const newShopNameInput = document.getElementById('newShopName');
-  const totalSalesElement = document.getElementById('totalSales');
-  const productNameInput = document.getElementById('productName');
-  const productPriceInput = document.getElementById('productPrice');
-  const productQuantityInput = document.getElementById('productQuantity');
-  const addToSaleBtn = document.getElementById('addToSaleBtn');
-  const salesHistoryData = document.getElementById('salesHistoryData');
-  const downloadPDFBtn = document.getElementById('downloadPDF');
-  const saleForm = document.getElementById('saleForm');
+let salesData = JSON.parse(localStorage.getItem("salesData")) || [];
+let suggestedProducts = new Set();
 
-  let salesData = [];
+// Add product and generate sale
+function generateSale() {
+    const shopName = document.getElementById("shop-name").value;
+    const productName = document.getElementById("product-name").value;
+    const productPrice = parseFloat(document.getElementById("product-price").value);
+    const productQuantity = parseFloat(document.getElementById("product-quantity").value) || 1;
 
-  // Shop Activation
-  if (localStorage.getItem('shopName')) {
-    document.getElementById('shopActivation').classList.add('hidden');
-    document.getElementById('dashboard').classList.remove('hidden');
-    totalSalesElement.textContent = `Total Sales: 0.00৳`;
-  }
-
-  activateShopBtn.addEventListener('click', () => {
-    const shopName = shopNameInput.value.trim();
-    if (shopName) {
-      localStorage.setItem('shopName', shopName);
-      dashboard.classList.remove('hidden');
-      document.getElementById('shopActivation').classList.add('hidden');
-      totalSalesElement.textContent = `Total Sales: 0.00৳`;
+    if (!shopName || !productName || isNaN(productPrice)) {
+        alert("Please fill out all required fields.");
+        return;
     }
-  });
 
-  // Menu toggle
-  menuBtn.addEventListener('click', () => {
-    sideMenu.classList.toggle('hidden');
-  });
-
-  closeMenuBtn.addEventListener('click', () => {
-    sideMenu.classList.add('hidden');
-  });
-
-  // Sales History
-  salesHistoryBtn.addEventListener('click', () => {
-    salesHistoryContainer.classList.toggle('hidden');
-  });
-
-  closeSalesHistory.addEventListener('click', () => {
-    salesHistoryContainer.classList.add('hidden');
-  });
-
-  // Change Shop Name
-  changeShopNameBtn.addEventListener('click', () => {
-    const newShopName = newShopNameInput.value.trim();
-    if (newShopName) {
-      localStorage.setItem('shopName', newShopName);
-      alert('Shop name updated!');
-    }
-  });
-
-  // Add Sale
-  saleForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const productName = productNameInput.value.trim();
-    const productPrice = parseFloat(productPriceInput.value);
-    const productQuantity = parseInt(productQuantityInput.value);
-
-    if (productName && !isNaN(productPrice) && !isNaN(productQuantity)) {
-      const sale = {
+    const product = {
+        shopName,
         productName,
         productPrice,
         productQuantity,
-        total: productPrice * productQuantity
-      };
+        total: productPrice * productQuantity,
+    };
 
-      salesData.push(sale);
+    // Update sales data and save to local storage
+    salesData.push(product);
+    localStorage.setItem("salesData", JSON.stringify(salesData));
 
-      // Update total sales
-      const totalSales = salesData.reduce((acc, sale) => acc + sale.total, 0);
-      totalSalesElement.textContent = `Total Sales: ${totalSales.toFixed(2)}৳`;
+    // Update suggestions and sales display
+    suggestedProducts.add(productName);
+    updateSuggestions();
+    updateLastSaleView(product);
+    resetForm();
+}
 
-      // Clear inputs
-      productNameInput.value = '';
-      productPriceInput.value = '';
-      productQuantityInput.value = '';
+// Update only the last sale view
+function updateLastSaleView(lastSale) {
+    const saleSummary = document.getElementById("sale-summary");
+    saleSummary.innerHTML = `
+        <h3>Last Sale Summary:</h3>
+        <p><strong>Shop:</strong> ${lastSale.shopName}</p>
+        <p><strong>Product:</strong> ${lastSale.productName}</p>
+        <p><strong>Quantity:</strong> ${lastSale.productQuantity}</p>
+        <p><strong>Total:</strong> ৳${lastSale.total.toFixed(2)}</p>
+    `;
+}
 
-      alert('Sale Added Successfully');
-    }
-  });
-
-  // View Sales History
-  const viewSalesHistory = () => {
-    salesHistoryData.innerHTML = '';
-    salesData.forEach(sale => {
-      const saleDiv = document.createElement('div');
-      saleDiv.textContent = `${sale.productName} - ${sale.productQuantity} x ${sale.productPrice}৳ = ${sale.total}৳`;
-      salesHistoryData.appendChild(saleDiv);
+// Update datalist for suggested products
+function updateSuggestions() {
+    const datalist = document.getElementById("suggested-products");
+    datalist.innerHTML = "";
+    suggestedProducts.forEach((product) => {
+        const option = document.createElement("option");
+        option.value = product;
+        datalist.appendChild(option);
     });
-  };
+}
 
-  // Download PDF
-  downloadPDFBtn.addEventListener('click', () => {
-    alert('Download PDF functionality will be implemented here.');
-  });
+// Reset input fields
+function resetForm() {
+    document.getElementById("shop-name").value = "";
+    document.getElementById("product-name").value = "";
+    document.getElementById("product-price").value = "";
+    document.getElementById("product-quantity").value = "";
+}
 
-  // Initially view sales history if data is available
-  if (salesData.length > 0) {
-    viewSalesHistory();
-  }
-});
+// Open close store modal and show full sales history
+function openCloseStoreModal() {
+    const fullSalesList = document.getElementById("full-sales-list");
+    fullSalesList.innerHTML = "";
+
+    salesData.forEach((sale, index) => {
+        const listItem = document.createElement("li");
+        listItem.innerHTML = `
+            <strong>${index + 1}.</strong> Shop: ${sale.shopName}, Product: ${sale.productName},
+            Quantity: ${sale.productQuantity}, Total: ৳${sale.total.toFixed(2)}
+        `;
+        fullSalesList.appendChild(listItem);
+    });
+
+    document.getElementById("close-store-modal").style.display = "block";
+}
+
+// Download sales history as PDF
+function downloadSalesHistory() {
+    const salesSummary = salesData
+        .map(
+            (sale, index) =>
+                `${index + 1}. Shop: ${sale.shopName}, Product: ${sale.productName}, Quantity: ${sale.productQuantity}, Total: ৳${sale.total.toFixed(2)}`
+        )
+        .join("\n");
+
+    const blob = new Blob([salesSummary], { type: "application/pdf" });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "Sales_History.pdf";
+    link.click();
+
+    URL.revokeObjectURL(url);
+}
+
+// Close store and clear sales data
+function closeStore() {
+    salesData = [];
+    localStorage.removeItem("salesData");
+    document.getElementById("close-store-modal").style.display = "none";
+    alert("Store closed and all sales data cleared!");
+    location.reload();
+}
+
+// Cancel store closure
+function cancelStoreClosure() {
+    document.getElementById("close-store-modal").style.display = "none";
+}
+
+// Initialize sales view on page load
+window.onload = function () {
+    if (salesData.length > 0) {
+        updateLastSaleView(salesData[salesData.length - 1]);
+    }
+};

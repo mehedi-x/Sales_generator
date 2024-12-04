@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sales Generator</title>
+  <title>Sales Manager</title>
   <link rel="stylesheet" href="styles.css"> <!-- External CSS Link -->
   <script src="script.js" defer></script> <!-- External JS Link -->
 </head>
@@ -12,11 +12,14 @@
   <div class="container">
     <!-- Header Section -->
     <header>
-      <div class="logo">
-        <h1>Sales Manager</h1>
+      <div class="total-sales">
+        <h2>Total Sales: 0.00৳</h2>
+      </div>
+      <div class="header-middle">
+        <!-- Empty space for aesthetic purposes -->
       </div>
       <div class="header-right">
-        <button id="themeToggleBtn">Toggle Theme</button>
+        <button id="menuBtn">&#9776;</button>
       </div>
     </header>
 
@@ -27,11 +30,9 @@
         <li><a href="#addSale">Add Sale</a></li>
         <li><a href="#salesHistory" id="viewSalesBtn">Sales History</a></li>
         <li><a href="#storeClose">Store Close</a></li>
+        <li><a href="#exportImport">Export/Import</a></li>
       </ul>
     </div>
-
-    <!-- Menu Button -->
-    <button id="menuBtn" class="menu-btn">&#9776;</button>
 
     <!-- Main Content -->
     <div class="main-content">
@@ -50,15 +51,14 @@
             <h3>Total Sales</h3>
             <p>$0.00</p>
           </div>
-          <div>
-            <h3>Items Sold</h3>
-            <p>0</p>
-          </div>
         </div>
       </div>
 
       <!-- Sales History Section -->
       <div id="salesHistoryContainer" class="sales-history hidden">
+        <div class="close-button">
+          <button id="closeSalesHistory">Close</button>
+        </div>
         <h3>Sales History</h3>
         <div id="salesHistoryData"></div>
         <div>
@@ -69,6 +69,7 @@
           <label for="salesItemFilter">Filter by Item:</label>
           <input type="text" id="salesItemFilter" placeholder="Item Name">
         </div>
+        <button id="downloadPDF">Download PDF</button>
       </div>
 
       <!-- Add Sale Section -->

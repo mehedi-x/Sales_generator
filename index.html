@@ -7,64 +7,65 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.css">
   <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <div id="app">
     <!-- Side Menu -->
-    <aside id="sideMenu" class="hidden">
-      <button id="closeMenuBtn">✖</button>
-      <ul>
-        <li><button id="dashboardBtn">Dashboard</button></li>
-        <li><button id="addSaleBtn">Add Sale</button></li>
-        <li><button id="viewSalesBtn">Sales History</button></li>
-        <li><button id="settingsBtn">Settings</button></li>
-        <li><button id="logoutBtn">Logout</button></li>
-      </ul>
+    <aside id="sideMenu" class="side-menu hidden">
+      <button id="closeMenuBtn" class="close-btn">✖</button>
+      <nav>
+        <ul>
+          <li><button id="dashboardBtn" class="menu-item">Dashboard</button></li>
+          <li><button id="addSaleBtn" class="menu-item">Add Sale</button></li>
+          <li><button id="viewSalesBtn" class="menu-item">Sales History</button></li>
+          <li><button id="settingsBtn" class="menu-item">Settings</button></li>
+          <li><button id="logoutBtn" class="menu-item">Logout</button></li>
+        </ul>
+      </nav>
     </aside>
 
     <!-- Header -->
-    <header>
-      <button id="menuBtn">☰</button>
-      <h1>Sales Management</h1>
+    <header class="header">
+      <button id="menuBtn" class="menu-btn">☰</button>
+      <h1 class="title">Sales Management</h1>
     </header>
 
     <!-- Main Content -->
-    <main>
+    <main class="main-content">
       <!-- Shop Name Section -->
-      <section id="shopNameContainer">
+      <section id="shopNameContainer" class="section">
         <h2>Enter Shop Name:</h2>
-        <input type="text" id="shopNameInput" placeholder="Shop Name">
-        <button id="activateShopBtn">Activate Shop</button>
+        <input type="text" id="shopNameInput" class="input" placeholder="Shop Name">
+        <button id="activateShopBtn" class="btn">Activate Shop</button>
       </section>
 
       <!-- Dashboard Section -->
-      <section id="dashboard" class="hidden">
+      <section id="dashboard" class="section hidden">
         <h2>Dashboard</h2>
-        <div id="totalSales">Total Sales: $0.00</div>
-        <div id="salesChartContainer">
+        <div id="totalSales" class="total-sales">Total Sales: $0.00</div>
+        <div id="salesChartContainer" class="chart-container">
           <canvas id="salesChart"></canvas>
         </div>
-        <button id="addSaleBtn">Add Sale</button>
-        <button id="viewSalesBtn">View Sales History</button>
+        <button id="addSaleBtn" class="btn">Add Sale</button>
+        <button id="viewSalesBtn" class="btn">View Sales History</button>
       </section>
 
       <!-- Sales History Section -->
-      <section id="salesHistory" class="hidden">
+      <section id="salesHistory" class="section hidden">
         <h2>Sales History</h2>
-        <input type="date" id="salesDateFilter" placeholder="Filter by Date">
-        <input type="text" id="salesItemFilter" placeholder="Search by Item">
+        <input type="date" id="salesDateFilter" class="input">
+        <input type="text" id="salesItemFilter" class="input" placeholder="Search by Item">
         <div id="salesHistoryContainer"></div>
       </section>
 
       <!-- Add Sale Form -->
-      <section id="salesForm" class="hidden">
+      <section id="salesForm" class="section hidden">
         <h2>Add Sale</h2>
         <form id="saleForm">
-          <input type="text" id="itemName" placeholder="Item Name" required>
-          <input type="number" id="itemPrice" placeholder="Item Price" required>
-          <input type="number" id="itemQuantity" placeholder="Quantity" required>
-          <button type="submit">Submit Sale</button>
+          <input type="text" id="itemName" class="input" placeholder="Item Name" required>
+          <input type="number" id="itemPrice" class="input" placeholder="Item Price" required>
+          <input type="number" id="itemQuantity" class="input" placeholder="Quantity" required>
+          <button type="submit" class="btn">Submit Sale</button>
         </form>
       </section>
     </main>

@@ -3,92 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Software Dashboard</title>
+    <title>Dashboard</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <div class="container">
+        <!-- Header Section -->
+        <header>
+            <div class="header-content">
+                <h1>Software Name</h1>
+                <div class="menu-icon" onclick="toggleMenu()">
+                    <span class="dot">...</span>
+                </div>
+            </div>
+        </header>
 
-<!-- Menu Section -->
-<div class="menu">
-    <ul>
-        <li id="sales-history">Sales History</li>
-        <li id="settings">Settings</li>
-    </ul>
-</div>
+        <!-- Menu Options (hidden by default) -->
+        <div id="menu" class="menu">
+            <ul>
+                <li onclick="showSalesHistory()">Sales History</li>
+                <li onclick="showSettings()">Settings</li>
+            </ul>
+        </div>
 
-<!-- Dashboard Section -->
-<div class="dashboard">
-    <div class="status-container">
-        <div class="status-box" id="software-status">
-            <strong>Status</strong><br>
-            <span id="status-text">Active</span>
+        <!-- Dashboard Section -->
+        <div class="dashboard">
+            <div class="status-container">
+                <div class="status-box">
+                    <strong>Status</strong>
+                    <span id="status">Active</span>
+                </div>
+                <div class="status-box">
+                    <strong>Last Sold</strong>
+                    <span id="lastSoldProduct">Product Name</span>
+                </div>
+                <div class="status-box">
+                    <strong>Price</strong>
+                    <span id="price">৳100</span>
+                </div>
+            </div>
         </div>
-        <div class="status-box" id="last-sold">
-            <strong>Last Sold</strong><br>
-            <span id="last-sold-product">Product Name</span>
+
+        <!-- Add New Sale Section -->
+        <div class="add-sale-section">
+            <h3>Add New Sale</h3>
+            <form>
+                <label for="shopName">Shop Name:</label>
+                <input type="text" id="shopName" placeholder="Enter shop name" required>
+                
+                <label for="productName">Product Name:</label>
+                <input type="text" id="productName" placeholder="Enter product name" required>
+
+                <label for="price">Price:</label>
+                <input type="number" id="price" placeholder="Enter price" required>
+                
+                <button type="submit">Add Sale</button>
+            </form>
         </div>
-        <div class="status-box" id="price">
-            <strong>Price</strong><br>
-            <span id="last-sale-price">৳100</span>
-        </div>
+
     </div>
 
-    <!-- Sales History Section -->
-    <div class="sales-history-section" style="display: none;">
-        <h3>Sales History</h3>
-        <div class="filter-container">
-            <input type="date" id="filter-date">
-            <input type="time" id="filter-time">
-            <input type="number" id="filter-year" placeholder="Year">
-            <button id="filter-btn">Filter</button>
-        </div>
-        <div id="sales-list" class="sales-list">
-            <!-- Dynamic Sales List will be populated here -->
-        </div>
-        <button id="export-file">Export File</button>
-        <button id="import-file">Input File</button>
-    </div>
-
-    <!-- Add New Sale Section -->
-    <div id="add-new-sale-section">
-        <h3>Add New Sale</h3>
-        <div id="shop-name-section" style="display: none;">
-            <label for="shop-name">Shop Name:</label>
-            <input type="text" id="shop-name" placeholder="Enter Shop Name">
-            <button onclick="saveShopName()">Save</button>
-        </div>
-
-        <!-- Add Sale Form -->
-        <form id="add-sale-form">
-            <label for="product-name">Product Name:</label>
-            <input type="text" id="product-name" placeholder="Enter Product Name">
-
-            <label for="product-price">Product Price:</label>
-            <input type="number" id="product-price" placeholder="Enter Price">
-
-            <label for="quantity">Quantity:</label>
-            <input type="number" id="quantity" placeholder="Enter Quantity">
-
-            <button type="submit">Add Sale</button>
-        </form>
-    </div>
-
-    <!-- Settings Section -->
-    <div id="settings-section" class="settings-section" style="display: none;">
-        <h3>Settings</h3>
-        <p>Coming Soon</p>
-    </div>
-
-    <!-- Modal for Import File -->
-    <div id="import-modal" class="modal">
-        <div class="modal-content">
-            <input type="file" id="file-upload" accept=".json">
-            <button onclick="importFile()">Import</button>
-            <button onclick="closeModal()">Close</button>
-        </div>
-    </div>
-</div>
-
-<script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

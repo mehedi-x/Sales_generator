@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sales Management System</title>
+    <title>Professional Dashboard</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -11,55 +11,56 @@
         <!-- Header Section -->
         <header>
             <div class="header-left">
-                <h1 class="brand-name">Sales Management</h1>
+                <span class="brand-name">Sales Manager</span>
             </div>
             <div class="header-right">
-                <button id="menu-toggle">Menu</button>
+                <button onclick="toggleLightMode()">Switch to Light Mode</button>
             </div>
         </header>
-
-        <!-- Menu Section -->
-        <nav id="menu" class="hidden">
-            <ul>
-                <li><button id="product-name-btn">Product Name</button></li>
-                <li><button id="filter-sales-history-btn">Filter Sales History</button></li>
-                <li><button id="search-sales-history-btn">Search Sales History</button></li>
-                <li><button id="download-pdf-btn">Download as PDF</button></li>
-                <li><button id="download-csv-btn">Download as CSV</button></li>
-                <li><button id="toggle-light-mode-btn">Switch to Light Mode</button></li>
-            </ul>
-        </nav>
 
         <!-- Dashboard Section -->
         <div class="dashboard-section">
             <div class="dashboard-container">
+                <!-- Software Status Box -->
                 <div class="dashboard-box" id="software-status">
+                    <div class="status-indicator" id="status-indicator"></div>
                     <h3>Software Status</h3>
-                    <p id="status-text">Active</p>
+                    <p id="status-text">Inactive</p>
+                    <small id="status-tip">Please activate the software to start.</small>
                 </div>
+
+                <!-- Last Sale Price Box -->
                 <div class="dashboard-box" id="last-sale">
                     <h3>Last Sale Price</h3>
                     <p id="last-sale-price">৳0.00</p>
                 </div>
-                <div class="dashboard-box" id="office-status">
-                    <h3>Office Status</h3>
-                    <p id="office-status-text">Office is Open</p>
+
+                <!-- Last Sold Product Box -->
+                <div class="dashboard-box" id="last-product">
+                    <h3>Last Sold Product</h3>
+                    <p id="last-product-name">No product sold yet</p>
                 </div>
             </div>
         </div>
 
-        <!-- Form Section -->
-        <div class="form-section">
-            <label for="shop-name">Shop Name:</label>
-            <input type="text" id="shop-name" placeholder="Enter shop name">
-            <label for="product-name">Product Name:</label>
-            <input type="text" id="product-name" placeholder="Enter product name" list="suggested-products">
-            <datalist id="suggested-products"></datalist>
-            <label for="product-price">Product Price:</label>
-            <input type="number" id="product-price" placeholder="Enter product price">
-            <label for="product-quantity">Quantity:</label>
-            <input type="number" id="product-quantity" placeholder="Enter quantity (optional)">
-            <button onclick="generateSale()">Generate Sale</button>
+        <!-- Product Sale Section -->
+        <div class="sales-section">
+            <h3>Product Sale</h3>
+            <form onsubmit="generateSale(event)">
+                <label for="shop-name">Shop Name:</label>
+                <input type="text" id="shop-name" placeholder="Enter shop name">
+
+                <label for="product-name">Product Name:</label>
+                <input type="text" id="product-name" placeholder="Enter product name">
+
+                <label for="product-price">Product Price:</label>
+                <input type="number" id="product-price" placeholder="Enter price">
+
+                <label for="product-quantity">Quantity (Optional):</label>
+                <input type="number" id="product-quantity" placeholder="Enter quantity">
+
+                <button type="submit">Generate Sale</button>
+            </form>
         </div>
     </div>
 

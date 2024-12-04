@@ -1,3 +1,5 @@
+/* styles.css */
+
 /* Global Styles */
 * {
     margin: 0;
@@ -32,7 +34,11 @@ header {
     font-weight: bold;
 }
 
-.header-right button {
+.header-right {
+    font-size: 18px;
+}
+
+header button {
     background-color: #e91e63; /* Bright color for buttons */
     color: #fff;
     border: none;
@@ -64,13 +70,6 @@ header button:hover {
 }
 
 /* Form Section */
-.form-section {
-    background-color: #2c2c2c;
-    padding: 20px;
-    border-radius: 5px;
-    margin-top: 20px;
-}
-
 .form-section label {
     font-size: 16px;
     margin-top: 10px;
@@ -99,7 +98,6 @@ header button:hover {
     margin-top: 10px;
 }
 
-/* Modal Styles */
 .modal {
     display: none;
     position: fixed;
@@ -132,15 +130,14 @@ header button:hover {
     margin-top: 10px;
 }
 
-#full-sales-list {
-    margin-top: 20px;
-    padding: 0;
-}
-
 #full-sales-list li {
     list-style-type: none;
     padding: 10px;
     background-color: #444;
     margin-bottom: 5px;
     border-radius: 5px;
+}
+
+#full-sales-list li strong {
+    color: #ff9800;
 }

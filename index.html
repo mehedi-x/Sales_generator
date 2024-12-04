@@ -13,7 +13,7 @@
     <!-- Header Section -->
     <header>
       <div class="total-sales">
-        <h2>Total Sales: 0.00৳</h2>
+        <h2>Total Sales: <span id="totalSales">0.00৳</span></h2>
       </div>
       <div class="header-middle">
         <!-- Empty space for aesthetic purposes -->
@@ -31,13 +31,14 @@
         <li><a href="#salesHistory" id="viewSalesBtn">Sales History</a></li>
         <li><a href="#storeClose">Store Close</a></li>
         <li><a href="#exportImport">Export/Import</a></li>
+        <li><a href="#settings" id="settingsBtn">Settings</a></li> <!-- Added Settings Option -->
       </ul>
     </div>
 
     <!-- Main Content -->
     <div class="main-content">
       <!-- Shop Name Activation Section -->
-      <div id="shopActivation" class="shop-activation">
+      <div id="shopActivation" class="shop-activation hidden">
         <h2>Enter Shop Name to Activate</h2>
         <input type="text" id="shopNameInput" placeholder="Shop Name">
         <button id="activateShopBtn">Activate Shop</button>
@@ -49,9 +50,23 @@
         <div class="sales-summary">
           <div>
             <h3>Total Sales</h3>
-            <p>$0.00</p>
+            <p><span id="dashboardTotalSales">0.00</span>৳</p>
           </div>
         </div>
+      </div>
+
+      <!-- Add Sale Section -->
+      <div id="addSale" class="add-sale">
+        <h3>Add Sale</h3>
+        <form id="saleForm">
+          <label for="productName">Product Name:</label>
+          <input type="text" id="productName" name="productName" required>
+          <label for="productPrice">Price:</label>
+          <input type="number" id="productPrice" name="productPrice" required>
+          <label for="productQuantity">Quantity:</label>
+          <input type="number" id="productQuantity" name="productQuantity" required>
+          <button type="submit" id="addToSaleBtn">Add to Sale</button>
+        </form>
       </div>
 
       <!-- Sales History Section -->
@@ -61,29 +76,17 @@
         </div>
         <h3>Sales History</h3>
         <div id="salesHistoryData"></div>
-        <div>
-          <label for="salesDateFilter">Filter by Date:</label>
-          <input type="date" id="salesDateFilter">
-        </div>
-        <div>
-          <label for="salesItemFilter">Filter by Item:</label>
-          <input type="text" id="salesItemFilter" placeholder="Item Name">
-        </div>
         <button id="downloadPDF">Download PDF</button>
       </div>
 
-      <!-- Add Sale Section -->
-      <div id="addSale" class="add-sale">
-        <h3>Add Sale</h3>
-        <form id="saleForm">
-          <label for="itemName">Item Name:</label>
-          <input type="text" id="itemName" name="itemName" required>
-          <label for="itemPrice">Price:</label>
-          <input type="number" id="itemPrice" name="itemPrice" required>
-          <label for="itemQuantity">Quantity:</label>
-          <input type="number" id="itemQuantity" name="itemQuantity" required>
-          <button type="submit">Add Sale</button>
-        </form>
+      <!-- Settings Section -->
+      <div id="settingsContainer" class="settings hidden">
+        <h3>Settings</h3>
+        <div>
+          <label for="newShopName">Change Shop Name:</label>
+          <input type="text" id="newShopName" placeholder="Enter New Shop Name">
+          <button id="changeShopNameBtn">Save</button>
+        </div>
       </div>
 
       <!-- Footer Section -->

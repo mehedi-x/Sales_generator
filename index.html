@@ -216,6 +216,7 @@
             <li onclick="toggleFullDashboard()">Full Dashboard</li>
             <li><a href="#">Sales History</a></li>
             <li><a href="#">Settings</a></li>
+            <li><a href="#">Dashboard Info</a></li>
         </ul>
     </div>
 
@@ -234,23 +235,9 @@
             <button onclick="generateSale()">Add Sale</button>
         </div>
 
-        <!-- Dashboard Section -->
+        <!-- Mini Dashboard Section -->
         <div class="dashboard">
-            <h3>Dashboard</h3>
-            <div class="stats">
-                <div class="stat">
-                    <h4>Total Sales</h4>
-                    <p id="total-sales">৳0.00</p>
-                </div>
-                <div class="stat">
-                    <h4>Items Sold</h4>
-                    <p id="items-sold">0</p>
-                </div>
-                <div class="stat">
-                    <h4>Top Product</h4>
-                    <p id="top-product">N/A</p>
-                </div>
-            </div>
+            <h3>Sales</h3>
             <div class="sales-history">
                 <h4>Sales History</h4>
                 <ul id="sales-history-list"></ul>
@@ -305,13 +292,11 @@
                 "N/A"
             );
 
-            document.getElementById("total-sales").innerText = `৳${totalSales.toFixed(
-                2
-            )}`;
-            document.getElementById("items-sold").innerText = itemsSold;
-            document.getElementById("top-product").innerText = topProduct;
+            document.getElementById("full-total-sales").innerText = `৳${totalSales.toFixed(2)}`;
+            document.getElementById("full-items-sold").innerText = itemsSold;
+            document.getElementById("full-top-product").innerText = topProduct;
 
-            // Update Sales History
+            // Update Sales History in the main dashboard
             const salesHistoryList = document.getElementById("sales-history-list");
             salesHistoryList.innerHTML = "";
             salesData.slice().reverse().forEach((sale, index) => {

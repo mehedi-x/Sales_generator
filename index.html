@@ -5,91 +5,207 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sales Management</title>
     <style>
-        /* Basic styling */
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            padding: 30px;
+        }
+
+        h1, h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h3 {
+            margin-top: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Form Section */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* Sales Summary Section */
+        #sale-summary {
+            background-color: #f8f8f8;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        /* Modal */
         #close-store-modal {
             display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
         }
-        #sale-summary {
-            margin-bottom: 20px;
+
+        #close-store-modal .modal-content {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 600px;
+            overflow-y: auto;
         }
+
+        #close-store-modal button {
+            background-color: #f44336;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            margin-bottom: 30px;
+        }
+
+        .filter-section select {
+            width: auto;
+            margin-right: 10px;
+        }
+
+        /* Sales History List */
         #full-sales-list, #filtered-sales-history {
             list-style: none;
             padding: 0;
+        }
+
+        #full-sales-list li, #filtered-sales-history li {
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
         }
     </style>
 </head>
 <body>
 
-    <h1>Sales Management System</h1>
+    <div class="container">
+        <h1>Sales Management System</h1>
 
-    <form id="sale-form">
-        <div>
-            <label for="shop-name">Shop Name:</label>
-            <input type="text" id="shop-name" required>
-        </div>
-        <div>
-            <label for="product-name">Product Name:</label>
-            <input type="text" id="product-name" list="suggested-products" required>
-            <datalist id="suggested-products"></datalist>
-        </div>
-        <div>
-            <label for="product-price">Product Price (৳):</label>
-            <input type="number" id="product-price" required>
-        </div>
-        <div>
-            <label for="product-quantity">Product Quantity:</label>
-            <input type="number" id="product-quantity" required>
-        </div>
-        <button type="button" onclick="generateSale()">Generate Sale</button>
-    </form>
+        <!-- Sales Form -->
+        <form id="sale-form">
+            <div class="form-group">
+                <label for="shop-name">Shop Name:</label>
+                <input type="text" id="shop-name" required>
+            </div>
+            <div class="form-group">
+                <label for="product-name">Product Name:</label>
+                <input type="text" id="product-name" list="suggested-products" required>
+                <datalist id="suggested-products"></datalist>
+            </div>
+            <div class="form-group">
+                <label for="product-price">Product Price (৳):</label>
+                <input type="number" id="product-price" required>
+            </div>
+            <div class="form-group">
+                <label for="product-quantity">Product Quantity:</label>
+                <input type="number" id="product-quantity" required>
+            </div>
+            <button type="button" onclick="generateSale()">Generate Sale</button>
+        </form>
 
-    <div id="sale-summary"></div>
+        <!-- Sale Summary -->
+        <div id="sale-summary"></div>
 
-    <button onclick="openCloseStoreModal()">View Sales History</button>
+        <button onclick="openCloseStoreModal()">View Sales History</button>
 
-    <div id="close-store-modal">
-        <h2>Sales History</h2>
-        <ul id="full-sales-list"></ul>
-        <button onclick="cancelStoreClosure()">Cancel</button>
-        <button onclick="closeStore()">Close Store</button>
+        <!-- Modal for Sales History -->
+        <div id="close-store-modal">
+            <div class="modal-content">
+                <h2>Sales History</h2>
+                <ul id="full-sales-list"></ul>
+                <button onclick="cancelStoreClosure()">Cancel</button>
+                <button onclick="closeStore()">Close Store</button>
+            </div>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <h2>Filter Sales History</h2>
+            <label for="day-select">Day:</label>
+            <select id="day-select">
+                <option value="">All</option>
+            </select>
+            <label for="month-select">Month:</label>
+            <select id="month-select">
+                <option value="">All</option>
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+            </select>
+            <label for="year-select">Year:</label>
+            <select id="year-select">
+                <option value="">All</option>
+            </select>
+            <button onclick="applyFilter()">Apply Filter</button>
+        </div>
+
+        <!-- Filtered Sales History -->
+        <div id="filtered-sales-history"></div>
+
+        <button onclick="downloadSalesHistory()">Download Sales History as PDF</button>
     </div>
-
-    <h2>Filter Sales History</h2>
-    <div>
-        <label for="day-select">Day:</label>
-        <select id="day-select">
-            <option value="">All</option>
-        </select>
-        <label for="month-select">Month:</label>
-        <select id="month-select">
-            <option value="">All</option>
-            <option value="1">January</option>
-            <option value="2">February</option>
-            <option value="3">March</option>
-            <option value="4">April</option>
-            <option value="5">May</option>
-            <option value="6">June</option>
-            <option value="7">July</option>
-            <option value="8">August</option>
-            <option value="9">September</option>
-            <option value="10">October</option>
-            <option value="11">November</option>
-            <option value="12">December</option>
-        </select>
-        <label for="year-select">Year:</label>
-        <select id="year-select">
-            <option value="">All</option>
-        </select>
-        <button onclick="applyFilter()">Apply Filter</button>
-    </div>
-
-    <div id="filtered-sales-history"></div>
-
-    <button onclick="downloadSalesHistory()">Download Sales History as PDF</button>
 
     <script>
         let salesData = JSON.parse(localStorage.getItem("salesData")) || [];
@@ -168,13 +284,27 @@
                 const listItem = document.createElement("li");
                 listItem.innerHTML = `
                     <strong>${index + 1}.</strong> Shop: ${sale.shopName}, Product: ${sale.productName},
-                    Quantity: ${sale.productQuantity}, Total: ৳${sale.total.toFixed(2)},
+                    Quantity: ${sale.productQuantity}, Total: ৳${sale.total.toFixed(2)}, 
                     Time: ${new Date(sale.time).toLocaleString()}
                 `;
                 fullSalesList.appendChild(listItem);
             });
 
-            document.getElementById("close-store-modal").style.display = "block";
+            document.getElementById("close-store-modal").style.display = "flex";
+        }
+
+        // Close store and clear sales data
+        function closeStore() {
+            salesData = [];
+            localStorage.removeItem("salesData");
+            document.getElementById("close-store-modal").style.display = "none";
+            alert("Store closed and all sales data cleared!");
+            location.reload();
+        }
+
+        // Cancel store closure
+        function cancelStoreClosure() {
+            document.getElementById("close-store-modal").style.display = "none";
         }
 
         // Download sales history as PDF
@@ -197,21 +327,7 @@
             URL.revokeObjectURL(url);
         }
 
-        // Close store and clear sales data
-        function closeStore() {
-            salesData = [];
-            localStorage.removeItem("salesData");
-            document.getElementById("close-store-modal").style.display = "none";
-            alert("Store closed and all sales data cleared!");
-            location.reload();
-        }
-
-        // Cancel store closure
-        function cancelStoreClosure() {
-            document.getElementById("close-store-modal").style.display = "none";
-        }
-
-        // Filter sales history based on day, month, year
+        // Apply filter to sales data
         function applyFilter() {
             const day = document.getElementById('day-select').value;
             const month = document.getElementById('month-select').value;
@@ -219,41 +335,34 @@
 
             const filteredSales = salesData.filter(sale => {
                 const saleDate = new Date(sale.time);
-                const saleDay = saleDate.getDate();
-                const saleMonth = saleDate.getMonth() + 1;
-                const saleYear = saleDate.getFullYear();
-
                 return (
-                    (day ? saleDay === parseInt(day) : true) &&
-                    (month ? saleMonth === parseInt(month) : true) &&
-                    (year ? saleYear === parseInt(year) : true)
+                    (!day || saleDate.getDate() == day) &&
+                    (!month || saleDate.getMonth() + 1 == month) &&
+                    (!year || saleDate.getFullYear() == year)
                 );
             });
 
-            displaySalesHistory(filteredSales);
+            displayFilteredSales(filteredSales);
         }
 
         // Display filtered sales history
-        function displaySalesHistory(sales) {
+        function displayFilteredSales(sales) {
             const filteredSalesHistory = document.getElementById("filtered-sales-history");
             filteredSalesHistory.innerHTML = sales.length === 0
                 ? 'No sales found for the selected filters.'
                 : sales.map(sale => `
-                    <p>
+                    <li>
                         <strong>Shop:</strong> ${sale.shopName}<br>
                         <strong>Product:</strong> ${sale.productName}<br>
                         <strong>Quantity:</strong> ${sale.productQuantity}<br>
                         <strong>Total:</strong> ৳${sale.total.toFixed(2)}<br>
                         <strong>Time:</strong> ${new Date(sale.time).toLocaleString()}
-                    </p>
+                    </li>
                 `).join('');
         }
 
-        // Initialize sales view on page load
+        // Populate year options
         window.onload = function () {
-            if (salesData.length > 0) {
-                updateLastSaleView(salesData[salesData.length - 1]);
-            }
             populateYearOptions();
             populateDayOptions();
         };

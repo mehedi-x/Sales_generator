@@ -21,8 +21,67 @@
         .main-wrapper {
             width: 100%;
             max-width: 1200px;
-            margin: 20px auto;
+            margin: 0 auto;
             padding: 20px;
+        }
+
+        /* Header Section */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #1e1e1e;
+            border-bottom: 1px solid #333;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-left .menu-icon {
+            font-size: 30px;
+            cursor: pointer;
+        }
+
+        .header-right {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        /* Slide Menu */
+        .slide-menu {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 300px;
+            height: 100%;
+            background-color: #2c2c2c;
+            padding: 20px;
+            transition: 0.3s;
+            z-index: 1000;
+        }
+
+        .slide-menu.open {
+            left: 0;
+        }
+
+        .slide-menu ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .slide-menu ul li {
+            padding: 10px;
+            background-color: #444;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            color: #fff;
+        }
+
+        .slide-menu ul li:hover {
+            background-color: #555;
         }
 
         /* Dashboard Section */
@@ -116,7 +175,39 @@
     </style>
 </head>
 <body>
+    <header>
+        <div class="header-left">
+            <span class="menu-icon" onclick="toggleMenu()">&#9776;</span>
+        </div>
+        <div class="header-right">
+            Sales Generator
+        </div>
+    </header>
+
+    <!-- Slide Menu -->
+    <div class="slide-menu" id="slide-menu">
+        <ul>
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="#">Sales History</a></li>
+            <li><a href="#">Settings</a></li>
+        </ul>
+    </div>
+
     <div class="main-wrapper">
+        <!-- Form Section -->
+        <div class="form-section">
+            <h3>Add a Sale</h3>
+            <label for="shop-name">Shop Name</label>
+            <input type="text" id="shop-name" placeholder="Enter shop name">
+            <label for="product-name">Product Name</label>
+            <input type="text" id="product-name" placeholder="Enter product name">
+            <label for="product-price">Price</label>
+            <input type="number" id="product-price" placeholder="Enter price">
+            <label for="product-quantity">Quantity</label>
+            <input type="number" id="product-quantity" placeholder="Enter quantity">
+            <button onclick="generateSale()">Add Sale</button>
+        </div>
+
         <!-- Dashboard Section -->
         <div class="dashboard">
             <h3>Dashboard</h3>
@@ -138,20 +229,6 @@
                 <h4>Sales History</h4>
                 <ul id="sales-history-list"></ul>
             </div>
-        </div>
-
-        <!-- Form Section -->
-        <div class="form-section">
-            <h3>Add a Sale</h3>
-            <label for="shop-name">Shop Name</label>
-            <input type="text" id="shop-name" placeholder="Enter shop name">
-            <label for="product-name">Product Name</label>
-            <input type="text" id="product-name" placeholder="Enter product name">
-            <label for="product-price">Price</label>
-            <input type="number" id="product-price" placeholder="Enter price">
-            <label for="product-quantity">Quantity</label>
-            <input type="number" id="product-quantity" placeholder="Enter quantity">
-            <button onclick="generateSale()">Add Sale</button>
         </div>
     </div>
 
@@ -227,6 +304,12 @@
             localStorage.setItem("salesData", JSON.stringify(salesData));
 
             updateDashboard();
+        }
+
+        // Toggle Slide Menu
+        function toggleMenu() {
+            const slideMenu = document.getElementById("slide-menu");
+            slideMenu.classList.toggle("open");
         }
 
         window.onload = updateDashboard;

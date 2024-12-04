@@ -8,51 +8,50 @@
 </head>
 <body>
     <div class="main-wrapper">
-        <!-- Header Section -->
         <header>
             <div class="header-left">
                 <span class="brand-name">Sales Generator</span>
             </div>
             <div class="header-right">
+                <span id="total-sales">Total Sales: ৳0.00</span>
                 <button onclick="openCloseStoreModal()">Close Store</button>
             </div>
         </header>
 
-        <!-- Sales Section -->
-<div class="sales-section" id="sale-summary">
-    <h3>Last Sale Summary:</h3>
-    <p>No sales data available.</p>
-    <h3>Total Sales: <span id="total-sales">৳0.00</span></h3>
-</div>
-        <!-- Form Section -->
-        <div class="form-section">
+        <section class="sales-section">
+            <div id="sale-summary">
+                <h3>Last Sale Summary:</h3>
+                <p>No sales recorded yet.</p>
+            </div>
+        </section>
+
+        <section class="form-section">
             <label for="shop-name">Shop Name:</label>
             <input type="text" id="shop-name" placeholder="Enter shop name">
 
             <label for="product-name">Product Name:</label>
-            <input type="text" id="product-name" placeholder="Enter product name" list="suggested-products">
+            <input type="text" id="product-name" list="suggested-products" placeholder="Enter product name">
             <datalist id="suggested-products"></datalist>
 
             <label for="product-price">Product Price:</label>
-            <input type="number" id="product-price" placeholder="Enter product price">
+            <input type="number" id="product-price" placeholder="Enter price">
 
             <label for="product-quantity">Product Quantity:</label>
-            <input type="number" id="product-quantity" placeholder="Enter quantity (optional)">
+            <input type="number" id="product-quantity" placeholder="Enter quantity">
 
             <button onclick="generateSale()">Generate Sale</button>
-        </div>
+        </section>
 
-        <!-- Modal -->
         <div class="modal" id="close-store-modal">
             <div class="modal-content">
                 <h3>Sales History</h3>
                 <ul id="full-sales-list"></ul>
-                <button onclick="downloadSalesHistory()">Download PDF</button>
                 <button onclick="closeStore()">Close Store</button>
                 <button onclick="cancelStoreClosure()">Cancel</button>
             </div>
         </div>
     </div>
-    <script src="script.js" defer></script>
+
+    <script src="script.js"></script>
 </body>
 </html>

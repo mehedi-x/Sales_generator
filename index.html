@@ -3,77 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sales Dashboard</title>
+    <title>Software Dashboard</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="main-wrapper">
-        <!-- Header -->
-        <header>
-            <div class="header-left">
-                <h1 class="brand-name">Sales Dashboard</h1>
-            </div>
-            <div class="header-right">
-                <button id="open-menu">Menu</button>
-            </div>
-        </header>
 
-        <!-- Dashboard Section -->
-        <div class="dashboard-section">
-            <div class="dashboard-container">
-                <!-- Software Status Box -->
-                <div class="dashboard-box" id="software-status">
-                    <div class="status-indicator" id="status-indicator"></div>
-                    <h3>Software Status</h3>
-                    <p id="status-text">Inactive</p>
-                    <small id="status-tip">Please activate the software to start.</small>
-                </div>
+<!-- Menu Section -->
+<div class="menu">
+    <ul>
+        <li id="sales-history">Sales History</li>
+        <li id="settings">Settings</li>
+    </ul>
+</div>
 
-                <!-- Last Sale Price Box -->
-                <div class="dashboard-box" id="last-sale">
-                    <h3>Last Sale Price</h3>
-                    <p id="last-sale-price">৳0.00</p>
-                </div>
+<!-- Add New Sale Section -->
+<div id="add-new-sale-section">
+    <h3>Add New Sale</h3>
+    <div id="shop-name-section" style="display: none;">
+        <label for="shop-name">Shop Name:</label>
+        <input type="text" id="shop-name" placeholder="Enter Shop Name">
+        <button onclick="saveShopName()">Save</button>
+    </div>
 
-                <!-- Last Sold Product Box -->
-                <div class="dashboard-box" id="last-product">
-                    <h3>Last Sold Product</h3>
-                    <p id="last-product-name">No product sold yet</p>
-                </div>
-            </div>
+    <!-- Add Sale Form -->
+    <form id="add-sale-form">
+        <label for="product-name">Product Name:</label>
+        <input type="text" id="product-name" placeholder="Enter Product Name">
+
+        <label for="product-price">Product Price:</label>
+        <input type="number" id="product-price" placeholder="Enter Price">
+
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" placeholder="Enter Quantity">
+
+        <button type="submit">Add Sale</button>
+    </form>
+</div>
+
+<!-- Dashboard Section -->
+<div class="dashboard">
+    <div class="status-container">
+        <div class="status-box" id="software-status">
+            <strong>Status</strong><br>
+            <span id="status-text">Active</span>
         </div>
-
-        <!-- Sales Form Section -->
-        <div class="form-section">
-            <h2>Add New Sale</h2>
-            <label for="shop-name">Shop Name</label>
-            <input type="text" id="shop-name" placeholder="Enter shop name">
-            
-            <label for="product-name">Product Name</label>
-            <input type="text" id="product-name" placeholder="Enter product name">
-            
-            <label for="product-price">Product Price</label>
-            <input type="number" id="product-price" placeholder="Enter product price">
-            
-            <label for="product-quantity">Quantity</label>
-            <input type="number" id="product-quantity" placeholder="Enter quantity (optional)">
-            
-            <button onclick="generateSale()">Generate Sale</button>
+        <div class="status-box" id="last-sold">
+            <strong>Last Sold</strong><br>
+            <span id="last-sold-product">Product Name</span>
         </div>
-
-        <!-- Modal for Full Sales History -->
-        <div id="close-store-modal" class="modal">
-            <div class="modal-content">
-                <h2>Full Sales History</h2>
-                <ul id="full-sales-list"></ul>
-                <button onclick="downloadSalesHistory()">Download as PDF</button>
-                <button onclick="closeStore()">Close Store</button>
-                <button onclick="cancelStoreClosure()">Cancel</button>
-            </div>
+        <div class="status-box" id="price">
+            <strong>Price</strong><br>
+            <span id="last-sale-price">৳100</span>
         </div>
     </div>
 
-    <!-- JavaScript -->
-    <script src="script.js"></script>
+    <!-- Sales History Section -->
+    <div class="sales-history-section" style="display: none;">
+        <h3>Sales History</h3>
+        <div class="filter-container">
+            <input type="date" id="filter-date">
+            <input type="time" id="filter-time">
+            <input type="number" id="filter-year" placeholder="Year">
+            <button id="filter-btn">Filter</button>
+        </div>
+        <div id="sales-list" class="sales-list">
+            <!-- Dynamic Sales List will be populated here -->
+        </div>
+        <button id="export-file">Export File</button>
+        <button id="import-file">Input File</button>
+    </div>
+
+    <!-- Settings Section -->
+    <div id="settings-section" class="settings-section" style="display: none;">
+        <h3>Settings</h3>
+        <p>Coming Soon</p>
+    </div>
+
+    <!-- Mobile Transactions Section -->
+    <div id="mobile-transactions" class="mobile-transactions" style="display: none;">
+        <h3>Mobile Transactions</h3>
+        <div id="mobile-sales-list">
+            <!-- Dynamic Mobile Sales List will be populated here -->
+        </div>
+    </div>
+
+    <!-- Modal for Import File -->
+    <div id="import-modal" class="modal">
+        <div class="modal-content">
+            <input type="file" id="file-upload" accept=".json">
+            <button onclick="importFile()">Import</button>
+            <button onclick="closeModal()">Close</button>
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-/* Global Styles */
+/* General Styles */
 * {
   margin: 0;
   padding: 0;
@@ -6,195 +6,130 @@
 }
 
 body {
-  font-family: 'Roboto', sans-serif;
-  background-color: var(--background-color);
-  color: var(--text-color);
-  margin: 0;
-  transition: background-color 0.3s, color 0.3s;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
 }
 
-#app {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
-/* Header and Menu */
-.header {
+header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  background-color: var(--header-background);
-  color: var(--header-text-color);
-  padding: 20px;
-  border-radius: 10px 10px 0 0;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #2c3e50;
+  padding: 15px;
+  color: white;
 }
 
-.title {
-  font-size: 28px;
+header .logo h1 {
+  font-size: 24px;
+}
+
+header .header-right button {
+  background-color: #e91e63;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+header .header-right button:hover {
+  background-color: #c2185b;
 }
 
 .menu-btn {
-  font-size: 30px;
-  background: transparent;
-  border: none;
-  color: var(--header-text-color);
-  cursor: pointer;
-}
-
-.theme-toggle-btn {
   font-size: 24px;
-  background: transparent;
+  background: none;
   border: none;
-  color: var(--header-text-color);
   cursor: pointer;
+  color: #2c3e50;
 }
 
-/* Side Menu */
 .side-menu {
-  position: absolute;
-  left: -250px;
+  position: fixed;
   top: 0;
-  height: 100%;
+  left: 0;
   width: 250px;
-  background-color: var(--side-menu-background);
+  height: 100%;
+  background-color: #34495e;
   color: white;
+  display: none;
   padding: 20px;
-  transition: 0.3s ease;
-  box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.2);
 }
 
-.side-menu nav ul {
+.side-menu ul {
   list-style-type: none;
 }
 
-.menu-item {
-  display: block;
-  padding: 10px;
-  margin: 15px 0;
-  font-size: 18px;
-  color: white;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.menu-item:hover {
-  background-color: #4caf50;
-}
-
-.close-btn {
-  font-size: 24px;
-  background: transparent;
-  border: none;
-  color: white;
-  cursor: pointer;
-  margin-bottom: 20px;
-}
-
-/* Main Content */
-.main-content {
-  padding: 20px;
-  flex: 1;
-  overflow-y: auto;
-}
-
-.section {
-  background-color: var(--card-background);
-  padding: 20px;
-  margin: 20px 0;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-}
-
-h2 {
-  font-size: 24px;
-  margin-bottom: 15px;
-}
-
-.input {
-  width: 100%;
-  padding: 12px;
+.side-menu ul li {
   margin: 10px 0;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 16px;
 }
 
-.input:focus {
-  outline: none;
-  border-color: var(--accent-color);
-}
-
-.btn {
-  background-color: var(--accent-color);
+.side-menu ul li a {
   color: white;
-  padding: 12px 20px;
-  border: none;
+  text-decoration: none;
+}
+
+.side-menu.hidden {
+  display: none;
+}
+
+#dashboard, #salesHistoryContainer, #addSale {
+  display: none;
+}
+
+#dashboard {
+  background-color: #ffffff;
+  padding: 20px;
   border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.btn:hover {
-  background-color: var(--accent-hover-color);
+.sales-summary {
+  display: flex;
+  justify-content: space-between;
 }
 
-.total-sales {
-  font-size: 20px;
-  margin-bottom: 20px;
+.sales-summary div {
+  text-align: center;
 }
 
-.chart-container {
-  width: 100%;
-  height: 300px;
-  margin-bottom: 20px;
+.sales-history, .add-sale {
+  background-color: #ffffff;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Sales History */
-#salesHistoryContainer {
+footer {
+  text-align: center;
   margin-top: 20px;
 }
 
-#salesHistoryContainer div {
-  background-color: var(--card-background-light);
-  padding: 10px;
-  margin: 10px 0;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+footer p {
+  font-size: 14px;
 }
 
-#salesHistoryContainer div:hover {
-  background-color: var(--card-hover-background);
-}
-
-/* Dark Mode Variables */
-:root {
-  --background-color: #f5f5f5;
-  --text-color: #333;
-  --header-background: #3f51b5;
-  --header-text-color: white;
-  --side-menu-background: #3f51b5;
-  --card-background: white;
-  --card-background-light: #fafafa;
-  --card-hover-background: #f1f1f1;
-  --accent-color: #3f51b5;
-  --accent-hover-color: #3949ab;
-}
-
+/* Dark Mode */
 body.dark-mode {
-  --background-color: #121212;
-  --text-color: #eaeaea;
-  --header-background: #303030;
-  --header-text-color: #fff;
-  --side-menu-background: #424242;
-  --card-background: #333;
-  --card-background-light: #444;
-  --card-hover-background: #555;
-  --accent-color: #bb86fc;
-  --accent-hover-color: #3700b3;
+  background-color: #2c3e50;
+  color: white;
+}
+
+body.dark-mode header {
+  background-color: #34495e;
+}
+
+body.dark-mode .side-menu {
+  background-color: #1a242f;
+}
+
+body.dark-mode footer {
+  background-color: #34495e;
+  color: white;
 }

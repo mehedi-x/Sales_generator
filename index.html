@@ -627,3 +627,108 @@
 </body>
 
 </html>
+
+<script>
+    let salesData = JSON.parse(localStorage.getItem("salesData")) || [];
+
+    // Initialize the stored shop name
+    const shopNameStored = localStorage.getItem("shopName");
+
+    if (shopNameStored) {
+        document.getElementById('shop-name').value = shopNameStored;
+    }
+
+    // Event listener for the menu button
+    const menuBtn = document.getElementById('menu-btn');
+    const menuPopup = document.getElementById('menu-popup');
+
+    menuBtn.addEventListener('click', function () {
+        menuPopup.style.display = menuPopup.style.display === 'flex' ? 'none' : 'flex';
+    });
+
+    function closeMenu() {
+        menuPopup.style.display = 'none';
+    }
+
+    function openFullSalesHistory() {
+        if (salesData.length === 0) {
+            alert("No sales history available.");
+            return;
+        }
+        const salesHistory = salesData.map(sale => `
+            Shop: ${sale.shopName}, Product: ${sale.productName}, 
+            Quantity: ${sale.productQuantity}, Total: ৳${sale.total.toFixed(2)}, 
+            Time: ${sale.time}
+        `).join('\n');
+        alert("Full Sales History:\n" + salesHistory);
+    }
+
+    function downloadSalesHistory() {
+        if (salesData.length === 0) {
+            alert("No sales history to download.");
+            return;
+        }
+        const data = JSON.stringify(salesData, null, 2);
+        const blob = new Blob([data], { type: 'application/json' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'sales-history.json';
+        link.click();
+    }
+
+    function closeStore() {
+        if (confirm("Are you sure you want to close the store?")) {
+            localStorage.removeItem('salesData');
+            location.reload();
+        }
+    }
+
+    function generateSale() {
+        const shopName = document.getElementById('shop-name').value.trim();
+        const productName = document.getElementById('product-name').value.trim();
+        const productPrice = parseFloat(document.getElementById('product-price').value);
+        const productQuantity = parseInt(document.getElementById('product-quantity').value);
+
+        if (!shopName || !productName || isNaN(productPrice) || isNaN(productQuantity) || productPrice <= 0 || productQuantity <= 0) {
+            alert("Please fill out all fields correctly.");
+            return;
+        }
+
+        const total = productPrice * productQuantity;
+        const saleData = {
+            shopName,
+            productName,
+            productPrice,
+            productQuantity,
+            total,
+            time: new Date().toLocaleString()
+        };
+
+        salesData.push(saleData);
+        localStorage.setItem('salesData', JSON.stringify(salesData));
+        localStorage.setItem('shopName', shopName);
+
+        updateSaleSummary(saleData);
+        updateTotalSale();
+
+        document.getElementById('product-name').value = '';
+        document.getElementById('product-price').value = '';
+        document.getElementById('product-quantity').value = '';
+    }
+
+    function updateSaleSummary(saleData) {
+        document.getElementById('sale-summary').innerHTML = `
+            Shop: ${saleData.shopName}, Product: ${saleData.productName}, 
+            Quantity: ${saleData.productQuantity}, Total: ৳${saleData.total.toFixed(2)}
+        `;
+    }
+
+    function updateTotalSale() {
+        const totalSale = salesData.reduce((total, sale) => total + sale.total, 0);
+        document.getElementById('total-sale').textContent = `Total Sale: ৳${totalSale.toFixed(2)}`;
+    }
+
+    // Initialize the total sale display
+    updateTotalSale();
+</script>
+

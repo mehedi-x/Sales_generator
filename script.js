@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const themeToggleBtn = document.getElementById('themeToggleBtn');
   const shopNameInput = document.getElementById('shopNameInput');
   const activateShopBtn = document.getElementById('activateShopBtn');
   const dashboard = document.getElementById('dashboard');
@@ -9,26 +8,33 @@ document.addEventListener('DOMContentLoaded', () => {
   const salesHistoryBtn = document.getElementById('viewSalesBtn');
   const salesHistoryContainer = document.getElementById('salesHistoryContainer');
   const closeSalesHistory = document.getElementById('closeSalesHistory');
-  const downloadPDF = document.getElementById('downloadPDF');
-  
-  // Theme toggle functionality
-  if (localStorage.getItem('darkMode') === 'true') {
-    document.body.classList.add('dark-mode');
+  const changeShopNameBtn = document.getElementById('changeShopNameBtn');
+  const newShopNameInput = document.getElementById('newShopName');
+  const totalSalesElement = document.getElementById('totalSales');
+  const productNameInput = document.getElementById('productName');
+  const productPriceInput = document.getElementById('productPrice');
+  const productQuantityInput = document.getElementById('productQuantity');
+  const addToSaleBtn = document.getElementById('addToSaleBtn');
+  const salesHistoryData = document.getElementById('salesHistoryData');
+  const downloadPDFBtn = document.getElementById('downloadPDF');
+  const saleForm = document.getElementById('saleForm');
+
+  let salesData = [];
+
+  // Shop Activation
+  if (localStorage.getItem('shopName')) {
+    document.getElementById('shopActivation').classList.add('hidden');
+    document.getElementById('dashboard').classList.remove('hidden');
+    totalSalesElement.textContent = `Total Sales: 0.00৳`;
   }
 
-  themeToggleBtn.addEventListener('click', () => {
-    const isDarkMode = document.body.classList.toggle('dark-mode');
-    localStorage.setItem('darkMode', isDarkMode);
-  });
-
-  // Activate Shop
   activateShopBtn.addEventListener('click', () => {
     const shopName = shopNameInput.value.trim();
     if (shopName) {
       localStorage.setItem('shopName', shopName);
       dashboard.classList.remove('hidden');
       document.getElementById('shopActivation').classList.add('hidden');
-      document.querySelector('header .total-sales').textContent = `Total Sales: 0.00৳`;
+      totalSalesElement.textContent = `Total Sales: 0.00৳`;
     }
   });
 
@@ -50,8 +56,62 @@ document.addEventListener('DOMContentLoaded', () => {
     salesHistoryContainer.classList.add('hidden');
   });
 
+  // Change Shop Name
+  changeShopNameBtn.addEventListener('click', () => {
+    const newShopName = newShopNameInput.value.trim();
+    if (newShopName) {
+      localStorage.setItem('shopName', newShopName);
+      alert('Shop name updated!');
+    }
+  });
+
+  // Add Sale
+  saleForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const productName = productNameInput.value.trim();
+    const productPrice = parseFloat(productPriceInput.value);
+    const productQuantity = parseInt(productQuantityInput.value);
+
+    if (productName && !isNaN(productPrice) && !isNaN(productQuantity)) {
+      const sale = {
+        productName,
+        productPrice,
+        productQuantity,
+        total: productPrice * productQuantity
+      };
+
+      salesData.push(sale);
+
+      // Update total sales
+      const totalSales = salesData.reduce((acc, sale) => acc + sale.total, 0);
+      totalSalesElement.textContent = `Total Sales: ${totalSales.toFixed(2)}৳`;
+
+      // Clear inputs
+      productNameInput.value = '';
+      productPriceInput.value = '';
+      productQuantityInput.value = '';
+
+      alert('Sale Added Successfully');
+    }
+  });
+
+  // View Sales History
+  const viewSalesHistory = () => {
+    salesHistoryData.innerHTML = '';
+    salesData.forEach(sale => {
+      const saleDiv = document.createElement('div');
+      saleDiv.textContent = `${sale.productName} - ${sale.productQuantity} x ${sale.productPrice}৳ = ${sale.total}৳`;
+      salesHistoryData.appendChild(saleDiv);
+    });
+  };
+
   // Download PDF
-  downloadPDF.addEventListener('click', () => {
+  downloadPDFBtn.addEventListener('click', () => {
     alert('Download PDF functionality will be implemented here.');
   });
+
+  // Initially view sales history if data is available
+  if (salesData.length > 0) {
+    viewSalesHistory();
+  }
 });

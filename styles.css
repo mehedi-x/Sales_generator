@@ -7,9 +7,10 @@
 
 body {
   font-family: 'Roboto', sans-serif;
-  background-color: #f5f5f5;
-  color: #333;
+  background-color: var(--background-color);
+  color: var(--text-color);
   margin: 0;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 #app {
@@ -23,8 +24,8 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #3f51b5;
-  color: white;
+  background-color: var(--header-background);
+  color: var(--header-text-color);
   padding: 20px;
   border-radius: 10px 10px 0 0;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -38,17 +39,26 @@ body {
   font-size: 30px;
   background: transparent;
   border: none;
-  color: white;
+  color: var(--header-text-color);
   cursor: pointer;
 }
 
+.theme-toggle-btn {
+  font-size: 24px;
+  background: transparent;
+  border: none;
+  color: var(--header-text-color);
+  cursor: pointer;
+}
+
+/* Side Menu */
 .side-menu {
   position: absolute;
   left: -250px;
   top: 0;
   height: 100%;
   width: 250px;
-  background-color: #3f51b5;
+  background-color: var(--side-menu-background);
   color: white;
   padding: 20px;
   transition: 0.3s ease;
@@ -92,7 +102,7 @@ body {
 }
 
 .section {
-  background-color: white;
+  background-color: var(--card-background);
   padding: 20px;
   margin: 20px 0;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
@@ -115,11 +125,11 @@ h2 {
 
 .input:focus {
   outline: none;
-  border-color: #3f51b5;
+  border-color: var(--accent-color);
 }
 
 .btn {
-  background-color: #3f51b5;
+  background-color: var(--accent-color);
   color: white;
   padding: 12px 20px;
   border: none;
@@ -130,7 +140,7 @@ h2 {
 }
 
 .btn:hover {
-  background-color: #3949ab;
+  background-color: var(--accent-hover-color);
 }
 
 .total-sales {
@@ -150,7 +160,7 @@ h2 {
 }
 
 #salesHistoryContainer div {
-  background-color: #fafafa;
+  background-color: var(--card-background-light);
   padding: 10px;
   margin: 10px 0;
   border-radius: 8px;
@@ -159,20 +169,32 @@ h2 {
 }
 
 #salesHistoryContainer div:hover {
-  background-color: #f1f1f1;
+  background-color: var(--card-hover-background);
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .side-menu {
-    width: 200px;
-  }
+/* Dark Mode Variables */
+:root {
+  --background-color: #f5f5f5;
+  --text-color: #333;
+  --header-background: #3f51b5;
+  --header-text-color: white;
+  --side-menu-background: #3f51b5;
+  --card-background: white;
+  --card-background-light: #fafafa;
+  --card-hover-background: #f1f1f1;
+  --accent-color: #3f51b5;
+  --accent-hover-color: #3949ab;
+}
 
-  .menu-btn {
-    font-size: 28px;
-  }
-
-  .section {
-    padding: 15px;
-  }
+body.dark-mode {
+  --background-color: #121212;
+  --text-color: #eaeaea;
+  --header-background: #303030;
+  --header-text-color: #fff;
+  --side-menu-background: #424242;
+  --card-background: #333;
+  --card-background-light: #444;
+  --card-hover-background: #555;
+  --accent-color: #bb86fc;
+  --accent-hover-color: #3700b3;
 }

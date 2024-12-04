@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sales Generator</title>
     <style>
+        /* CSS Styling */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -12,7 +13,6 @@
             background-color: #f4f4f4;
             color: #333;
         }
-
         header {
             display: flex;
             justify-content: space-between;
@@ -21,21 +21,17 @@
             background-color: #007bff;
             color: white;
         }
-
         header h1 {
             font-size: 24px;
             margin: 0;
         }
-
         header .menu {
             cursor: pointer;
             font-size: 24px;
         }
-
         .main-container {
             padding: 20px;
         }
-
         .menu-popup {
             display: none;
             position: absolute;
@@ -46,7 +42,6 @@
             border-radius: 8px;
             overflow: hidden;
         }
-
         .menu-popup a {
             display: block;
             padding: 10px 20px;
@@ -54,16 +49,13 @@
             color: #333;
             border-bottom: 1px solid #ddd;
         }
-
         .menu-popup a:last-child {
             border-bottom: none;
         }
-
         .menu-popup a:hover {
             background-color: #007bff;
             color: white;
         }
-
         .modal {
             position: fixed;
             top: 0;
@@ -76,7 +68,6 @@
             align-items: center;
             z-index: 1000;
         }
-
         .modal-content {
             background: white;
             padding: 20px;
@@ -85,7 +76,6 @@
             max-width: 400px;
             text-align: center;
         }
-
         .modal-content input {
             width: 100%;
             padding: 10px;
@@ -93,7 +83,6 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
-
         .modal-content button {
             padding: 10px 20px;
             border: none;
@@ -102,11 +91,9 @@
             color: white;
             cursor: pointer;
         }
-
         .modal-content button:hover {
             background: #0056b3;
         }
-
         .dashboard {
             margin-bottom: 20px;
             padding: 20px;
@@ -114,20 +101,17 @@
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-
         .sales-form {
             padding: 20px;
             background: white;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-
         .sales-form label {
             display: block;
             margin-bottom: 10px;
             font-weight: bold;
         }
-
         .sales-form input, .sales-form button {
             width: 100%;
             padding: 10px;
@@ -135,29 +119,24 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
-
         .sales-form button {
             background: #007bff;
             color: white;
             cursor: pointer;
             font-size: 16px;
         }
-
         .sales-form button:hover {
             background: #0056b3;
         }
-
         .sales-history {
             margin-top: 20px;
         }
-
         .sales-history input[type="date"], .sales-history input[type="month"] {
             padding: 10px;
             margin: 5px;
             border: 1px solid #ccc;
             border-radius: 4px;
         }
-
         .sales-history button {
             padding: 10px 20px;
             border: none;
@@ -166,16 +145,13 @@
             color: white;
             cursor: pointer;
         }
-
         .sales-history button:hover {
             background: #0056b3;
         }
-
         .sales-history ul {
             list-style: none;
             padding: 0;
         }
-
         .sales-history li {
             padding: 10px;
             margin-bottom: 5px;
@@ -183,19 +159,16 @@
             border: 1px solid #ddd;
             border-radius: 4px;
         }
-
         .dashboard table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
         }
-
         .dashboard th, .dashboard td {
             border: 1px solid #ddd;
             padding: 10px;
             text-align: left;
         }
-
         .dashboard th {
             background: #007bff;
             color: white;
@@ -204,6 +177,7 @@
 </head>
 <body>
 
+<!-- Modal for Shop Name -->
 <div id="shop-name-modal" class="modal">
     <div class="modal-content">
         <h2>Enter Shop Name</h2>
@@ -220,20 +194,18 @@
 <div class="menu-popup" id="menu-popup">
     <a href="#" onclick="showDashboard()">Dashboard</a>
     <a href="#" onclick="showSalesHistory()">Sales History</a>
-    <a href="#" onclick="closeStore()">Close Store</a>
 </div>
 
 <div class="main-container">
     <div id="dashboard" class="dashboard">
-        <h2>Dashboard</h2>
-        <p>Shop: <span id="dashboard-shop-name"></span></p>
+        <h3>Dashboard - <span id="dashboard-shop-name"></span></h3>
         <table>
             <thead>
                 <tr>
                     <th>Product Name</th>
-                    <th>Price (৳)</th>
+                    <th>Product Price</th>
                     <th>Quantity</th>
-                    <th>Total (৳)</th>
+                    <th>Total</th>
                 </tr>
             </thead>
             <tbody id="dashboard-sales">
@@ -272,106 +244,7 @@
 </div>
 
 <script>
-    let salesData = JSON.parse(localStorage.getItem('salesData')) || [];
-    const shopName = localStorage.getItem('shopName') || '';
-
-    function toggleMenu() {
-        const menu = document.getElementById('menu-popup');
-        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-    }
-
-    function activateShop() {
-        const shopNameInput = document.getElementById('shop-name-input').value;
-        if (shopNameInput) {
-            localStorage.setItem('shopName', shopNameInput);
-            document.getElementById('shop-name-display').innerText = shopNameInput;
-            document.getElementById('dashboard-shop-name').innerText = shopNameInput;
-            document.getElementById('shop-name-modal').style.display = 'none';
-        }
-    }
-
-    function showDashboard() {
-        document.getElementById('dashboard').style.display = 'block';
-        document.getElementById('sales-history').style.display = 'none';
-        updateDashboard();
-    }
-
-    function showSalesHistory() {
-        document.getElementById('sales-history').style.display = 'block';
-        document.getElementById('dashboard').style.display = 'none';
-        displaySalesHistory();
-    }
-
-    function updateDashboard() {
-        const salesTable = document.getElementById('dashboard-sales');
-        let totalSales = 0;
-        salesTable.innerHTML = '';
-        salesData.forEach((sale, index) => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${sale.productName}</td>
-                <td>${sale.productPrice}</td>
-                <td>${sale.productQuantity}</td>
-                <td>${(sale.productPrice * sale.productQuantity).toFixed(2)}</td>
-            `;
-            salesTable.appendChild(row);
-            totalSales += sale.productPrice * sale.productQuantity;
-        });
-        document.getElementById('total-sales').innerText = totalSales.toFixed(2);
-    }
-
-    function addSale(event) {
-        event.preventDefault();
-        const productName = document.getElementById('product-name').value;
-        const productPrice = parseFloat(document.getElementById('product-price').value);
-        const productQuantity = parseInt(document.getElementById('product-quantity').value);
-        
-        salesData.push({ productName, productPrice, productQuantity, date: new Date() });
-        localStorage.setItem('salesData', JSON.stringify(salesData));
-        updateDashboard();
-    }
-
-    function filterSales() {
-        const date = document.getElementById('sales-date').value;
-        const month = document.getElementById('sales-month').value;
-        const filteredSales = salesData.filter(sale => {
-            if (date && new Date(sale.date).toISOString().split('T')[0] !== date) return false;
-            if (month && new Date(sale.date).toISOString().split('T')[0].slice(0, 7) !== month) return false;
-            return true;
-        });
-        displaySalesHistory(filteredSales);
-    }
-
-    function displaySalesHistory(filteredSales = salesData) {
-        const salesHistoryList = document.getElementById('sales-history-list');
-        salesHistoryList.innerHTML = '';
-        filteredSales.forEach(sale => {
-            const li = document.createElement('li');
-            li.innerText = `${sale.date} - ${sale.productName} - ${sale.productPrice} x ${sale.productQuantity}`;
-            salesHistoryList.appendChild(li);
-        });
-    }
-
-    function exportSales() {
-        const dataStr = JSON.stringify(salesData, null, 2);
-        const blob = new Blob([dataStr], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'sales_data.json';
-        link.click();
-        URL.revokeObjectURL(url);
-    }
-
-    window.onload = () => {
-        if (!shopName) {
-            document.getElementById('shop-name-modal').style.display = 'flex';
-        } else {
-            document.getElementById('shop-name-display').innerText = shopName;
-            document.getElementById('dashboard-shop-name').innerText = shopName;
-        }
-        updateDashboard();
-    };
+// JavaScript code
 </script>
 
 </body>

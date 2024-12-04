@@ -4,7 +4,7 @@ let suggestedProducts = new Set();
 // Add product and generate sale
 function generateSale() {
     const shopName = document.getElementById("shop-name").value;
-    const productName = document.getElementById("product-name").value;
+    const productName = document.getElementById("product-name-input").value;
     const productPrice = parseFloat(document.getElementById("product-price").value);
     const productQuantity = parseFloat(document.getElementById("product-quantity").value) || 1;
 
@@ -44,116 +44,55 @@ function updateLastSaleView(lastSale) {
     `;
 }
 
-// Update datalist for suggested products
+// Update suggested products for auto-complete
 function updateSuggestions() {
-    const datalist = document.getElementById("suggested-products");
-    datalist.innerHTML = "";
+    const productList = document.getElementById("suggested-products");
+    productList.innerHTML = "";
     suggestedProducts.forEach((product) => {
         const option = document.createElement("option");
         option.value = product;
-        datalist.appendChild(option);
+        productList.appendChild(option);
     });
 }
 
-// Filter Sales History
-function filterSalesHistory() {
-    const filterInput = document.getElementById("filter").value.toLowerCase();
-    const filteredSales = salesData.filter((sale) => 
-        sale.shopName.toLowerCase().includes(filterInput) || 
-        sale.productName.toLowerCase().includes(filterInput)
-    );
-    displaySalesHistory(filteredSales);
+// Reset form after sale
+function resetForm() {
+    document.getElementById("shop-name").value = "";
+    document.getElementById("product-name-input").value = "";
+    document.getElementById("product-price").value = "";
+    document.getElementById("product-quantity").value = "";
 }
 
-// Display sales history (filtered or full)
-function displaySalesHistory(sales) {
-    const fullSalesList = document.getElementById("full-sales-list");
-    fullSalesList.innerHTML = "";
-    sales.forEach((sale, index) => {
-        const listItem = document.createElement("li");
-        listItem.innerHTML = `
-            <strong>${index + 1}.</strong> Shop: ${sale.shopName}, Product: ${sale.productName},
-            Quantity: ${sale.productQuantity}, Total: ৳${sale.total.toFixed(2)}
-        `;
-        fullSalesList.appendChild(listItem);
-}
+// Download sales history as PDF or CSV
+function downloadSalesHistory(type) {
+    const headers = ["Shop Name", "Product Name", "Price", "Quantity", "Total"];
+    let data = salesData.map((sale) => [
+        sale.shopName,
+        sale.productName,
+        sale.productPrice,
+        sale.productQuantity,
+        sale.total.toFixed(2),
+    ]);
 
-// Download sales history in selected format (PDF or CSV)
-function downloadSalesHistory(format) {
-    const salesSummary = salesData
-        .map(
-            (sale, index) =>
-                `${index + 1}. Shop: ${sale.shopName}, Product: ${sale.productName}, Quantity: ${sale.productQuantity}, Total: ৳${sale.total.toFixed(2)}`
-        )
-        .join("\n");
-
-    if (format === 'pdf') {
-        const blob = new Blob([salesSummary], { type: "application/pdf" });
-        const url = URL.createObjectURL(blob);
-
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = "Sales_History.pdf";
-        link.click();
-
-        URL.revokeObjectURL(url);
-    } else if (format === 'csv') {
-        const csvContent = "data:text/csv;charset=utf-8," + salesSummary;
+    if (type === "pdf") {
+        // Implement PDF generation (this part is left as an exercise, you can use libraries like jsPDF)
+        alert("PDF export feature not implemented yet.");
+    } else if (type === "csv") {
+        let csvContent = "data:text/csv;charset=utf-8," + headers.join(",") + "\n";
+        data.forEach((row) => {
+            csvContent += row.join(",") + "\n";
+        });
         const encodedUri = encodeURI(csvContent);
         const link = document.createElement("a");
-        link.href = encodedUri;
-        link.download = "Sales_History.csv";
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "sales_history.csv");
+        document.body.appendChild(link);
         link.click();
     }
 }
 
-// Toggle between dark and light mode
-document.getElementById("theme-toggle").addEventListener("click", function() {
-    const body = document.body;
-    body.classList.toggle("dark-mode");
-    this.textContent = body.classList.contains("dark-mode") ? "Switch to Light Mode" : "Switch to Dark Mode";
+// Theme toggle
+document.getElementById("theme-toggle").addEventListener("click", () => {
+    document.body.classList.toggle("light-mode");
+    document.body.classList.toggle("dark-mode");
 });
-
-// Open close store modal and show full sales history
-function openCloseStoreModal() {
-    const fullSalesList = document.getElementById("full-sales-list");
-    fullSalesList.innerHTML = "";
-
-    salesData.forEach((sale, index) => {
-        const listItem = document.createElement("li");
-        listItem.innerHTML = `
-            <strong>${index + 1}.</strong> Shop: ${sale.shopName}, Product: ${sale.productName},
-            Quantity: ${sale.productQuantity}, Total: ৳${sale.total.toFixed(2)}
-        `;
-        fullSalesList.appendChild(listItem);
-    });
-
-    document.getElementById("close-store-modal").style.display = "block";
-}
-
-// Close store and clear sales data
-function closeStore() {
-    salesData = [];
-    localStorage.removeItem("salesData");
-    document.getElementById("close-store-modal").style.display = "none";
-    alert("Store closed and all sales data cleared!");
-    location.reload();
-}
-
-// Cancel store closure
-function cancelStoreClosure() {
-    document.getElementById("close-store-modal").style.display = "none";
-}
-
-// Initialize sales view on page load
-window.onload = function () {
-    if (salesData.length > 0) {
-        updateLastSaleView(salesData[salesData.length - 1]);
-    }
-};
-
-// Event listener for filter input
-document.getElementById("filter").addEventListener("input", filterSalesHistory);
-
-// Event listener for product name input
-document.getElementById("product-name").addEventListener("input", updateSuggestions);

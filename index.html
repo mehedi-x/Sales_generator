@@ -113,6 +113,7 @@
 
         /* Sales History Section */
         .sales-history {
+            display: none;
             margin-top: 20px;
             max-height: 300px;
             overflow-y: auto;
@@ -198,6 +199,14 @@
             height: 100%;
             overflow-y: auto;
         }
+
+        .sales-history-button {
+            margin-top: 20px;
+            background-color: #ff9800;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -235,13 +244,31 @@
             <button onclick="generateSale()">Add Sale</button>
         </div>
 
-        <!-- Mini Dashboard Section -->
+        <!-- Dashboard Section -->
         <div class="dashboard">
             <h3>Sales</h3>
-            <div class="sales-history">
-                <h4>Sales History</h4>
-                <ul id="sales-history-list"></ul>
+            <div class="stats">
+                <div class="stat">
+                    <h4>Total Sales</h4>
+                    <p id="total-sales">৳0.00</p>
+                </div>
+                <div class="stat">
+                    <h4>Items Sold</h4>
+                    <p id="items-sold">0</p>
+                </div>
+                <div class="stat">
+                    <h4>Top Product</h4>
+                    <p id="top-product">N/A</p>
+                </div>
             </div>
+            <button class="sales-history-button" onclick="toggleSalesHistory()">View Sales History</button>
+        </div>
+
+        <!-- Sales History Section (Now in Full Screen) -->
+        <div class="sales-history" id="sales-history">
+            <h4>Sales History</h4>
+            <ul id="sales-history-list"></ul>
+            <button onclick="closeSalesHistory()">Close</button>
         </div>
     </div>
 
@@ -288,21 +315,35 @@
             });
 
             const topProduct = Object.keys(productCount).reduce((a, b) =>
-                productCount[a] > productCount[b] ? a : b,
-                "N/A"
+                productCount[a] > productCount[b] ? a : b
             );
 
+            document.getElementById("total-sales").innerText = `৳${totalSales.toFixed(2)}`;
+            document.getElementById("items-sold").innerText = itemsSold;
+            document.getElementById("top-product").innerText = topProduct;
+
+            // Update Full Dashboard
             document.getElementById("full-total-sales").innerText = `৳${totalSales.toFixed(2)}`;
             document.getElementById("full-items-sold").innerText = itemsSold;
             document.getElementById("full-top-product").innerText = topProduct;
 
-            // Update Sales History in the main dashboard
+            // Update Sales History List
+            updateSalesHistoryList();
+        }
+
+        // Update Sales History List
+        function updateSalesHistoryList() {
             const salesHistoryList = document.getElementById("sales-history-list");
+            const fullSalesHistoryList = document.getElementById("full-sales-history-list");
+
             salesHistoryList.innerHTML = "";
-            salesData.slice().reverse().forEach((sale, index) => {
+            fullSalesHistoryList.innerHTML = "";
+
+            salesData.forEach((sale, index) => {
                 const listItem = document.createElement("li");
-                listItem.innerHTML = `${index + 1}. Shop: ${sale.shopName}, Product: ${sale.productName}, Quantity: ${sale.productQuantity}, Total: ৳${sale.total.toFixed(2)}`;
+                listItem.innerHTML = `<strong>${sale.shopName}</strong>: ${sale.productName} - ৳${sale.productPrice} x ${sale.productQuantity} = ৳${sale.total}`;
                 salesHistoryList.appendChild(listItem);
+                fullSalesHistoryList.appendChild(listItem.cloneNode(true));
             });
         }
 
@@ -320,6 +361,16 @@
         // Close Full Dashboard
         function closeFullDashboard() {
             document.getElementById("full-screen-dashboard").classList.remove("open");
+        }
+
+        // Show Sales History
+        function toggleSalesHistory() {
+            document.getElementById("sales-history").style.display = "block";
+        }
+
+        // Close Sales History
+        function closeSalesHistory() {
+            document.getElementById("sales-history").style.display = "none";
         }
 
         // Generate Sale

@@ -11,11 +11,10 @@ body {
     color: #fff; /* Light text color */
 }
 
-.main-wrapper {
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
+/* Dark mode toggle */
+body.dark-mode {
+    background-color: #121212;
+    color: #fff;
 }
 
 /* Header Section */
@@ -108,7 +107,7 @@ header button:hover {
     background-color: #388e3c; /* Darker green for hover */
 }
 
-/* Modal Styles */
+/* Menu Modal Styles */
 .modal {
     display: none;
     position: fixed;
@@ -128,60 +127,44 @@ header button:hover {
     width: 60%;
     max-width: 600px;
     color: #fff;
+    position: relative;
 }
 
-.modal-content button {
-    background-color: #ff5722; /* Red for close/cancel buttons */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
     color: #fff;
-    padding: 10px 15px;
     border: none;
+    font-size: 20px;
     cursor: pointer;
+}
+
+.menu-items label,
+.menu-items button {
+    display: block;
+    margin-top: 20px;
+    font-size: 16px;
+}
+
+.menu-items input,
+.menu-items button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #444;
+    background-color: #333;
+    color: #fff;
     font-size: 16px;
     border-radius: 5px;
-    margin-top: 10px;
 }
 
-.modal-content button:hover {
-    background-color: #d84315;
+.menu-items button:hover {
+    background-color: #4caf50;
 }
 
-#full-sales-list {
-    margin-top: 20px;
-    padding: 0;
-}
-
-#full-sales-list li {
-    list-style-type: none;
-    padding: 10px;
-    background-color: #444;
-    margin-bottom: 5px;
-    border-radius: 5px;
-}
-
-#full-sales-list li strong {
-    color: #ff9800;
-}
-
-
-body.dark-mode {
-    background-color: #121212;
-    color: #fff;
-}
-
-button {
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-button:hover {
-    background-color: #c2185b;
-    transform: scale(1.05);
-}
-
-.modal-content {
-    animation: fadeIn 0.5s ease-in-out;
-}
-
-@keyframes fadeIn {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
+/* Hide the menu modal by default */
+#menu-modal {
+    display: none;
 }

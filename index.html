@@ -65,6 +65,49 @@
             color: white;
         }
 
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .modal-content button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            background: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+
+        .modal-content button:hover {
+            background: #0056b3;
+        }
+
         .dashboard {
             margin-bottom: 20px;
             padding: 20px;
@@ -122,12 +165,37 @@
             border: 1px solid #ddd;
             border-radius: 4px;
         }
+
+        .dashboard table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .dashboard th, .dashboard td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .dashboard th {
+            background: #007bff;
+            color: white;
+        }
     </style>
 </head>
 <body>
 
+<div id="shop-name-modal" class="modal">
+    <div class="modal-content">
+        <h2>Enter Shop Name</h2>
+        <input type="text" id="shop-name-input" placeholder="Enter shop name" required>
+        <button onclick="activateShop()">Activate</button>
+    </div>
+</div>
+
 <header>
-    <h1>Sales Generator</h1>
+    <h1 id="shop-name-display">Sales Generator</h1>
     <div class="menu" onclick="toggleMenu()">☰</div>
 </header>
 
@@ -140,6 +208,18 @@
 <div class="main-container">
     <div id="dashboard" class="dashboard">
         <h2>Dashboard</h2>
+        <p>Shop: <span id="dashboard-shop-name"></span></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Price (৳)</th>
+                    <th>Quantity</th>
+                    <th>Total (৳)</th>
+                </tr>
+            </thead>
+            <tbody id="dashboard-sales"></tbody>
+        </table>
         <p>Total Sales: ৳<span id="total-sales">0.00</span></p>
     </div>
 
@@ -158,14 +238,10 @@
             <button type="submit">Add Sale</button>
         </form>
     </div>
-
-    <div id="sales-history" class="sales-history">
-        <h2>Sales History</h2>
-        <ul id="history-list"></ul>
-    </div>
 </div>
 
 <script>
+    let shopName = localStorage.getItem('shopName') || '';
     let salesData = JSON.parse(localStorage.getItem('salesData')) || [];
 
     function toggleMenu() {
@@ -173,24 +249,19 @@
         menuPopup.style.display = menuPopup.style.display === 'block' ? 'none' : 'block';
     }
 
-    function showDashboard() {
-        document.getElementById('dashboard').style.display = 'block';
-        document.getElementById('sales-form').style.display = 'none';
-        document.getElementById('sales-history').style.display = 'none';
-        toggleMenu();
+    function activateShop() {
+        shopName = document.getElementById('shop-name-input').value;
+        if (shopName.trim()) {
+            localStorage.setItem('shopName', shopName);
+            document.getElementById('shop-name-display').innerText = shopName;
+            document.getElementById('dashboard-shop-name').innerText = shopName;
+            document.getElementById('shop-name-modal').style.display = 'none';
+        }
     }
 
-    function showSalesHistory() {
-        const historyList = document.getElementById('history-list');
-        historyList.innerHTML = '';
-        salesData.forEach((sale, index) => {
-            const listItem = document.createElement('li');
-            listItem.innerText = `${index + 1}. Product: ${sale.productName}, Price: ৳${sale.productPrice.toFixed(2)}, Quantity: ${sale.productQuantity}, Total: ৳${sale.total.toFixed(2)}`;
-            historyList.appendChild(listItem);
-        });
-        document.getElementById('sales-history').style.display = 'block';
-        document.getElementById('dashboard').style.display = 'none';
-        document.getElementById('sales-form').style.display = 'none';
+    function showDashboard() {
+        updateDashboard();
+        document.getElementById('dashboard').style.display = 'block';
         toggleMenu();
     }
 
@@ -199,40 +270,43 @@
         const productName = document.getElementById('product-name').value;
         const productPrice = parseFloat(document.getElementById('product-price').value);
         const productQuantity = parseInt(document.getElementById('product-quantity').value, 10);
+        const total = productPrice * productQuantity;
 
-        const sale = {
-            productName,
-            productPrice,
-            productQuantity,
-            total: productPrice * productQuantity
-        };
-
+        const sale = { productName, productPrice, productQuantity, total };
         salesData.push(sale);
         localStorage.setItem('salesData', JSON.stringify(salesData));
-
-        document.getElementById('product-name').value = '';
-        document.getElementById('product-price').value = '';
-        document.getElementById('product-quantity').value = '1';
 
         updateDashboard();
     }
 
     function updateDashboard() {
         const totalSales = salesData.reduce((total, sale) => total + sale.total, 0);
+        const salesTable = document.getElementById('dashboard-sales');
+        salesTable.innerHTML = '';
+
+        salesData.forEach(sale => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${sale.productName}</td>
+                <td>${sale.productPrice.toFixed(2)}</td>
+                <td>${sale.productQuantity}</td>
+                <td>${sale.total.toFixed(2)}</td>
+            `;
+            salesTable.appendChild(row);
+        });
+
         document.getElementById('total-sales').innerText = totalSales.toFixed(2);
     }
 
-    function closeStore() {
-        if (confirm('Are you sure you want to close the store? This will clear all data.')) {
-            salesData = [];
-            localStorage.removeItem('salesData');
-            updateDashboard();
-            alert('Store closed and all data cleared.');
+    window.onload = () => {
+        if (!shopName) {
+            document.getElementById('shop-name-modal').style.display = 'flex';
+        } else {
+            document.getElementById('shop-name-display').innerText = shopName;
+            document.getElementById('dashboard-shop-name').innerText = shopName;
         }
-        toggleMenu();
-    }
-
-    window.onload = updateDashboard;
+        updateDashboard();
+    };
 </script>
 
 </body>

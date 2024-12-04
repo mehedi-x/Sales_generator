@@ -78,6 +78,7 @@
             margin-bottom: 10px;
             border-radius: 5px;
             color: #fff;
+            cursor: pointer;
         }
 
         .slide-menu ul li:hover {
@@ -172,6 +173,31 @@
         .form-section button:hover {
             background-color: #388e3c;
         }
+
+        /* Full-Screen Dashboard */
+        .full-screen-dashboard {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            z-index: 9999;
+        }
+
+        .full-screen-dashboard.open {
+            display: block;
+        }
+
+        .full-screen-dashboard .content {
+            background-color: #333;
+            padding: 20px;
+            border-radius: 5px;
+            height: 100%;
+            overflow-y: auto;
+        }
     </style>
 </head>
 <body>
@@ -187,7 +213,7 @@
     <!-- Slide Menu -->
     <div class="slide-menu" id="slide-menu">
         <ul>
-            <li><a href="#">Dashboard</a></li>
+            <li onclick="toggleFullDashboard()">Full Dashboard</li>
             <li><a href="#">Sales History</a></li>
             <li><a href="#">Settings</a></li>
         </ul>
@@ -232,6 +258,32 @@
         </div>
     </div>
 
+    <!-- Full-Screen Dashboard -->
+    <div class="full-screen-dashboard" id="full-screen-dashboard">
+        <div class="content">
+            <h3>Full Dashboard</h3>
+            <div class="stats">
+                <div class="stat">
+                    <h4>Total Sales</h4>
+                    <p id="full-total-sales">৳0.00</p>
+                </div>
+                <div class="stat">
+                    <h4>Items Sold</h4>
+                    <p id="full-items-sold">0</p>
+                </div>
+                <div class="stat">
+                    <h4>Top Product</h4>
+                    <p id="full-top-product">N/A</p>
+                </div>
+            </div>
+            <div class="sales-history">
+                <h4>Sales History</h4>
+                <ul id="full-sales-history-list"></ul>
+            </div>
+            <button onclick="closeFullDashboard()">Close Full-Screen</button>
+        </div>
+    </div>
+
     <script>
         let salesData = JSON.parse(localStorage.getItem("salesData")) || [];
 
@@ -257,42 +309,47 @@
                 2
             )}`;
             document.getElementById("items-sold").innerText = itemsSold;
-            document.getElementById("top-product").innerText = topProduct || "N/A";
+            document.getElementById("top-product").innerText = topProduct;
 
-            updateSalesHistory();
-        }
-
-        // Update Sales History
-        function updateSalesHistory() {
+            // Update Sales History
             const salesHistoryList = document.getElementById("sales-history-list");
             salesHistoryList.innerHTML = "";
-
-            salesData.forEach((sale, index) => {
+            salesData.slice().reverse().forEach((sale, index) => {
                 const listItem = document.createElement("li");
-                listItem.innerHTML = `<strong>${index + 1}.</strong> Shop: ${sale.shopName}, Product: ${
-                    sale.productName
-                }, Quantity: ${sale.productQuantity}, Total: ৳${sale.total.toFixed(2)}`;
+                listItem.innerHTML = `${index + 1}. Shop: ${sale.shopName}, Product: ${sale.productName}, Quantity: ${sale.productQuantity}, Total: ৳${sale.total.toFixed(2)}`;
                 salesHistoryList.appendChild(listItem);
             });
+        }
+
+        // Toggle Slide Menu
+        function toggleMenu() {
+            const slideMenu = document.getElementById("slide-menu");
+            slideMenu.classList.toggle("open");
+        }
+
+        // Toggle Full Dashboard
+        function toggleFullDashboard() {
+            document.getElementById("full-screen-dashboard").classList.add("open");
+        }
+
+        // Close Full Dashboard
+        function closeFullDashboard() {
+            document.getElementById("full-screen-dashboard").classList.remove("open");
         }
 
         // Generate Sale
         function generateSale() {
             const shopName = document.getElementById("shop-name").value;
             const productName = document.getElementById("product-name").value;
-            const productPrice = parseFloat(
-                document.getElementById("product-price").value
-            );
-            const productQuantity = parseFloat(
-                document.getElementById("product-quantity").value
-            ) || 1;
+            const productPrice = parseFloat(document.getElementById("product-price").value);
+            const productQuantity = parseInt(document.getElementById("product-quantity").value, 10) || 1;
 
             if (!shopName || !productName || isNaN(productPrice)) {
                 alert("Please fill out all required fields.");
                 return;
             }
 
-            const product = {
+            const sale = {
                 shopName,
                 productName,
                 productPrice,
@@ -300,16 +357,9 @@
                 total: productPrice * productQuantity,
             };
 
-            salesData.push(product);
+            salesData.push(sale);
             localStorage.setItem("salesData", JSON.stringify(salesData));
-
             updateDashboard();
-        }
-
-        // Toggle Slide Menu
-        function toggleMenu() {
-            const slideMenu = document.getElementById("slide-menu");
-            slideMenu.classList.toggle("open");
         }
 
         window.onload = updateDashboard;

@@ -40,6 +40,67 @@ menuBtn.addEventListener('click', function () {
     }
 });
 
+function openFullSalesHistory() {
+    const salesHistory = salesData.map((sale, index) => `
+        <div>
+            <strong>#${index + 1}</strong><br>
+            <strong>Shop:</strong> ${sale.shopName}<br>
+            <strong>Product:</strong> ${sale.productName}<br>
+            <strong>Quantity:</strong> ${sale.productQuantity}<br>
+            <strong>Total:</strong> ৳${sale.total.toFixed(2)}<br>
+            <strong>Time:</strong> ${sale.time}<br>
+            <hr>
+        </div>
+    `).join('');
+
+    const modal = document.getElementById("history-modal");
+    const contentDiv = document.getElementById("history-content");
+
+    if (!salesData.length) {
+        contentDiv.innerHTML = "<p>No sales history available.</p>";
+    } else {
+        contentDiv.innerHTML = salesHistory;
+    }
+
+    modal.style.display = "block";
+}
+let salesData = JSON.parse(localStorage.getItem("salesData")) || [];
+
+function generateSale() {
+    const shopName = document.getElementById("shop-name").value;
+    const productName = document.getElementById("product-name").value;
+    const productPrice = parseFloat(document.getElementById("product-price").value);
+    const productQuantity = parseInt(document.getElementById("product-quantity").value);
+
+    if (!shopName || !productName || isNaN(productPrice) || isNaN(productQuantity)) {
+        alert("Please fill out all fields correctly.");
+        return;
+    }
+
+    const sale = {
+        shopName,
+        productName,
+        productPrice,
+        productQuantity,
+        total: productPrice * productQuantity,
+        time: new Date().toLocaleString(),
+    };
+
+    salesData.push(sale);
+    localStorage.setItem("salesData", JSON.stringify(salesData));
+
+    document.getElementById("sale-summary").innerHTML = `
+        <strong>Shop:</strong> ${sale.shopName}<br>
+        <strong>Product:</strong> ${sale.productName}<br>
+        <strong>Total:</strong> ৳${sale.total.toFixed(2)}
+    `;
+
+    document.getElementById("total-sale").textContent = `Total Sale: ৳${salesData.reduce((acc, cur) => acc + cur.total, 0).toFixed(2)}`;
+}
+function closeModal() {
+    const modal = document.getElementById("history-modal");
+    modal.style.display = "none";
+}
 
 // Update only the last sale view
 function updateLastSaleView(lastSale) {

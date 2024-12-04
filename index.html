@@ -1,136 +1,70 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sales Generator</title>
-    <style>
-        /* Styling */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-            color: #333;
-        }
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-            background-color: #007bff;
-            color: white;
-        }
-        header h1 {
-            font-size: 24px;
-            margin: 0;
-        }
-        .menu {
-            cursor: pointer;
-            font-size: 24px;
-        }
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-        .modal-content {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-        }
-        .modal-content input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .modal-content button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            background: #007bff;
-            color: white;
-            cursor: pointer;
-        }
-        .modal-content button:hover {
-            background: #0056b3;
-        }
-        #shop-name-display {
-            display: inline-block;
-        }
-    </style>
-</head>
-<body>
+let shopName = localStorage.getItem("shopName") || "";
+let salesData = JSON.parse(localStorage.getItem("salesData")) || [];
 
-<header>
-    <h1 id="shop-name-display">Sales Generator</h1>
-    <div class="menu" onclick="toggleMenu()">☰</div>
-</header>
+// Show shop name if it's already stored
+if (shopName) {
+    document.getElementById("shop-name-display").textContent = `Shop: ${shopName}`;
+} else {
+    document.getElementById("shop-name-popup").style.display = "flex";
+}
 
-<div class="modal" id="shop-name-modal" style="display: none;">
-    <div class="modal-content">
-        <h2>Enter Shop Name</h2>
-        <input type="text" id="shop-name-input" placeholder="Enter shop name" required>
-        <button onclick="activateShop()">Activate</button>
-    </div>
-</div>
+// Show menu when the menu button is clicked
+document.getElementById("menu-btn").addEventListener("click", function() {
+    document.getElementById("menu").classList.toggle("hidden-menu");
+});
 
-<script>
-    // Function to check if shop name is stored in localStorage
-    function checkShopName() {
-        const shopName = localStorage.getItem("shopName");
-
-        // If shop name is not stored, show modal to input shop name
-        if (!shopName) {
-            document.getElementById("shop-name-modal").style.display = "flex";
-        } else {
-            // Display existing shop name in header
-            document.getElementById("shop-name-display").innerText = `Sales Generator - ${shopName}`;
-        }
+// Activate Shop Name
+document.getElementById("activate-btn").addEventListener("click", function() {
+    shopName = document.getElementById("shop-name").value;
+    if (shopName) {
+        localStorage.setItem("shopName", shopName);
+        document.getElementById("shop-name-display").textContent = `Shop: ${shopName}`;
+        document.getElementById("shop-name-popup").style.display = "none";
     }
+});
 
-    // Activate the shop with the name entered
-    function activateShop() {
-        const shopName = document.getElementById("shop-name-input").value.trim();
+// Add Sale
+document.getElementById("add-sale-btn").addEventListener("click", function() {
+    let productName = prompt("Enter Product Name:");
+    let productPrice = parseFloat(prompt("Enter Product Price:"));
+    let productQuantity = parseInt(prompt("Enter Product Quantity:"));
 
-        if (shopName) {
-            // Save the shop name to localStorage
-            localStorage.setItem("shopName", shopName);
-            // Close the modal and update header with shop name
-            document.getElementById("shop-name-modal").style.display = "none";
-            document.getElementById("shop-name-display").innerText = `Sales Generator - ${shopName}`;
-        } else {
-            alert("Please enter a valid shop name.");
-        }
+    if (productName && !isNaN(productPrice) && !isNaN(productQuantity)) {
+        let total = productPrice * productQuantity;
+        let sale = { productName, productPrice, productQuantity, total };
+        salesData.push(sale);
+        localStorage.setItem("salesData", JSON.stringify(salesData));
+
+        updateSaleSummary(sale);
     }
+});
 
-    // Function to load the stored shop name when page loads
-    window.onload = function() {
-        checkShopName();
-    };
+// Update Sale Summary
+function updateSaleSummary(sale) {
+    let saleSummary = document.getElementById("sale-summary");
+    saleSummary.innerHTML = `
+        <p><strong>Product:</strong> ${sale.productName}</p>
+        <p><strong>Price:</strong> ৳${sale.productPrice}</p>
+        <p><strong>Quantity:</strong> ${sale.productQuantity}</p>
+        <p><strong>Total:</strong> ৳${sale.total}</p>
+    `;
+}
 
-    // Optional: Trigger modal again based on a set time (for security)
-    setTimeout(() => {
-        const shopName = localStorage.getItem("shopName");
-        if (shopName) {
-            document.getElementById("shop-name-input").value = shopName;
-            document.getElementById("shop-name-modal").style.display = "flex";
-        }
-    }, 10000); // Show modal after 10 seconds for security (can be adjusted)
+// View Sales History
+document.getElementById("view-sales-history").addEventListener("click", function() {
+    let salesHistoryList = document.getElementById("sales-history-list");
+    salesHistoryList.innerHTML = "";
+    
+    salesData.forEach((sale, index) => {
+        let saleItem = document.createElement("div");
+        saleItem.innerHTML = `<p><strong>Sale #${index + 1}: </strong>${sale.productName} - ৳${sale.total}</p>`;
+        salesHistoryList.appendChild(saleItem);
+    });
+});
 
-</script>
-
-</body>
-</html>
+// Close Store and Clear Data
+document.getElementById("close-store-btn").addEventListener("click", function() {
+    localStorage.removeItem("shopName");
+    localStorage.removeItem("salesData");
+    location.reload();
+});

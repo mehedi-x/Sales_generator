@@ -1,29 +1,61 @@
-let salesData = JSON.parse(localStorage.getItem("salesData")) || [];
-let suggestedProducts = new Set();
+// Simulated Data
+let softwareActive = true; // Change this to simulate active or inactive state.
+let lastSale = { price: 1200, product: "Mobile Phone" };
 
+// Update Dashboard Status
 function updateDashboard() {
-    const softwareStatus = document.getElementById("status-text");
-    const officeStatusText = document.getElementById("office-status-text");
+    const statusIndicator = document.getElementById("status-indicator");
+    const statusText = document.getElementById("status-text");
+    const statusTip = document.getElementById("status-tip");
     const lastSalePrice = document.getElementById("last-sale-price");
+    const lastProductName = document.getElementById("last-product-name");
 
-    softwareStatus.textContent = "Active"; // Example
-    officeStatusText.textContent = "Office is Open"; // Example
+    // Update Software Status
+    if (softwareActive) {
+        statusIndicator.classList.add("active");
+        statusText.textContent = "Active";
+        statusTip.textContent = "Software is running smoothly.";
+    } else {
+        statusIndicator.classList.remove("active");
+        statusText.textContent = "Inactive";
+        statusTip.textContent = "Please activate the software to start.";
+    }
 
-    const lastSale = salesData[salesData.length - 1];
-    lastSalePrice.textContent = lastSale ? `৳${lastSale.total.toFixed(2)}` : "৳0.00";
+    // Update Last Sale Price and Product
+    if (lastSale) {
+        lastSalePrice.textContent = `৳${lastSale.price}`;
+        lastProductName.textContent = lastSale.product;
+    } else {
+        lastSalePrice.textContent = "৳0.00";
+        lastProductName.textContent = "No product sold yet";
+    }
 }
 
-function generateSale() {
+// Generate Sale
+function generateSale(event) {
+    event.preventDefault();
+
     const shopName = document.getElementById("shop-name").value;
     const productName = document.getElementById("product-name").value;
     const productPrice = parseFloat(document.getElementById("product-price").value);
     const productQuantity = parseFloat(document.getElementById("product-quantity").value) || 1;
 
-    const product = { shopName, productName, productPrice, productQuantity, total: productPrice * productQuantity };
-    salesData.push(product);
-    localStorage.setItem("salesData", JSON.stringify(salesData));
+    if (!shopName || !productName || isNaN(productPrice)) {
+        alert("Please fill out all required fields.");
+        return;
+    }
 
-    suggestedProducts.add(productName);
+    const total = productPrice * productQuantity;
+    lastSale = { price: total, product: productName };
+
+    alert(`Sale recorded successfully!\nTotal: ৳${total.toFixed(2)}`);
     updateDashboard();
 }
+
+// Toggle Light/Dark Mode
+function toggleLightMode() {
+    document.body.classList.toggle("light-mode");
+}
+
+// Initialize Dashboard
 window.onload = updateDashboard;

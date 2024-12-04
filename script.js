@@ -1,141 +1,132 @@
-let salesData = [];  // Array to hold sales data
-
-// Check if Shop Name is saved
-function checkShopName() {
-    const shopName = localStorage.getItem('shopName');
-    if (shopName) {
-        document.getElementById('shop-name-section').style.display = 'none';
-    } else {
-        document.getElementById('shop-name-section').style.display = 'block';
-    }
+// Function to toggle the menu visibility
+function toggleMenu() {
+    var menu = document.getElementById('menu');
+    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
 }
 
-// Save Shop Name to LocalStorage
-function saveShopName() {
-    const shopName = document.getElementById('shop-name').value;
-    if (shopName) {
-        localStorage.setItem('shopName', shopName);
-        document.getElementById('shop-name-section').style.display = 'none';
-    } else {
-        alert('Please enter a valid shop name.');
-    }
+// Function to show the Sales History when the user clicks on it
+function showSalesHistory() {
+    alert("Sales History option clicked");
+    // Here you can implement the logic to show sales history
 }
 
-// Show Sales History
-document.getElementById("sales-history").addEventListener("click", function() {
-    document.querySelector(".sales-history-section").style.display = "block";
-    document.querySelector(".settings-section").style.display = "none";
-    displaySalesData(salesData);
-});
+// Function to show the Settings page or option
+function showSettings() {
+    alert("Settings option clicked");
+    // Add the logic to show settings page here (e.g., redirect to settings page)
+}
 
-// Show Settings
-document.getElementById("settings").addEventListener("click", function() {
-    document.querySelector(".settings-section").style.display = "block";
-    document.querySelector(".sales-history-section").style.display = "none";
-});
+// Function to handle changing software status between Active and Inactive
+let softwareStatus = 'Active';  // Default status
 
-// Filter sales data
-document.getElementById("filter-btn").addEventListener("click", function() {
-    const filterDate = document.getElementById("filter-date").value;
-    const filterTime = document.getElementById("filter-time").value;
-    const filterYear = document.getElementById("filter-year").value;
-
-    const filteredData = salesData.filter(item => {
-        return (filterDate ? item.date === filterDate : true) &&
-               (filterTime ? item.time === filterTime : true) &&
-               (filterYear ? item.year === filterYear : true);
-    });
-
-    displaySalesData(filteredData);
-});
-
-// Display sales data dynamically
-function displaySalesData(data) {
-    const salesList = document.getElementById("sales-list");
-    salesList.innerHTML = "";  // Clear previous data
-
-    const visibleData = data.slice(0, 5); // Show only the first 5 items
-    visibleData.forEach(item => {
-        const div = document.createElement("div");
-        div.innerHTML = `Product: ${item.productName}, Price: ৳${item.price}, Date: ${item.date}`;
-        salesList.appendChild(div);
-    });
-
-    // Load more data when scrolling
-    salesList.addEventListener('scroll', function() {
-        if (salesList.scrollTop + salesList.clientHeight >= salesList.scrollHeight) {
-            const additionalData = data.slice(visibleData.length, visibleData.length + 5);
-            additionalData.forEach(item => {
-                const div = document.createElement("div");
-                div.innerHTML = `Product: ${item.productName}, Price: ৳${item.price}, Date: ${item.date}`;
-                salesList.appendChild(div);
-            });
+function toggleStatus() {
+    if (softwareStatus === 'Active') {
+        softwareStatus = 'Inactive';
+        // Display confirmation popup
+        const confirmation = confirm("Are you sure you want to deactivate the software?");
+        if (confirmation) {
+            document.getElementById('status').textContent = 'Inactive';
+            document.getElementById('status').style.color = '#e53935'; // Red color for Inactive
+            // Save this change to the server/localStorage or database
+            alert("Software status has been changed to Inactive.");
+        } else {
+            // If user cancels, revert status to Active
+            softwareStatus = 'Active';
+            document.getElementById('status').textContent = 'Active';
+            document.getElementById('status').style.color = '#388e3c'; // Green color for Active
         }
-    });
+    } else {
+        softwareStatus = 'Active';
+        document.getElementById('status').textContent = 'Active';
+        document.getElementById('status').style.color = '#388e3c'; // Green color for Active
+    }
 }
 
-// Export File
-document.getElementById("export-file").addEventListener("click", function() {
-    const data = JSON.stringify(salesData);
-    const blob = new Blob([data], { type: "application/json" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "sales_history.json";
-    link.click();
-});
+// Function to handle the Add New Sale form submission
+function addNewSale(event) {
+    event.preventDefault();  // Prevent default form submission
 
-// Open Import Modal
-document.getElementById("import-file").addEventListener("click", function() {
-    document.getElementById("import-modal").style.display = "block";
-});
+    // Get values from the form
+    let shopName = document.getElementById('shopName').value;
+    let productName = document.getElementById('productName').value;
+    let price = document.getElementById('price').value;
 
-// Close Import Modal
-function closeModal() {
-    document.getElementById("import-modal").style.display = "none";
+    if (shopName && productName && price) {
+        // Save the shop name in local storage (only once)
+        if (!localStorage.getItem('shopName')) {
+            localStorage.setItem('shopName', shopName);
+            alert("Shop Name saved locally!");
+        }
+
+        // Log the new sale data (you can replace this with an actual database call)
+        console.log(`Sale Added: Shop Name - ${shopName}, Product Name - ${productName}, Price - ${price}`);
+        
+        // Clear the form after submission
+        document.getElementById('shopName').value = '';
+        document.getElementById('productName').value = '';
+        document.getElementById('price').value = '';
+
+        alert("Sale has been added successfully!");
+    } else {
+        alert("Please fill out all fields.");
+    }
 }
 
-// Import File
-function importFile() {
-    const file = document.getElementById("file-upload").files[0];
+// Function to initialize the app when it loads
+window.onload = function() {
+    // Check if shop name is already saved in localStorage and auto-fill the shop name
+    if (localStorage.getItem('shopName')) {
+        document.getElementById('shopName').value = localStorage.getItem('shopName');
+    }
+}
+
+// Function to handle the file input (for importing/exporting data)
+function handleFileInput(event) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    
+    reader.onload = function(e) {
+        const fileContent = e.target.result;
+        console.log(fileContent);
+        // Here, you can implement the logic to parse the file and restore the data
+        alert("File has been uploaded successfully!");
+    };
+    
     if (file) {
-        const reader = new FileReader();
-        reader.onload = function(event) {
-            const importedData = JSON.parse(event.target.result);
-            salesData = importedData; // Update salesData array with imported data
-            displaySalesData(salesData); // Display the imported data
-            closeModal(); // Close modal
-        };
         reader.readAsText(file);
     }
 }
 
-// Handle Add Sale
-document.getElementById("add-sale-form").addEventListener("submit", function(event) {
-    event.preventDefault();  // Prevent form submission
+// Function to handle file export (export sales data to a file)
+function exportData() {
+    const data = [
+        { "shopName": "Store1", "productName": "Product A", "price": "100" },
+        { "shopName": "Store2", "productName": "Product B", "price": "200" }
+    ];
 
-    const productName = document.getElementById("product-name").value;
-    const productPrice = document.getElementById("product-price").value;
-    const quantity = document.getElementById("quantity").value;
-    const date = new Date().toISOString().split('T')[0];  // Current date in YYYY-MM-DD format
-    const time = new Date().toLocaleTimeString();  // Current time in HH:MM:SS format
-    const year = new Date().getFullYear();  // Current year
+    const jsonData = JSON.stringify(data);
+    const blob = new Blob([jsonData], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'sales_data.json';
+    a.click();
 
-    if (productName && productPrice && quantity) {
-        const newSale = {
-            productName,
-            price: productPrice,
-            quantity,
-            date,
-            time,
-            year
-        };
-        salesData.push(newSale);
-        displaySalesData(salesData);  // Display updated sales data
-        alert('Sale added successfully!');
-    } else {
-        alert('Please fill out all fields.');
-    }
-});
+    alert("Data exported successfully!");
+}
 
-// Call checkShopName on page load
-window.onload = checkShopName;
+// Function to filter Sales History based on Date and Time
+function filterSalesHistory() {
+    const date = document.getElementById('filterDate').value;
+    const time = document.getElementById('filterTime').value;
+
+    // You can implement a filtering logic here based on date and time
+    console.log(`Filtering Sales History for Date: ${date}, Time: ${time}`);
+}
+
+// Function to load more sales history data
+function loadMoreSalesHistory() {
+    alert("Loading more sales data...");
+    // Add logic to fetch and load more sales history here
+}

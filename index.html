@@ -7,53 +7,52 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <div class="header-left">
-            <span class="brand-name">Sales Generator</span>
-        </div>
-        <div class="header-right">
-            <button onclick="openCloseStoreModal()">Close Store</button>
-        </div>
-    </header>
-
     <div class="main-wrapper">
-        <section class="form-section">
-            <h2>Generate Sale</h2>
-            <label for="shop-name">Shop Name</label>
-            <input type="text" id="shop-name" placeholder="Enter shop name" required>
+        <!-- Header Section -->
+        <header>
+            <div class="header-left">
+                <span class="brand-name">Sales Generator</span>
+            </div>
+            <div class="header-right">
+                <button onclick="openCloseStoreModal()">Close Store</button>
+            </div>
+        </header>
 
-            <label for="product-name">Product Name</label>
-            <input type="text" id="product-name" placeholder="Enter product name" list="suggested-products" required>
+        <!-- Sales Section -->
+        <div class="sales-section" id="sale-summary">
+            <h3>Last Sale Summary:</h3>
+            <p>No sales data available.</p>
+        </div>
+
+        <!-- Form Section -->
+        <div class="form-section">
+            <label for="shop-name">Shop Name:</label>
+            <input type="text" id="shop-name" placeholder="Enter shop name">
+
+            <label for="product-name">Product Name:</label>
+            <input type="text" id="product-name" placeholder="Enter product name" list="suggested-products">
             <datalist id="suggested-products"></datalist>
 
-            <label for="product-price">Product Price</label>
-            <input type="number" id="product-price" placeholder="Enter price" min="0" step="0.01" required>
+            <label for="product-price">Product Price:</label>
+            <input type="number" id="product-price" placeholder="Enter product price">
 
-            <label for="product-quantity">Product Quantity</label>
-            <input type="number" id="product-quantity" placeholder="Enter quantity" min="1" value="1" required>
+            <label for="product-quantity">Product Quantity:</label>
+            <input type="number" id="product-quantity" placeholder="Enter quantity (optional)">
 
             <button onclick="generateSale()">Generate Sale</button>
-        </section>
+        </div>
 
-        <section class="sales-section">
-            <div id="sale-summary">
-                <h3>Last Sale Summary:</h3>
-                <p>No sales generated yet.</p>
+        <!-- Modal -->
+        <div class="modal" id="close-store-modal">
+            <div class="modal-content">
+                <h3>Sales History</h3>
+                <ul id="full-sales-list"></ul>
+                <button onclick="downloadSalesHistory()">Download PDF</button>
+                <button onclick="closeStore()">Close Store</button>
+                <button onclick="cancelStoreClosure()">Cancel</button>
             </div>
-        </section>
-    </div>
-
-    <!-- Modal for Store Management -->
-    <div id="close-store-modal" class="modal">
-        <div class="modal-content">
-            <h2>Store Sales History</h2>
-            <ul id="full-sales-list"></ul>
-            <button onclick="downloadSalesHistory()">Download History</button>
-            <button onclick="closeStore()">Close Store</button>
-            <button onclick="cancelStoreClosure()">Cancel</button>
         </div>
     </div>
-
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
 </body>
 </html>

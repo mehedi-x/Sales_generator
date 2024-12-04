@@ -404,6 +404,31 @@
 
     </header>
 
+
+    <!-- Product Name Input with Autocomplete -->
+<label for="product-name">Product Name:</label>
+<input type="text" id="product-name" name="product-name" list="suggested-products" autocomplete="off" />
+
+<!-- Suggested Products Datalist -->
+<datalist id="suggested-products"></datalist>
+
+<!-- Sales History Filter Section -->
+<div class="filter-section">
+    <label for="filter">Filter Sales History:</label>
+    <input type="text" id="filter" placeholder="Search sales history..." />
+</div>
+
+<!-- Download Options -->
+<div class="download-section">
+    <button id="download-pdf" onclick="downloadSalesHistory('pdf')">Download as PDF</button>
+    <button id="download-csv" onclick="downloadSalesHistory('csv')">Download as CSV</button>
+</div>
+
+<!-- Dark/Light Mode Toggle -->
+<div class="theme-toggle">
+    <button id="theme-toggle">Switch to Light Mode</button>
+</div>
+
     <!-- Last Sale (Calculator View) -->
 
     <div class="sales-section">

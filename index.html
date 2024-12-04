@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sales Generator</title>
     <style>
-        /* CSS Styling */
+        /* Styling */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -25,36 +25,9 @@
             font-size: 24px;
             margin: 0;
         }
-        header .menu {
+        .menu {
             cursor: pointer;
             font-size: 24px;
-        }
-        .main-container {
-            padding: 20px;
-        }
-        .menu-popup {
-            display: none;
-            position: absolute;
-            top: 60px;
-            right: 20px;
-            background-color: white;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        .menu-popup a {
-            display: block;
-            padding: 10px 20px;
-            text-decoration: none;
-            color: #333;
-            border-bottom: 1px solid #ddd;
-        }
-        .menu-popup a:last-child {
-            border-bottom: none;
-        }
-        .menu-popup a:hover {
-            background-color: #007bff;
-            color: white;
         }
         .modal {
             position: fixed;
@@ -94,91 +67,19 @@
         .modal-content button:hover {
             background: #0056b3;
         }
-        .dashboard {
-            margin-bottom: 20px;
-            padding: 20px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        .sales-form {
-            padding: 20px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        .sales-form label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-        .sales-form input, .sales-form button {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .sales-form button {
-            background: #007bff;
-            color: white;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        .sales-form button:hover {
-            background: #0056b3;
-        }
-        .sales-history {
-            margin-top: 20px;
-        }
-        .sales-history input[type="date"], .sales-history input[type="month"] {
-            padding: 10px;
-            margin: 5px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .sales-history button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            background: #007bff;
-            color: white;
-            cursor: pointer;
-        }
-        .sales-history button:hover {
-            background: #0056b3;
-        }
-        .sales-history ul {
-            list-style: none;
-            padding: 0;
-        }
-        .sales-history li {
-            padding: 10px;
-            margin-bottom: 5px;
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        .dashboard table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        .dashboard th, .dashboard td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-        }
-        .dashboard th {
-            background: #007bff;
-            color: white;
+        #shop-name-display {
+            display: inline-block;
         }
     </style>
 </head>
 <body>
 
-<!-- Modal for Shop Name -->
-<div id="shop-name-modal" class="modal">
+<header>
+    <h1 id="shop-name-display">Sales Generator</h1>
+    <div class="menu" onclick="toggleMenu()">☰</div>
+</header>
+
+<div class="modal" id="shop-name-modal" style="display: none;">
     <div class="modal-content">
         <h2>Enter Shop Name</h2>
         <input type="text" id="shop-name-input" placeholder="Enter shop name" required>
@@ -186,65 +87,49 @@
     </div>
 </div>
 
-<header>
-    <h1 id="shop-name-display">Sales Generator</h1>
-    <div class="menu" onclick="toggleMenu()">☰</div>
-</header>
-
-<div class="menu-popup" id="menu-popup">
-    <a href="#" onclick="showDashboard()">Dashboard</a>
-    <a href="#" onclick="showSalesHistory()">Sales History</a>
-</div>
-
-<div class="main-container">
-    <div id="dashboard" class="dashboard">
-        <h3>Dashboard - <span id="dashboard-shop-name"></span></h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Product Name</th>
-                    <th>Product Price</th>
-                    <th>Quantity</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody id="dashboard-sales">
-                <!-- Sales data will be inserted here -->
-            </tbody>
-        </table>
-        <p>Total Sales: <span id="total-sales">0.00</span></p>
-    </div>
-
-    <div id="sales-form" class="sales-form">
-        <h3>Add Sale</h3>
-        <form onsubmit="addSale(event)">
-            <label for="product-name">Product Name</label>
-            <input type="text" id="product-name" required>
-            
-            <label for="product-price">Product Price</label>
-            <input type="number" id="product-price" required>
-            
-            <label for="product-quantity">Product Quantity</label>
-            <input type="number" id="product-quantity" required>
-            
-            <button type="submit">Add Sale</button>
-        </form>
-    </div>
-
-    <div id="sales-history" class="sales-history">
-        <h3>Sales History</h3>
-        <div>
-            <input type="date" id="sales-date">
-            <input type="month" id="sales-month">
-            <button onclick="filterSales()">Filter</button>
-            <button onclick="exportSales()">Export</button>
-        </div>
-        <ul id="sales-history-list"></ul>
-    </div>
-</div>
-
 <script>
-// JavaScript code
+    // Check if shop name already exists in localStorage
+    function checkShopName() {
+        const shopName = localStorage.getItem("shopName");
+
+        // If shop name is not stored, show modal to input shop name
+        if (!shopName) {
+            document.getElementById("shop-name-modal").style.display = "flex";
+        } else {
+            // Display existing shop name in header
+            document.getElementById("shop-name-display").innerText = `Sales Generator - ${shopName}`;
+        }
+    }
+
+    // Activate the shop with the name entered
+    function activateShop() {
+        const shopName = document.getElementById("shop-name-input").value.trim();
+
+        if (shopName) {
+            // Save the shop name to localStorage
+            localStorage.setItem("shopName", shopName);
+            // Close the modal and update header with shop name
+            document.getElementById("shop-name-modal").style.display = "none";
+            document.getElementById("shop-name-display").innerText = `Sales Generator - ${shopName}`;
+        } else {
+            alert("Please enter a valid shop name.");
+        }
+    }
+
+    // Function to load the stored shop name when page loads
+    window.onload = function() {
+        checkShopName();
+    };
+
+    // Optional: Trigger modal again based on a set time (for security)
+    setTimeout(() => {
+        const shopName = localStorage.getItem("shopName");
+        if (shopName) {
+            document.getElementById("shop-name-input").value = shopName;
+            document.getElementById("shop-name-modal").style.display = "flex";
+        }
+    }, 10000); // Show modal after 10 seconds for security (can be adjusted)
+
 </script>
 
 </body>

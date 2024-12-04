@@ -1,7 +1,6 @@
 let salesData = JSON.parse(localStorage.getItem("salesData")) || [];
 let suggestedProducts = new Set();
 
-// Add product and generate sale
 function generateSale() {
     const shopName = document.getElementById("shop-name").value;
     const productName = document.getElementById("product-name").value;
@@ -21,19 +20,77 @@ function generateSale() {
         total: productPrice * productQuantity,
     };
 
-    // Update sales data and save to local storage
     salesData.push(product);
     localStorage.setItem("salesData", JSON.stringify(salesData));
-
-    // Update suggestions and sales display
     suggestedProducts.add(productName);
     updateSuggestions();
     updateLastSaleView(product);
     resetForm();
 }
 
-// Update only the last sale view
 function updateLastSaleView(lastSale) {
+    const saleSummary = document.getElementById("sale-summary");
+    saleSummary.innerHTML = `
+        <h3>Last Sale Summary:</h3>
+        <p><strong>Shop:</strong> ${lastSale.shopName}</p>
+        <p><strong>Product:</strong> ${lastSale.productName}</p>
+        <p><strong>Quantity:</strong> ${lastSale.productQuantity}</p>
+        <p><strong>Total:</strong> ৳${lastSale.total.toFixed(2)}</p>
+    `;
+}
+
+function updateSuggestions() {
+    const datalist = document.getElementById("suggested-products");
+    datalist.innerHTML = "";
+    suggestedProducts.forEach((product) => {
+        const option = document.createElement("option");
+        option.value = product;
+        datalist.appendChild(option);
+    });
+}
+
+function resetForm() {
+    document.getElementById("shop-name").value = "";
+    document.getElementById("product-name").value = "";
+    document.getElementById("product-price").value = "";
+    document.getElementById("product-quantity").value = "";
+}
+
+function openCloseStoreModal() {
+    const fullSalesList = document.getElementById("full-sales-list");
+    fullSalesList.innerHTML = salesData.map((sale, index) => `
+        <li>${index + 1}. Shop: ${sale.shopName}, Product: ${sale.productName}, Quantity: ${sale.productQuantity}, Total: ৳${sale.total.toFixed(2)}</li>
+    `).join("");
+    document.getElementById("close-store-modal").style.display = "flex";
+}
+
+function downloadSalesHistory() {
+    const data = salesData.map((sale, i) => `${i + 1}. Shop: ${sale.shopName}, Product: ${sale.productName}, Total: ৳${sale.total.toFixed(2)}`).join("\n");
+    const blob = new Blob([data], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "Sales_History.txt";
+    link.click();
+    URL.revokeObjectURL(url);
+}
+
+function closeStore() {
+    salesData = [];
+    localStorage.removeItem("salesData");
+    alert("Store closed. All data cleared.");
+    location.reload();
+}
+
+function cancelStoreClosure() {
+    document.getElementById("close-store-modal").style.display = "none";
+}
+
+window.onload = function () {
+    if (salesData.length > 0) {
+        updateLastSaleView(salesData[salesData.length - 1]);
+    }
+};
     const saleSummary = document.getElementById("sale-summary");
     saleSummary.innerHTML = `
         <h3>Last Sale Summary:</h3>

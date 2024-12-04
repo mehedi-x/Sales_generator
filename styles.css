@@ -1,183 +1,178 @@
 /* Global Styles */
-body {
-  font-family: 'Roboto', sans-serif;
-  background-color: #f4f7fb;
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+  margin: 0;
+}
+
 #app {
-  width: 100%;
-  margin: 0 auto;
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
 
 /* Header and Menu */
-header {
+.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: #3f51b5;
   color: white;
-  padding: 15px 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  padding: 20px;
+  border-radius: 10px 10px 0 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-header h1 {
-  font-size: 24px;
-}
-
-#menuBtn {
+.title {
   font-size: 28px;
-  cursor: pointer;
+}
+
+.menu-btn {
+  font-size: 30px;
   background: transparent;
   border: none;
   color: white;
+  cursor: pointer;
 }
 
-#sideMenu {
+.side-menu {
   position: absolute;
-  top: 0;
   left: -250px;
-  width: 250px;
+  top: 0;
   height: 100%;
+  width: 250px;
   background-color: #3f51b5;
   color: white;
-  padding: 30px;
+  padding: 20px;
   transition: 0.3s ease;
+  box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.2);
 }
 
-#sideMenu button {
+.side-menu nav ul {
+  list-style-type: none;
+}
+
+.menu-item {
   display: block;
-  width: 100%;
-  padding: 10px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  text-align: left;
-  font-size: 18px;
-  margin-bottom: 15px;
-  cursor: pointer;
-}
-
-#sideMenu button:hover {
-  background-color: #45a049;
-}
-
-button {
-  background-color: #4CAF50;
-  color: white;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-button:hover {
-  background-color: #45a049;
-}
-
-input[type="text"], input[type="number"], input[type="date"] {
   padding: 10px;
   margin: 15px 0;
-  width: 100%;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  font-size: 18px;
+  color: white;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease;
 }
 
-input[type="text"]:focus, input[type="number"]:focus, input[type="date"]:focus {
-  border-color: #3f51b5;
-  outline: none;
+.menu-item:hover {
+  background-color: #4caf50;
+}
+
+.close-btn {
+  font-size: 24px;
+  background: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+/* Main Content */
+.main-content {
+  padding: 20px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.section {
+  background-color: white;
+  padding: 20px;
+  margin: 20px 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
 }
 
 h2 {
-  font-size: 22px;
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+.input {
+  width: 100%;
+  padding: 12px;
   margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 16px;
 }
 
-/* Dashboard */
-#dashboard {
-  background-color: white;
-  padding: 20px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  border-radius: 10px;
-  margin-top: 20px;
+.input:focus {
+  outline: none;
+  border-color: #3f51b5;
 }
 
-#totalSales {
-  font-size: 18px;
-  margin-bottom: 10px;
+.btn {
+  background-color: #3f51b5;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-#salesChartContainer {
+.btn:hover {
+  background-color: #3949ab;
+}
+
+.total-sales {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.chart-container {
   width: 100%;
   height: 300px;
-  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 /* Sales History */
-#salesHistory {
-  background-color: white;
-  padding: 20px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  border-radius: 10px;
-  margin-top: 20px;
-}
-
 #salesHistoryContainer {
   margin-top: 20px;
 }
 
-#salesHistory div {
-  background-color: #f4f4f4;
+#salesHistoryContainer div {
+  background-color: #fafafa;
   padding: 10px;
   margin: 10px 0;
-  border-radius: 5px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-#salesHistory div:hover {
-  background-color: #e8e8e8;
-}
-
-/* Form Styling */
-#salesForm {
-  background-color: white;
-  padding: 20px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  border-radius: 10px;
-  margin-top: 20px;
-}
-
-#salesForm input[type="text"], #salesForm input[type="number"] {
-  padding: 12px;
-  margin-bottom: 15px;
-  width: 100%;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-}
-
-#salesForm button {
-  width: 100%;
-  padding: 15px;
-  background-color: #3f51b5;
-  color: white;
-  font-size: 18px;
-}
-
-#salesForm button:hover {
-  background-color: #3949ab;
+#salesHistoryContainer div:hover {
+  background-color: #f1f1f1;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  #sideMenu {
+  .side-menu {
     width: 200px;
   }
 
-  #menuBtn {
-    font-size: 24px;
+  .menu-btn {
+    font-size: 28px;
+  }
+
+  .section {
+    padding: 15px;
   }
 }

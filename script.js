@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
   const menuBtn = document.getElementById('menuBtn');
   const sideMenu = document.getElementById('sideMenu');
   const closeMenuBtn = document.getElementById('closeMenuBtn');
@@ -6,22 +6,16 @@ document.addEventListener('DOMContentLoaded', function() {
   const activateShopBtn = document.getElementById('activateShopBtn');
   const dashboard = document.getElementById('dashboard');
   const salesChart = document.getElementById('salesChart');
-  const salesHistory = document.getElementById('salesHistory');
+  const salesHistoryContainer = document.getElementById('salesHistoryContainer');
   const salesDateFilter = document.getElementById('salesDateFilter');
   const salesItemFilter = document.getElementById('salesItemFilter');
-  const salesHistoryContainer = document.getElementById('salesHistoryContainer');
-
+  
   let salesData = JSON.parse(localStorage.getItem('salesData')) || [];
   let shopName = localStorage.getItem('shopName') || '';
 
   // Open/close side menu
-  menuBtn.addEventListener('click', function() {
-    sideMenu.classList.remove('hidden');
-  });
-
-  closeMenuBtn.addEventListener('click', function() {
-    sideMenu.classList.add('hidden');
-  });
+  menuBtn.addEventListener('click', () => sideMenu.classList.remove('hidden'));
+  closeMenuBtn.addEventListener('click', () => sideMenu.classList.add('hidden'));
 
   // Activate Shop
   if (shopName) {
@@ -30,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
     dashboard.classList.remove('hidden');
   }
 
-  activateShopBtn.addEventListener('click', function() {
+  activateShopBtn.addEventListener('click', () => {
     shopName = shopNameInput.value.trim();
     if (shopName) {
       localStorage.setItem('shopName', shopName);
@@ -39,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // Display total sales and chart
+  // Update Total Sales and Chart
   function updateTotalSales() {
     const total = salesData.reduce((sum, sale) => sum + sale.price * sale.quantity, 0);
     document.getElementById('totalSales').textContent = `Total Sales: $${total.toFixed(2)}`;
@@ -47,15 +41,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // Update chart
     const salesItems = salesData.map(sale => sale.itemName);
     const uniqueItems = [...new Set(salesItems)];
-
     const itemSales = uniqueItems.map(item => {
-      return salesData
-        .filter(sale => sale.itemName === item)
-        .reduce((sum, sale) => sum + sale.price * sale.quantity, 0);
+      return salesData.filter(sale => sale.itemName === item)
+                      .reduce((sum, sale) => sum + sale.price * sale.quantity, 0);
     });
 
     const ctx = salesChart.getContext('2d');
-    const chart = new Chart(ctx, {
+    new Chart(ctx, {
       type: 'bar',
       data: {
         labels: uniqueItems,
@@ -69,11 +61,9 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // Add Sale
-  document.getElementById('addSaleBtn').addEventListener('click', function() {
-    document.getElementById('salesForm').classList.remove('hidden');
-  });
+  document.getElementById('addSaleBtn').addEventListener('click', () => document.getElementById('salesForm').classList.remove('hidden'));
 
-  document.getElementById('saleForm').addEventListener('submit', function(event) {
+  document.getElementById('saleForm').addEventListener('submit', event => {
     event.preventDefault();
 
     const itemName = document.getElementById('itemName').value;
@@ -90,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // Display sales history
+  // Display Sales History
   function displaySalesHistory() {
     salesHistoryContainer.innerHTML = '';
     salesData.forEach(sale => {
@@ -100,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Filter sales
+  // Filter Sales History
   salesDateFilter.addEventListener('change', filterSales);
   salesItemFilter.addEventListener('input', filterSales);
 

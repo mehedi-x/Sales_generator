@@ -31,6 +31,15 @@ function generateSale() {
     updateLastSaleView(product);
     resetForm();
 }
+// Menu toggle logic fixed
+menuBtn.addEventListener('click', function () {
+    if (menuPopup.style.display === 'flex') {
+        menuPopup.style.display = 'none';
+    } else {
+        menuPopup.style.display = 'flex';
+    }
+});
+
 
 // Update only the last sale view
 function updateLastSaleView(lastSale) {

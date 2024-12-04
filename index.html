@@ -3,118 +3,237 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Drive Integration</title>
-    <script src="https://apis.google.com/js/api.js"></script>
+    <title>Sales Generator</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: #007bff;
+            color: white;
+        }
+
+        header h1 {
+            font-size: 24px;
+            margin: 0;
+        }
+
+        header .menu {
+            cursor: pointer;
+            font-size: 24px;
+        }
+
+        .main-container {
+            padding: 20px;
+        }
+
+        .menu-popup {
+            display: none;
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            background-color: white;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .menu-popup a {
+            display: block;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #333;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .menu-popup a:last-child {
+            border-bottom: none;
+        }
+
+        .menu-popup a:hover {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .dashboard {
+            margin-bottom: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .sales-form {
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .sales-form label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .sales-form input, .sales-form button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .sales-form button {
+            background: #007bff;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .sales-form button:hover {
+            background: #0056b3;
+        }
+
+        .sales-history {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .sales-history ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sales-history li {
+            padding: 10px;
+            margin-bottom: 5px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Google Drive Integration</h1>
 
-    <!-- Button to Sign in and connect to Google Drive -->
-    <button id="authorize-button" style="display: block;">Connect to Google Drive</button>
-    <button id="signout-button" style="display: none;">Sign Out</button>
+<header>
+    <h1>Sales Generator</h1>
+    <div class="menu" onclick="toggleMenu()">☰</div>
+</header>
 
-    <!-- Display Status -->
-    <div id="status"></div>
+<div class="menu-popup" id="menu-popup">
+    <a href="#" onclick="showDashboard()">Dashboard</a>
+    <a href="#" onclick="showSalesHistory()">Sales History</a>
+    <a href="#" onclick="closeStore()">Close Store</a>
+</div>
 
-    <!-- Upload Sales Data to Google Drive -->
-    <button id="upload-button" style="display: none;">Upload Sales Data</button>
+<div class="main-container">
+    <div id="dashboard" class="dashboard">
+        <h2>Dashboard</h2>
+        <p>Total Sales: ৳<span id="total-sales">0.00</span></p>
+    </div>
 
-    <script>
-        const CLIENT_ID = '444696366439-fp0342q1a6siel3uo7boecnrh44i9p7v.apps.googleusercontent.com';
-        const API_KEY = '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';
-        const SCOPES = 'https://www.googleapis.com/auth/drive.file';
+    <div id="sales-form" class="sales-form">
+        <h2>Add Sale</h2>
+        <form onsubmit="addSale(event)">
+            <label for="product-name">Product Name:</label>
+            <input type="text" id="product-name" required>
 
-        // Load Google API
-        function handleClientLoad() {
-            gapi.load('client:auth2', initClient);
+            <label for="product-price">Product Price:</label>
+            <input type="number" id="product-price" step="0.01" required>
+
+            <label for="product-quantity">Product Quantity:</label>
+            <input type="number" id="product-quantity" step="1" value="1" required>
+
+            <button type="submit">Add Sale</button>
+        </form>
+    </div>
+
+    <div id="sales-history" class="sales-history">
+        <h2>Sales History</h2>
+        <ul id="history-list"></ul>
+    </div>
+</div>
+
+<script>
+    let salesData = JSON.parse(localStorage.getItem('salesData')) || [];
+
+    function toggleMenu() {
+        const menuPopup = document.getElementById('menu-popup');
+        menuPopup.style.display = menuPopup.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function showDashboard() {
+        document.getElementById('dashboard').style.display = 'block';
+        document.getElementById('sales-form').style.display = 'none';
+        document.getElementById('sales-history').style.display = 'none';
+        toggleMenu();
+    }
+
+    function showSalesHistory() {
+        const historyList = document.getElementById('history-list');
+        historyList.innerHTML = '';
+        salesData.forEach((sale, index) => {
+            const listItem = document.createElement('li');
+            listItem.innerText = `${index + 1}. Product: ${sale.productName}, Price: ৳${sale.productPrice.toFixed(2)}, Quantity: ${sale.productQuantity}, Total: ৳${sale.total.toFixed(2)}`;
+            historyList.appendChild(listItem);
+        });
+        document.getElementById('sales-history').style.display = 'block';
+        document.getElementById('dashboard').style.display = 'none';
+        document.getElementById('sales-form').style.display = 'none';
+        toggleMenu();
+    }
+
+    function addSale(event) {
+        event.preventDefault();
+        const productName = document.getElementById('product-name').value;
+        const productPrice = parseFloat(document.getElementById('product-price').value);
+        const productQuantity = parseInt(document.getElementById('product-quantity').value, 10);
+
+        const sale = {
+            productName,
+            productPrice,
+            productQuantity,
+            total: productPrice * productQuantity
+        };
+
+        salesData.push(sale);
+        localStorage.setItem('salesData', JSON.stringify(salesData));
+
+        document.getElementById('product-name').value = '';
+        document.getElementById('product-price').value = '';
+        document.getElementById('product-quantity').value = '1';
+
+        updateDashboard();
+    }
+
+    function updateDashboard() {
+        const totalSales = salesData.reduce((total, sale) => total + sale.total, 0);
+        document.getElementById('total-sales').innerText = totalSales.toFixed(2);
+    }
+
+    function closeStore() {
+        if (confirm('Are you sure you want to close the store? This will clear all data.')) {
+            salesData = [];
+            localStorage.removeItem('salesData');
+            updateDashboard();
+            alert('Store closed and all data cleared.');
         }
+        toggleMenu();
+    }
 
-        // Initialize the Google API client library
-        function initClient() {
-            gapi.client.init({
-                apiKey: API_KEY,
-                clientId: CLIENT_ID,
-                discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"],
-                scope: SCOPES
-            }).then(() => {
-                // Update UI based on user's sign-in state
-                const authorizeButton = document.getElementById('authorize-button');
-                const signoutButton = document.getElementById('signout-button');
-                const uploadButton = document.getElementById('upload-button');
+    window.onload = updateDashboard;
+</script>
 
-                gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
-                updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-
-                authorizeButton.onclick = handleAuthClick;
-                signoutButton.onclick = handleSignoutClick;
-                uploadButton.onclick = uploadSalesData;
-            });
-        }
-
-        // Update UI based on sign-in status
-        function updateSigninStatus(isSignedIn) {
-            const authorizeButton = document.getElementById('authorize-button');
-            const signoutButton = document.getElementById('signout-button');
-            const uploadButton = document.getElementById('upload-button');
-            const statusDiv = document.getElementById('status');
-
-            if (isSignedIn) {
-                authorizeButton.style.display = 'none';
-                signoutButton.style.display = 'block';
-                uploadButton.style.display = 'block';
-                statusDiv.innerHTML = '<p>Connected to Google Drive</p>';
-            } else {
-                authorizeButton.style.display = 'block';
-                signoutButton.style.display = 'none';
-                uploadButton.style.display = 'none';
-                statusDiv.innerHTML = '<p>Please connect to Google Drive to upload data.</p>';
-            }
-        }
-
-        // Handle sign-in button click
-        function handleAuthClick(event) {
-            gapi.auth2.getAuthInstance().signIn();
-        }
-
-        // Handle sign-out button click
-        function handleSignoutClick(event) {
-            gapi.auth2.getAuthInstance().signOut();
-        }
-
-        // Upload sales data to Google Drive
-        function uploadSalesData() {
-            const salesData = JSON.parse(localStorage.getItem("salesData")) || [];
-            const fileContent = JSON.stringify(salesData, null, 2);
-            const blob = new Blob([fileContent], { type: 'application/json' });
-
-            const metadata = {
-                name: 'SalesData.json',
-                mimeType: 'application/json'
-            };
-
-            const form = new FormData();
-            form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
-            form.append('file', blob);
-
-            fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
-                method: 'POST',
-                headers: {
-                    'Authorization': 'Bearer ' + gapi.auth.getToken().access_token
-                },
-                body: form
-            })
-                .then(response => response.json())
-                .then(data => {
-                    alert('Sales data uploaded to Google Drive successfully!');
-                })
-                .catch(error => {
-                    console.error('Error uploading file:', error);
-                    alert('Failed to upload sales data.');
-                });
-        }
-
-        // Load the API client
-        handleClientLoad();
-    </script>
 </body>
 </html>

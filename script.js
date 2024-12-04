@@ -55,13 +55,64 @@ function updateSuggestions() {
     });
 }
 
-// Reset input fields
-function resetForm() {
-    document.getElementById("shop-name").value = "";
-    document.getElementById("product-name").value = "";
-    document.getElementById("product-price").value = "";
-    document.getElementById("product-quantity").value = "";
+// Filter Sales History
+function filterSalesHistory() {
+    const filterInput = document.getElementById("filter").value.toLowerCase();
+    const filteredSales = salesData.filter((sale) => 
+        sale.shopName.toLowerCase().includes(filterInput) || 
+        sale.productName.toLowerCase().includes(filterInput)
+    );
+    displaySalesHistory(filteredSales);
 }
+
+// Display sales history (filtered or full)
+function displaySalesHistory(sales) {
+    const fullSalesList = document.getElementById("full-sales-list");
+    fullSalesList.innerHTML = "";
+    sales.forEach((sale, index) => {
+        const listItem = document.createElement("li");
+        listItem.innerHTML = `
+            <strong>${index + 1}.</strong> Shop: ${sale.shopName}, Product: ${sale.productName},
+            Quantity: ${sale.productQuantity}, Total: ৳${sale.total.toFixed(2)}
+        `;
+        fullSalesList.appendChild(listItem);
+}
+
+// Download sales history in selected format (PDF or CSV)
+function downloadSalesHistory(format) {
+    const salesSummary = salesData
+        .map(
+            (sale, index) =>
+                `${index + 1}. Shop: ${sale.shopName}, Product: ${sale.productName}, Quantity: ${sale.productQuantity}, Total: ৳${sale.total.toFixed(2)}`
+        )
+        .join("\n");
+
+    if (format === 'pdf') {
+        const blob = new Blob([salesSummary], { type: "application/pdf" });
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "Sales_History.pdf";
+        link.click();
+
+        URL.revokeObjectURL(url);
+    } else if (format === 'csv') {
+        const csvContent = "data:text/csv;charset=utf-8," + salesSummary;
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.href = encodedUri;
+        link.download = "Sales_History.csv";
+        link.click();
+    }
+}
+
+// Toggle between dark and light mode
+document.getElementById("theme-toggle").addEventListener("click", function() {
+    const body = document.body;
+    body.classList.toggle("dark-mode");
+    this.textContent = body.classList.contains("dark-mode") ? "Switch to Light Mode" : "Switch to Dark Mode";
+});
 
 // Open close store modal and show full sales history
 function openCloseStoreModal() {
@@ -78,26 +129,6 @@ function openCloseStoreModal() {
     });
 
     document.getElementById("close-store-modal").style.display = "block";
-}
-
-// Download sales history as PDF
-function downloadSalesHistory() {
-    const salesSummary = salesData
-        .map(
-            (sale, index) =>
-                `${index + 1}. Shop: ${sale.shopName}, Product: ${sale.productName}, Quantity: ${sale.productQuantity}, Total: ৳${sale.total.toFixed(2)}`
-        )
-        .join("\n");
-
-    const blob = new Blob([salesSummary], { type: "application/pdf" });
-    const url = URL.createObjectURL(blob);
-
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "Sales_History.pdf";
-    link.click();
-
-    URL.revokeObjectURL(url);
 }
 
 // Close store and clear sales data
@@ -120,3 +151,9 @@ window.onload = function () {
         updateLastSaleView(salesData[salesData.length - 1]);
     }
 };
+
+// Event listener for filter input
+document.getElementById("filter").addEventListener("input", filterSalesHistory);
+
+// Event listener for product name input
+document.getElementById("product-name").addEventListener("input", updateSuggestions);

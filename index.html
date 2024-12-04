@@ -3,195 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sales Generator</title>
-    <style>
-        /* Global Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: #fff;
-        }
-
-        .main-wrapper {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-            background-color: #1e1e1e;
-            border-bottom: 1px solid #333;
-        }
-
-        header h1 {
-            font-size: 20px;
-            font-weight: bold;
-            margin-left: 10px;
-        }
-
-        .menu {
-            position: relative;
-        }
-
-        .menu-button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 24px;
-            color: #fff;
-        }
-
-        .dropdown {
-            display: none;
-            position: absolute;
-            right: 0;
-            top: 100%;
-            background-color: #2c2c2c;
-            border-radius: 5px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
-        }
-
-        .dropdown.active {
-            display: block;
-        }
-
-        .dropdown a {
-            display: block;
-            color: #fff;
-            padding: 10px 15px;
-            text-decoration: none;
-            border-bottom: 1px solid #444;
-        }
-
-        .dropdown a:last-child {
-            border-bottom: none;
-        }
-
-        .dropdown a:hover {
-            background-color: #333;
-        }
-
-        .form-section, .sales-history-section, .store-close-section {
-            background-color: #2c2c2c;
-            padding: 20px;
-            border-radius: 5px;
-            margin-top: 20px;
-        }
-
-        .form-section input,
-        .sales-history-section input {
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            background-color: #333;
-            color: #fff;
-            border: 1px solid #444;
-            border-radius: 5px;
-        }
-
-        .form-section button,
-        .sales-history-section button {
-            background-color: #4caf50;
-            padding: 10px 20px;
-            border: none;
-            color: #fff;
-            margin-top: 20px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-
-        .form-section button:hover,
-        .sales-history-section button:hover {
-            background-color: #388e3c;
-        }
-    </style>
+    <title>Google Drive Integration</title>
+    <script src="https://apis.google.com/js/api.js"></script>
 </head>
 <body>
-    <header>
-        <h1>Sales Generator</h1>
-        <div class="menu">
-            <button class="menu-button" onclick="toggleMenu()">☰</button>
-            <div class="dropdown" id="dropdown-menu">
-                <a href="#add-sale">Add Sale</a>
-                <a href="#sales-history">Sales History</a>
-                <a href="#store-close">Store Close</a>
-            </div>
-        </div>
-    </header>
+    <h1>Google Drive Integration</h1>
 
-    <div class="main-wrapper">
-        <!-- Add Sale Section -->
-        <div class="form-section" id="add-sale">
-            <h3>Add a Sale</h3>
-            <label for="product-name">Product Name</label>
-            <input type="text" id="product-name" placeholder="Enter product name">
-            <label for="product-price">Price</label>
-            <input type="number" id="product-price" placeholder="Enter price">
-            <label for="product-quantity">Quantity</label>
-            <input type="number" id="product-quantity" placeholder="Enter quantity">
-            <button onclick="addSale()">Add Sale</button>
-        </div>
+    <!-- Button to Sign in and connect to Google Drive -->
+    <button id="authorize-button" style="display: block;">Connect to Google Drive</button>
+    <button id="signout-button" style="display: none;">Sign Out</button>
 
-        <!-- Sales History Section -->
-        <div class="sales-history-section" id="sales-history" style="display:none;">
-            <h3>Sales History</h3>
-            <p>View and manage all your sales records here.</p>
-            <button onclick="showSalesHistory()">Show Sales History</button>
-        </div>
+    <!-- Display Status -->
+    <div id="status"></div>
 
-        <!-- Store Close Section -->
-        <div class="store-close-section" id="store-close" style="display:none;">
-            <h3>Store Close</h3>
-            <p>Close your store and save all data.</p>
-            <button onclick="storeClose()">Close Store</button>
-        </div>
-    </div>
+    <!-- Upload Sales Data to Google Drive -->
+    <button id="upload-button" style="display: none;">Upload Sales Data</button>
 
     <script>
-        // Menu Toggle
-        function toggleMenu() {
-            const menu = document.getElementById("dropdown-menu");
-            menu.classList.toggle("active");
+        const CLIENT_ID = '444696366439-fp0342q1a6siel3uo7boecnrh44i9p7v.apps.googleusercontent.com';
+        const API_KEY = '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';
+        const SCOPES = 'https://www.googleapis.com/auth/drive.file';
+
+        // Load Google API
+        function handleClientLoad() {
+            gapi.load('client:auth2', initClient);
         }
 
-        // Add a Sale
-        function addSale() {
-            const productName = document.getElementById("product-name").value.trim();
-            const productPrice = parseFloat(document.getElementById("product-price").value);
-            const productQuantity = parseInt(document.getElementById("product-quantity").value, 10);
+        // Initialize the Google API client library
+        function initClient() {
+            gapi.client.init({
+                apiKey: API_KEY,
+                clientId: CLIENT_ID,
+                discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"],
+                scope: SCOPES
+            }).then(() => {
+                // Update UI based on user's sign-in state
+                const authorizeButton = document.getElementById('authorize-button');
+                const signoutButton = document.getElementById('signout-button');
+                const uploadButton = document.getElementById('upload-button');
 
-            if (!productName || isNaN(productPrice) || isNaN(productQuantity)) {
-                alert("Please fill out all fields!");
-                return;
+                gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+                updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+
+                authorizeButton.onclick = handleAuthClick;
+                signoutButton.onclick = handleSignoutClick;
+                uploadButton.onclick = uploadSalesData;
+            });
+        }
+
+        // Update UI based on sign-in status
+        function updateSigninStatus(isSignedIn) {
+            const authorizeButton = document.getElementById('authorize-button');
+            const signoutButton = document.getElementById('signout-button');
+            const uploadButton = document.getElementById('upload-button');
+            const statusDiv = document.getElementById('status');
+
+            if (isSignedIn) {
+                authorizeButton.style.display = 'none';
+                signoutButton.style.display = 'block';
+                uploadButton.style.display = 'block';
+                statusDiv.innerHTML = '<p>Connected to Google Drive</p>';
+            } else {
+                authorizeButton.style.display = 'block';
+                signoutButton.style.display = 'none';
+                uploadButton.style.display = 'none';
+                statusDiv.innerHTML = '<p>Please connect to Google Drive to upload data.</p>';
             }
-
-            alert(`Sale Added:\n${productName}, Price: ৳${productPrice}, Quantity: ${productQuantity}`);
         }
 
-        // Show Sales History
-        function showSalesHistory() {
-            document.getElementById("sales-history").style.display = "block";
-            alert("Sales history is displayed here.");
+        // Handle sign-in button click
+        function handleAuthClick(event) {
+            gapi.auth2.getAuthInstance().signIn();
         }
 
-        // Store Close
-        function storeClose() {
-            if (confirm("Are you sure you want to close the store?")) {
-                alert("Store closed. Data saved!");
-            }
+        // Handle sign-out button click
+        function handleSignoutClick(event) {
+            gapi.auth2.getAuthInstance().signOut();
         }
+
+        // Upload sales data to Google Drive
+        function uploadSalesData() {
+            const salesData = JSON.parse(localStorage.getItem("salesData")) || [];
+            const fileContent = JSON.stringify(salesData, null, 2);
+            const blob = new Blob([fileContent], { type: 'application/json' });
+
+            const metadata = {
+                name: 'SalesData.json',
+                mimeType: 'application/json'
+            };
+
+            const form = new FormData();
+            form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+            form.append('file', blob);
+
+            fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + gapi.auth.getToken().access_token
+                },
+                body: form
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert('Sales data uploaded to Google Drive successfully!');
+                })
+                .catch(error => {
+                    console.error('Error uploading file:', error);
+                    alert('Failed to upload sales data.');
+                });
+        }
+
+        // Load the API client
+        handleClientLoad();
     </script>
 </body>
 </html>

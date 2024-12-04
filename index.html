@@ -1,70 +1,53 @@
-let shopName = localStorage.getItem("shopName") || "";
-let salesData = JSON.parse(localStorage.getItem("salesData")) || [];
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Generator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="header-left">
+            <button id="menu-btn" class="menu-btn">☰</button>
+            <span id="shop-name-display"></span>
+        </div>
+    </header>
 
-// Show shop name if it's already stored
-if (shopName) {
-    document.getElementById("shop-name-display").textContent = `Shop: ${shopName}`;
-} else {
-    document.getElementById("shop-name-popup").style.display = "flex";
-}
+    <!-- Shop Name Popup -->
+    <div id="shop-name-popup" class="modal">
+        <div class="modal-content">
+            <h2>Enter Shop Name</h2>
+            <input type="text" id="shop-name" placeholder="Enter Shop Name" required>
+            <button id="activate-btn">Activate</button>
+        </div>
+    </div>
 
-// Show menu when the menu button is clicked
-document.getElementById("menu-btn").addEventListener("click", function() {
-    document.getElementById("menu").classList.toggle("hidden-menu");
-});
+    <!-- Sales Section -->
+    <div class="sales-section">
+        <h3>Sales Section</h3>
+        <button id="add-sale-btn">Add Sale</button>
+        <div id="sale-summary">
+            <!-- Last sale summary will appear here -->
+        </div>
+    </div>
 
-// Activate Shop Name
-document.getElementById("activate-btn").addEventListener("click", function() {
-    shopName = document.getElementById("shop-name").value;
-    if (shopName) {
-        localStorage.setItem("shopName", shopName);
-        document.getElementById("shop-name-display").textContent = `Shop: ${shopName}`;
-        document.getElementById("shop-name-popup").style.display = "none";
-    }
-});
+    <!-- Sales History -->
+    <div class="sales-history">
+        <button id="view-sales-history">View Sales History</button>
+        <div id="sales-history-list"></div>
+    </div>
 
-// Add Sale
-document.getElementById("add-sale-btn").addEventListener("click", function() {
-    let productName = prompt("Enter Product Name:");
-    let productPrice = parseFloat(prompt("Enter Product Price:"));
-    let productQuantity = parseInt(prompt("Enter Product Quantity:"));
+    <!-- Menu Section (Hidden by default) -->
+    <div id="menu" class="hidden-menu">
+        <ul>
+            <li><button id="view-sales-history-menu">Sales History</button></li>
+            <li><button id="close-store-btn">Close Store</button></li>
+        </ul>
+    </div>
 
-    if (productName && !isNaN(productPrice) && !isNaN(productQuantity)) {
-        let total = productPrice * productQuantity;
-        let sale = { productName, productPrice, productQuantity, total };
-        salesData.push(sale);
-        localStorage.setItem("salesData", JSON.stringify(salesData));
-
-        updateSaleSummary(sale);
-    }
-});
-
-// Update Sale Summary
-function updateSaleSummary(sale) {
-    let saleSummary = document.getElementById("sale-summary");
-    saleSummary.innerHTML = `
-        <p><strong>Product:</strong> ${sale.productName}</p>
-        <p><strong>Price:</strong> ৳${sale.productPrice}</p>
-        <p><strong>Quantity:</strong> ${sale.productQuantity}</p>
-        <p><strong>Total:</strong> ৳${sale.total}</p>
-    `;
-}
-
-// View Sales History
-document.getElementById("view-sales-history").addEventListener("click", function() {
-    let salesHistoryList = document.getElementById("sales-history-list");
-    salesHistoryList.innerHTML = "";
-    
-    salesData.forEach((sale, index) => {
-        let saleItem = document.createElement("div");
-        saleItem.innerHTML = `<p><strong>Sale #${index + 1}: </strong>${sale.productName} - ৳${sale.total}</p>`;
-        salesHistoryList.appendChild(saleItem);
-    });
-});
-
-// Close Store and Clear Data
-document.getElementById("close-store-btn").addEventListener("click", function() {
-    localStorage.removeItem("shopName");
-    localStorage.removeItem("salesData");
-    location.reload();
-});
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>

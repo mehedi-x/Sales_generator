@@ -1,53 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sales Generator</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sales Management</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <!-- Header Section -->
+  <div id="app">
+    <!-- Menu Button -->
     <header>
-        <div class="header-left">
-            <button id="menu-btn" class="menu-btn">☰</button>
-            <span id="shop-name-display"></span>
-        </div>
+      <button id="menuBtn">☰</button>
+      <h1>Sales Management</h1>
     </header>
 
-    <!-- Shop Name Popup -->
-    <div id="shop-name-popup" class="modal">
-        <div class="modal-content">
-            <h2>Enter Shop Name</h2>
-            <input type="text" id="shop-name" placeholder="Enter Shop Name" required>
-            <button id="activate-btn">Activate</button>
-        </div>
+    <!-- Main Content -->
+    <div id="mainContent">
+      <div id="shopNameContainer">
+        <label for="shopNameInput">Enter Shop Name:</label>
+        <input type="text" id="shopNameInput" placeholder="Enter your shop name">
+        <button id="activateShopBtn">Activate Shop</button>
+      </div>
+
+      <div id="dashboard" class="hidden">
+        <h2>Dashboard</h2>
+        <div id="totalSales">Total Sales: $0.00</div>
+        <button id="addSaleBtn">Add Sale</button>
+        <button id="viewSalesBtn">View Sales History</button>
+        <canvas id="salesChart" width="400" height="200"></canvas>
+      </div>
+
+      <!-- Sales History -->
+      <div id="salesHistory" class="hidden">
+        <h2>Sales History</h2>
+        <input type="date" id="salesDateFilter">
+        <input type="text" id="salesItemFilter" placeholder="Search by item">
+        <button id="exportBtn">Export Sales</button>
+        <button id="importBtn">Import Sales</button>
+      </div>
+
+      <!-- Add Sale Form -->
+      <div id="salesForm" class="hidden">
+        <h2>Add Sale</h2>
+        <form id="saleForm">
+          <input type="text" id="itemName" placeholder="Item Name" required>
+          <input type="number" id="itemPrice" placeholder="Item Price" required>
+          <input type="number" id="itemQuantity" placeholder="Quantity" required>
+          <button type="submit">Submit Sale</button>
+        </form>
+      </div>
     </div>
 
-    <!-- Sales Section -->
-    <div class="sales-section">
-        <h3>Sales Section</h3>
-        <button id="add-sale-btn">Add Sale</button>
-        <div id="sale-summary">
-            <!-- Last sale summary will appear here -->
-        </div>
-    </div>
-
-    <!-- Sales History -->
-    <div class="sales-history">
-        <button id="view-sales-history">View Sales History</button>
-        <div id="sales-history-list"></div>
-    </div>
-
-    <!-- Menu Section (Hidden by default) -->
-    <div id="menu" class="hidden-menu">
-        <ul>
-            <li><button id="view-sales-history-menu">Sales History</button></li>
-            <li><button id="close-store-btn">Close Store</button></li>
-        </ul>
-    </div>
-
-    <!-- JavaScript -->
-    <script src="script.js"></script>
+    <script src="app.js"></script>
+  </div>
 </body>
 </html>

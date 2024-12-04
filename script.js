@@ -149,3 +149,57 @@ function closeStore() {
         alert("Store has been closed. All sales data has been cleared.");
     }
 }
+
+
+
+
+function openFullSalesHistory() {
+    const salesHistory = salesData.map((sale, index) => `
+        <div>
+            <strong>#${index + 1}</strong><br>
+            <strong>Shop:</strong> ${sale.shopName}<br>
+            <strong>Product:</strong> ${sale.productName}<br>
+            <strong>Quantity:</strong> ${sale.productQuantity}<br>
+            <strong>Total:</strong> ৳${sale.total.toFixed(2)}<br>
+            <strong>Time:</strong> ${sale.time}<br>
+            <hr>
+        </div>
+    `).join('');
+    
+    if (!salesHistory) {
+        alert("No sales history available.");
+        return;
+    }
+
+    const historyPopup = document.createElement("div");
+    historyPopup.style.position = "fixed";
+    historyPopup.style.top = "10%";
+    historyPopup.style.left = "10%";
+    historyPopup.style.width = "80%";
+    historyPopup.style.height = "80%";
+    historyPopup.style.backgroundColor = "white";
+    historyPopup.style.overflowY = "scroll";
+    historyPopup.style.padding = "20px";
+    historyPopup.style.boxShadow = "0 5px 15px rgba(0,0,0,0.3)";
+    historyPopup.style.borderRadius = "10px";
+    historyPopup.style.zIndex = "1001";
+
+    historyPopup.innerHTML = `
+        <h2 style="text-align: center; color: #333;">Full Sales History</h2>
+        <div>${salesHistory}</div>
+        <button style="
+            position: absolute; 
+            top: 10px; 
+            right: 10px; 
+            padding: 5px 10px; 
+            font-size: 16px; 
+            background-color: #4CAF50; 
+            color: white; 
+            border: none; 
+            border-radius: 5px;
+            cursor: pointer;
+        " onclick="document.body.removeChild(this.parentNode)">Close</button>
+    `;
+
+    document.body.appendChild(historyPopup);
+}

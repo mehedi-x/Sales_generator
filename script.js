@@ -25,7 +25,6 @@ function saveShopName() {
 document.getElementById("sales-history").addEventListener("click", function() {
     document.querySelector(".sales-history-section").style.display = "block";
     document.querySelector(".settings-section").style.display = "none";
-    document.querySelector(".mobile-transactions").style.display = "none";
     displaySalesData(salesData);
 });
 
@@ -33,7 +32,6 @@ document.getElementById("sales-history").addEventListener("click", function() {
 document.getElementById("settings").addEventListener("click", function() {
     document.querySelector(".settings-section").style.display = "block";
     document.querySelector(".sales-history-section").style.display = "none";
-    document.querySelector(".mobile-transactions").style.display = "none";
 });
 
 // Filter sales data
@@ -110,12 +108,6 @@ function importFile() {
         reader.readAsText(file);
     }
 }
-
-// Display Mobile Transactions Section (Triggered on Mobile)
-document.getElementById("mobile-transactions").addEventListener("click", function() {
-    document.querySelector(".mobile-transactions").style.display = "block";
-    displaySalesData(salesData); // Display sales on mobile
-});
 
 // Handle Add Sale
 document.getElementById("add-sale-form").addEventListener("submit", function(event) {

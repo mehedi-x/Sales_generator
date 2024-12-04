@@ -3,46 +3,62 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sales Management</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <title>Sales Management System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.css">
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <div id="app">
-    <!-- Menu Button -->
+    <!-- Side Menu -->
+    <aside id="sideMenu" class="hidden">
+      <button id="closeMenuBtn">✖</button>
+      <ul>
+        <li><button id="dashboardBtn">Dashboard</button></li>
+        <li><button id="addSaleBtn">Add Sale</button></li>
+        <li><button id="viewSalesBtn">Sales History</button></li>
+        <li><button id="settingsBtn">Settings</button></li>
+        <li><button id="logoutBtn">Logout</button></li>
+      </ul>
+    </aside>
+
+    <!-- Header -->
     <header>
       <button id="menuBtn">☰</button>
       <h1>Sales Management</h1>
     </header>
 
     <!-- Main Content -->
-    <div id="mainContent">
-      <div id="shopNameContainer">
-        <label for="shopNameInput">Enter Shop Name:</label>
-        <input type="text" id="shopNameInput" placeholder="Enter your shop name">
+    <main>
+      <!-- Shop Name Section -->
+      <section id="shopNameContainer">
+        <h2>Enter Shop Name:</h2>
+        <input type="text" id="shopNameInput" placeholder="Shop Name">
         <button id="activateShopBtn">Activate Shop</button>
-      </div>
+      </section>
 
-      <div id="dashboard" class="hidden">
+      <!-- Dashboard Section -->
+      <section id="dashboard" class="hidden">
         <h2>Dashboard</h2>
         <div id="totalSales">Total Sales: $0.00</div>
+        <div id="salesChartContainer">
+          <canvas id="salesChart"></canvas>
+        </div>
         <button id="addSaleBtn">Add Sale</button>
         <button id="viewSalesBtn">View Sales History</button>
-        <canvas id="salesChart" width="400" height="200"></canvas>
-      </div>
+      </section>
 
-      <!-- Sales History -->
-      <div id="salesHistory" class="hidden">
+      <!-- Sales History Section -->
+      <section id="salesHistory" class="hidden">
         <h2>Sales History</h2>
-        <input type="date" id="salesDateFilter">
-        <input type="text" id="salesItemFilter" placeholder="Search by item">
-        <button id="exportBtn">Export Sales</button>
-        <button id="importBtn">Import Sales</button>
-      </div>
+        <input type="date" id="salesDateFilter" placeholder="Filter by Date">
+        <input type="text" id="salesItemFilter" placeholder="Search by Item">
+        <div id="salesHistoryContainer"></div>
+      </section>
 
       <!-- Add Sale Form -->
-      <div id="salesForm" class="hidden">
+      <section id="salesForm" class="hidden">
         <h2>Add Sale</h2>
         <form id="saleForm">
           <input type="text" id="itemName" placeholder="Item Name" required>
@@ -50,8 +66,8 @@
           <input type="number" id="itemQuantity" placeholder="Quantity" required>
           <button type="submit">Submit Sale</button>
         </form>
-      </div>
-    </div>
+      </section>
+    </main>
 
     <script src="app.js"></script>
   </div>

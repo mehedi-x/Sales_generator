@@ -8,60 +8,50 @@ document.addEventListener('DOMContentLoaded', () => {
   const closeMenuBtn = document.getElementById('closeMenuBtn');
   const salesHistoryBtn = document.getElementById('viewSalesBtn');
   const salesHistoryContainer = document.getElementById('salesHistoryContainer');
-  const salesDateFilter = document.getElementById('salesDateFilter');
-  const salesItemFilter = document.getElementById('salesItemFilter');
+  const closeSalesHistory = document.getElementById('closeSalesHistory');
+  const downloadPDF = document.getElementById('downloadPDF');
   
-  // Check for dark mode preference
+  // Theme toggle functionality
   if (localStorage.getItem('darkMode') === 'true') {
     document.body.classList.add('dark-mode');
   }
 
-  // Toggle theme
   themeToggleBtn.addEventListener('click', () => {
     const isDarkMode = document.body.classList.toggle('dark-mode');
     localStorage.setItem('darkMode', isDarkMode);
   });
 
-  // Menu toggle functionality
+  // Activate Shop
+  activateShopBtn.addEventListener('click', () => {
+    const shopName = shopNameInput.value.trim();
+    if (shopName) {
+      localStorage.setItem('shopName', shopName);
+      dashboard.classList.remove('hidden');
+      document.getElementById('shopActivation').classList.add('hidden');
+      document.querySelector('header .total-sales').textContent = `Total Sales: 0.00৳`;
+    }
+  });
+
+  // Menu toggle
   menuBtn.addEventListener('click', () => {
-    sideMenu.classList.remove('hidden');
+    sideMenu.classList.toggle('hidden');
   });
 
   closeMenuBtn.addEventListener('click', () => {
     sideMenu.classList.add('hidden');
   });
 
-  // Shop Name Activation
-  let shopName = localStorage.getItem('shopName');
-  if (shopName) {
-    shopNameInput.value = shopName;
-    activateShopBtn.classList.add('hidden');
-    dashboard.classList.remove('hidden');
-  }
-
-  activateShopBtn.addEventListener('click', () => {
-    shopName = shopNameInput.value.trim();
-    if (shopName) {
-      localStorage.setItem('shopName', shopName);
-      dashboard.classList.remove('hidden');
-      activateShopBtn.classList.add('hidden');
-    }
+  // Sales History
+  salesHistoryBtn.addEventListener('click', () => {
+    salesHistoryContainer.classList.toggle('hidden');
   });
 
-  // Sales History Filter
-  salesHistoryBtn.addEventListener('click', () => {
-    // Fetch and display sales history (mock data for now)
-    const salesData = [
-      { date: '2024-12-01', item: 'Product 1', amount: 200 },
-      { date: '2024-12-02', item: 'Product 2', amount: 300 }
-    ];
+  closeSalesHistory.addEventListener('click', () => {
+    salesHistoryContainer.classList.add('hidden');
+  });
 
-    salesHistoryContainer.innerHTML = salesData.map(sale => `
-      <div>
-        <strong>Date:</strong> ${sale.date} <br>
-        <strong>Item:</strong> ${sale.item} <br>
-        <strong>Amount:</strong> $${sale.amount}
-      </div>
-    `).join('');
+  // Download PDF
+  downloadPDF.addEventListener('click', () => {
+    alert('Download PDF functionality will be implemented here.');
   });
 });

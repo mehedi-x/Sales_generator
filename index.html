@@ -25,93 +25,68 @@
             padding: 20px;
         }
 
-        /* Header Section */
         header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
             padding: 20px;
             background-color: #1e1e1e;
             border-bottom: 1px solid #333;
         }
 
-        .header-left {
-            display: flex;
-            align-items: center;
-        }
-
-        .header-left .menu-icon {
-            font-size: 30px;
-            cursor: pointer;
-        }
-
-        .header-right {
-            font-size: 20px;
+        header h1 {
+            font-size: 24px;
             font-weight: bold;
         }
 
-        /* Slide Menu */
-        .slide-menu {
+        .popup {
+            display: none;
             position: fixed;
             top: 0;
-            left: -300px;
-            width: 300px;
+            left: 0;
+            width: 100%;
             height: 100%;
-            background-color: #2c2c2c;
-            padding: 20px;
-            transition: 0.3s;
+            background: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
             z-index: 1000;
         }
 
-        .slide-menu.open {
-            left: 0;
-        }
-
-        .slide-menu ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        .slide-menu ul li {
-            padding: 10px;
-            background-color: #444;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            color: #fff;
-            cursor: pointer;
-        }
-
-        .slide-menu ul li:hover {
-            background-color: #555;
-        }
-
-        /* Dashboard Section */
-        .dashboard {
-            background-color: #2c2c2c;
-            padding: 20px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-        }
-
-        .dashboard h3 {
-            margin-bottom: 20px;
-        }
-
-        .dashboard .stats {
+        .popup.active {
             display: flex;
-            justify-content: space-between;
-            gap: 10px;
         }
 
-        .dashboard .stat {
-            flex: 1;
-            background-color: #333;
-            padding: 10px;
+        .popup-content {
+            background-color: #2c2c2c;
+            padding: 30px;
+            border-radius: 10px;
             text-align: center;
+            color: #fff;
+        }
+
+        .popup-content input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #333;
+            color: #fff;
+            border: 1px solid #444;
             border-radius: 5px;
         }
 
-        /* Form Section */
+        .popup-content button {
+            background-color: #4caf50;
+            padding: 10px 20px;
+            border: none;
+            color: #fff;
+            margin-top: 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .popup-content button:hover {
+            background-color: #388e3c;
+        }
+
         .form-section {
             background-color: #2c2c2c;
             padding: 20px;
@@ -119,32 +94,23 @@
             margin-top: 20px;
         }
 
-        .form-section h3 {
-            margin-bottom: 20px;
-        }
-
-        .form-section label {
-            display: block;
-            margin: 10px 0 5px;
-        }
-
         .form-section input {
             width: 100%;
             padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #444;
+            margin-top: 10px;
             background-color: #333;
             color: #fff;
+            border: 1px solid #444;
             border-radius: 5px;
         }
 
         .form-section button {
-            width: 100%;
-            padding: 10px;
             background-color: #4caf50;
-            color: #fff;
+            padding: 10px;
             border: none;
+            color: #fff;
             border-radius: 5px;
+            margin-top: 20px;
             cursor: pointer;
         }
 
@@ -155,99 +121,62 @@
 </head>
 <body>
     <header>
-        <div class="header-left">
-            <span class="menu-icon" onclick="toggleMenu()">&#9776;</span>
-        </div>
-        <div class="header-right">
-            Sales Generator
-        </div>
+        <h1>Sales Generator</h1>
     </header>
 
-    <!-- Slide Menu -->
-    <div class="slide-menu" id="slide-menu">
-        <ul>
-            <li onclick="toggleFullDashboard()">Full Dashboard</li>
-            <li onclick="toggleSalesHistory()">Sales History</li>
-            <li onclick="storeClose()">Store Close</li>
-            <li onclick="generateSalesReport()">Sales Report</li>
-        </ul>
+    <!-- Popup Modal for Shop Name -->
+    <div class="popup" id="shop-popup">
+        <div class="popup-content">
+            <h3>Enter Shop Name</h3>
+            <input type="text" id="shop-name" placeholder="Enter your shop name">
+            <button onclick="saveShopName()">Save</button>
+        </div>
     </div>
 
     <div class="main-wrapper">
-        <!-- Dashboard Section -->
-        <div class="dashboard">
-            <h3>Sales Dashboard</h3>
-            <div class="stats">
-                <div class="stat">
-                    <h4>Total Sales</h4>
-                    <p id="total-sales">৳0.00</p>
-                </div>
-                <div class="stat">
-                    <h4>Items Sold</h4>
-                    <p id="items-sold">0</p>
-                </div>
-                <div class="stat">
-                    <h4>Top Product</h4>
-                    <p id="top-product">N/A</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Form Section -->
+        <!-- Add Sales Section -->
         <div class="form-section">
             <h3>Add a Sale</h3>
-            <label for="shop-name">Shop Name</label>
-            <input type="text" id="shop-name" placeholder="Enter shop name">
             <label for="product-name">Product Name</label>
             <input type="text" id="product-name" placeholder="Enter product name">
             <label for="product-price">Price</label>
             <input type="number" id="product-price" placeholder="Enter price">
             <label for="product-quantity">Quantity</label>
             <input type="number" id="product-quantity" placeholder="Enter quantity">
-            <button onclick="generateSale()">Add Sale</button>
+            <button onclick="addSale()">Add Sale</button>
         </div>
     </div>
 
     <script>
         let salesData = JSON.parse(localStorage.getItem("salesData")) || [];
+        let shopName = localStorage.getItem("shopName") || "";
 
-        // Update Dashboard
-        function updateDashboard() {
-            let totalSales = 0;
-            let itemsSold = 0;
-            let productCount = {};
+        window.onload = () => {
+            if (!shopName) {
+                document.getElementById("shop-popup").classList.add("active");
+            }
+        };
 
-            salesData.forEach((sale) => {
-                totalSales += sale.total;
-                itemsSold += sale.productQuantity;
-                productCount[sale.productName] =
-                    (productCount[sale.productName] || 0) + sale.productQuantity;
-            });
-
-            const topProduct = Object.keys(productCount).reduce((a, b) =>
-                productCount[a] > productCount[b] ? a : b
-            );
-
-            document.getElementById("total-sales").innerText = `৳${totalSales.toFixed(2)}`;
-            document.getElementById("items-sold").innerText = itemsSold;
-            document.getElementById("top-product").innerText = topProduct;
+        // Save Shop Name
+        function saveShopName() {
+            const nameInput = document.getElementById("shop-name").value.trim();
+            if (!nameInput) {
+                alert("Please enter a shop name!");
+                return;
+            }
+            shopName = nameInput;
+            localStorage.setItem("shopName", shopName);
+            document.getElementById("shop-popup").classList.remove("active");
         }
 
-        // Toggle Slide Menu
-        function toggleMenu() {
-            const slideMenu = document.getElementById("slide-menu");
-            slideMenu.classList.toggle("open");
-        }
-
-        // Generate Sale
-        function generateSale() {
-            const shopName = document.getElementById("shop-name").value;
-            const productName = document.getElementById("product-name").value;
+        // Add a Sale
+        function addSale() {
+            const productName = document.getElementById("product-name").value.trim();
             const productPrice = parseFloat(document.getElementById("product-price").value);
-            const productQuantity = parseInt(document.getElementById("product-quantity").value, 10) || 1;
+            const productQuantity = parseInt(document.getElementById("product-quantity").value, 10);
 
-            if (!shopName || !productName || isNaN(productPrice)) {
-                alert("Please fill out all required fields.");
+            if (!productName || isNaN(productPrice) || isNaN(productQuantity)) {
+                alert("Please fill out all fields!");
                 return;
             }
 
@@ -257,46 +186,44 @@
                 productPrice,
                 productQuantity,
                 total: productPrice * productQuantity,
+                date: new Date().toISOString(),
             };
 
             salesData.push(sale);
             localStorage.setItem("salesData", JSON.stringify(salesData));
-            updateDashboard();
+            alert("Sale added successfully!");
         }
 
-        // Store Close
+        // Store Close: Clears Shop Data and prompts for a new name
         function storeClose() {
-            if (confirm("Are you sure you want to clear all sales data?")) {
-                localStorage.removeItem("salesData");
-                salesData = [];
-                updateDashboard();
-                alert("Store closed and all data cleared from this device.");
+            if (confirm("Are you sure you want to close the store?")) {
+                localStorage.removeItem("shopName");
+                alert("Store closed. Enter a new shop name.");
+                document.getElementById("shop-popup").classList.add("active");
             }
         }
 
         // Generate Sales Report
         function generateSalesReport() {
             if (salesData.length === 0) {
-                alert("No sales data available.");
+                alert("No sales data available!");
                 return;
             }
 
-            let report = salesData.map((sale, index) => {
-                return `${index + 1}. Shop: ${sale.shopName}, Product: ${sale.productName}, Quantity: ${sale.productQuantity}, Total: ৳${sale.total.toFixed(2)}`;
+            let reportData = salesData.map(sale => {
+                return `${sale.date}: ${sale.productName} - Quantity: ${sale.productQuantity} - Total: ৳${sale.total}`;
             }).join("\n");
 
-            const blob = new Blob([report], { type: "text/plain" });
+            const blob = new Blob([reportData], { type: "text/plain" });
             const url = URL.createObjectURL(blob);
 
             const link = document.createElement("a");
             link.href = url;
-            link.download = "Sales_Report.txt";
+            link.download = `${shopName}_Sales_Report.txt`;
             link.click();
 
             URL.revokeObjectURL(url);
         }
-
-        window.onload = updateDashboard;
     </script>
 </body>
 </html>

@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional Dashboard</title>
+    <title>Sales Dashboard</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="main-wrapper">
-        <!-- Header Section -->
+        <!-- Header -->
         <header>
             <div class="header-left">
-                <span class="brand-name">Sales Manager</span>
+                <h1 class="brand-name">Sales Dashboard</h1>
             </div>
             <div class="header-right">
-                <button onclick="toggleLightMode()">Switch to Light Mode</button>
+                <button id="open-menu">Menu</button>
             </div>
         </header>
 
@@ -43,27 +43,37 @@
             </div>
         </div>
 
-        <!-- Product Sale Section -->
-        <div class="sales-section">
-            <h3>Product Sale</h3>
-            <form onsubmit="generateSale(event)">
-                <label for="shop-name">Shop Name:</label>
-                <input type="text" id="shop-name" placeholder="Enter shop name">
+        <!-- Sales Form Section -->
+        <div class="form-section">
+            <h2>Add New Sale</h2>
+            <label for="shop-name">Shop Name</label>
+            <input type="text" id="shop-name" placeholder="Enter shop name">
+            
+            <label for="product-name">Product Name</label>
+            <input type="text" id="product-name" placeholder="Enter product name">
+            
+            <label for="product-price">Product Price</label>
+            <input type="number" id="product-price" placeholder="Enter product price">
+            
+            <label for="product-quantity">Quantity</label>
+            <input type="number" id="product-quantity" placeholder="Enter quantity (optional)">
+            
+            <button onclick="generateSale()">Generate Sale</button>
+        </div>
 
-                <label for="product-name">Product Name:</label>
-                <input type="text" id="product-name" placeholder="Enter product name">
-
-                <label for="product-price">Product Price:</label>
-                <input type="number" id="product-price" placeholder="Enter price">
-
-                <label for="product-quantity">Quantity (Optional):</label>
-                <input type="number" id="product-quantity" placeholder="Enter quantity">
-
-                <button type="submit">Generate Sale</button>
-            </form>
+        <!-- Modal for Full Sales History -->
+        <div id="close-store-modal" class="modal">
+            <div class="modal-content">
+                <h2>Full Sales History</h2>
+                <ul id="full-sales-list"></ul>
+                <button onclick="downloadSalesHistory()">Download as PDF</button>
+                <button onclick="closeStore()">Close Store</button>
+                <button onclick="cancelStoreClosure()">Cancel</button>
+            </div>
         </div>
     </div>
 
+    <!-- JavaScript -->
     <script src="script.js"></script>
 </body>
 </html>

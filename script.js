@@ -19,6 +19,7 @@ function generateSale() {
         productPrice,
         productQuantity,
         total: productPrice * productQuantity,
+        time: new Date().toISOString(), // Save time of sale
     };
 
     // Update sales data and save to local storage
@@ -41,6 +42,7 @@ function updateLastSaleView(lastSale) {
         <p><strong>Product:</strong> ${lastSale.productName}</p>
         <p><strong>Quantity:</strong> ${lastSale.productQuantity}</p>
         <p><strong>Total:</strong> ৳${lastSale.total.toFixed(2)}</p>
+        <p><strong>Time:</strong> ${new Date(lastSale.time).toLocaleString()}</p>
     `;
 }
 
@@ -72,7 +74,8 @@ function openCloseStoreModal() {
         const listItem = document.createElement("li");
         listItem.innerHTML = `
             <strong>${index + 1}.</strong> Shop: ${sale.shopName}, Product: ${sale.productName},
-            Quantity: ${sale.productQuantity}, Total: ৳${sale.total.toFixed(2)}
+            Quantity: ${sale.productQuantity}, Total: ৳${sale.total.toFixed(2)},
+            Time: ${new Date(sale.time).toLocaleString()}
         `;
         fullSalesList.appendChild(listItem);
     });
@@ -85,7 +88,7 @@ function downloadSalesHistory() {
     const salesSummary = salesData
         .map(
             (sale, index) =>
-                `${index + 1}. Shop: ${sale.shopName}, Product: ${sale.productName}, Quantity: ${sale.productQuantity}, Total: ৳${sale.total.toFixed(2)}`
+                `${index + 1}. Shop: ${sale.shopName}, Product: ${sale.productName}, Quantity: ${sale.productQuantity}, Total: ৳${sale.total.toFixed(2)}, Time: ${new Date(sale.time).toLocaleString()}`
         )
         .join("\n");
 
@@ -114,9 +117,74 @@ function cancelStoreClosure() {
     document.getElementById("close-store-modal").style.display = "none";
 }
 
+// Filter sales history based on day, month, year
+function applyFilter() {
+    const day = document.getElementById('day-select').value;
+    const month = document.getElementById('month-select').value;
+    const year = document.getElementById('year-select').value;
+
+    const filteredSales = salesData.filter(sale => {
+        const saleDate = new Date(sale.time);
+        const saleDay = saleDate.getDate();
+        const saleMonth = saleDate.getMonth() + 1;
+        const saleYear = saleDate.getFullYear();
+
+        return (
+            (day ? saleDay === parseInt(day) : true) &&
+            (month ? saleMonth === parseInt(month) : true) &&
+            (year ? saleYear === parseInt(year) : true)
+        );
+    });
+
+    displaySalesHistory(filteredSales);
+}
+
+// Display filtered sales history
+function displaySalesHistory(sales) {
+    const filteredSalesHistory = document.getElementById("filtered-sales-history");
+    filteredSalesHistory.innerHTML = sales.length === 0
+        ? 'No sales found for the selected filters.'
+        : sales.map(sale => `
+            <p>
+                <strong>Shop:</strong> ${sale.shopName}<br>
+                <strong>Product:</strong> ${sale.productName}<br>
+                <strong>Quantity:</strong> ${sale.productQuantity}<br>
+                <strong>Total:</strong> ৳${sale.total.toFixed(2)}<br>
+                <strong>Time:</strong> ${new Date(sale.time).toLocaleString()}
+            </p>
+        `).join('');
+}
+
 // Initialize sales view on page load
 window.onload = function () {
     if (salesData.length > 0) {
         updateLastSaleView(salesData[salesData.length - 1]);
     }
+    populateYearOptions();
+    populateDayOptions();
 };
+
+// Populate the year and day options dynamically
+function populateYearOptions() {
+    const yearSelect = document.getElementById('year-select');
+    const years = [...new Set(salesData.map(sale => new Date(sale.time).getFullYear()))];
+    yearSelect.innerHTML = '<option value="">All</option>';
+    years.forEach(year => {
+        const option = document.createElement('option');
+        option.value = year;
+        option.textContent = year;
+        yearSelect.appendChild(option);
+    });
+}
+
+function populateDayOptions() {
+    const daySelect = document.getElementById('day-select');
+    const days = [...new Set(salesData.map(sale => new Date(sale.time).getDate()))];
+    daySelect.innerHTML = '<option value="">All</option>';
+    days.forEach(day => {
+        const option = document.createElement('option');
+        option.value = day;
+        option.textContent = day;
+        daySelect.appendChild(option);
+    });
+}

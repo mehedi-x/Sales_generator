@@ -3,75 +3,93 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sales Management System</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.css">
-  <link rel="stylesheet" href="style.css">
+  <title>Sales Generator</title>
+  <link rel="stylesheet" href="styles.css"> <!-- External CSS Link -->
+  <script src="script.js" defer></script> <!-- External JS Link -->
 </head>
 <body>
-  <div id="app">
-    <!-- Side Menu -->
-    <aside id="sideMenu" class="side-menu hidden">
-      <button id="closeMenuBtn" class="close-btn">✖</button>
-      <nav>
-        <ul>
-          <li><button id="dashboardBtn" class="menu-item">Dashboard</button></li>
-          <li><button id="addSaleBtn" class="menu-item">Add Sale</button></li>
-          <li><button id="viewSalesBtn" class="menu-item">Sales History</button></li>
-          <li><button id="settingsBtn" class="menu-item">Settings</button></li>
-          <li><button id="logoutBtn" class="menu-item">Logout</button></li>
-        </ul>
-      </nav>
-    </aside>
-
-    <!-- Header -->
-    <header class="header">
-      <button id="menuBtn" class="menu-btn">☰</button>
-      <h1 class="title">Sales Management</h1>
-      <button id="themeToggleBtn" class="theme-toggle-btn">🌙</button>
+  <!-- Main Container -->
+  <div class="container">
+    <!-- Header Section -->
+    <header>
+      <div class="logo">
+        <h1>Sales Manager</h1>
+      </div>
+      <div class="header-right">
+        <button id="themeToggleBtn">Toggle Theme</button>
+      </div>
     </header>
 
+    <!-- Side Menu -->
+    <div id="sideMenu" class="side-menu hidden">
+      <button id="closeMenuBtn">Close</button>
+      <ul>
+        <li><a href="#addSale">Add Sale</a></li>
+        <li><a href="#salesHistory" id="viewSalesBtn">Sales History</a></li>
+        <li><a href="#storeClose">Store Close</a></li>
+      </ul>
+    </div>
+
+    <!-- Menu Button -->
+    <button id="menuBtn" class="menu-btn">&#9776;</button>
+
     <!-- Main Content -->
-    <main class="main-content">
-      <!-- Shop Name Section -->
-      <section id="shopNameContainer" class="section">
-        <h2>Enter Shop Name:</h2>
-        <input type="text" id="shopNameInput" class="input" placeholder="Shop Name">
-        <button id="activateShopBtn" class="btn">Activate Shop</button>
-      </section>
+    <div class="main-content">
+      <!-- Shop Name Activation Section -->
+      <div id="shopActivation" class="shop-activation">
+        <h2>Enter Shop Name to Activate</h2>
+        <input type="text" id="shopNameInput" placeholder="Shop Name">
+        <button id="activateShopBtn">Activate Shop</button>
+      </div>
 
       <!-- Dashboard Section -->
-      <section id="dashboard" class="section hidden">
+      <div id="dashboard" class="dashboard hidden">
         <h2>Dashboard</h2>
-        <div id="totalSales" class="total-sales">Total Sales: $0.00</div>
-        <div id="salesChartContainer" class="chart-container">
-          <canvas id="salesChart"></canvas>
+        <div class="sales-summary">
+          <div>
+            <h3>Total Sales</h3>
+            <p>$0.00</p>
+          </div>
+          <div>
+            <h3>Items Sold</h3>
+            <p>0</p>
+          </div>
         </div>
-        <button id="addSaleBtn" class="btn">Add Sale</button>
-        <button id="viewSalesBtn" class="btn">View Sales History</button>
-      </section>
+      </div>
 
       <!-- Sales History Section -->
-      <section id="salesHistory" class="section hidden">
-        <h2>Sales History</h2>
-        <input type="date" id="salesDateFilter" class="input">
-        <input type="text" id="salesItemFilter" class="input" placeholder="Search by Item">
-        <div id="salesHistoryContainer"></div>
-      </section>
+      <div id="salesHistoryContainer" class="sales-history hidden">
+        <h3>Sales History</h3>
+        <div id="salesHistoryData"></div>
+        <div>
+          <label for="salesDateFilter">Filter by Date:</label>
+          <input type="date" id="salesDateFilter">
+        </div>
+        <div>
+          <label for="salesItemFilter">Filter by Item:</label>
+          <input type="text" id="salesItemFilter" placeholder="Item Name">
+        </div>
+      </div>
 
-      <!-- Add Sale Form -->
-      <section id="salesForm" class="section hidden">
-        <h2>Add Sale</h2>
+      <!-- Add Sale Section -->
+      <div id="addSale" class="add-sale">
+        <h3>Add Sale</h3>
         <form id="saleForm">
-          <input type="text" id="itemName" class="input" placeholder="Item Name" required>
-          <input type="number" id="itemPrice" class="input" placeholder="Item Price" required>
-          <input type="number" id="itemQuantity" class="input" placeholder="Quantity" required>
-          <button type="submit" class="btn">Submit Sale</button>
+          <label for="itemName">Item Name:</label>
+          <input type="text" id="itemName" name="itemName" required>
+          <label for="itemPrice">Price:</label>
+          <input type="number" id="itemPrice" name="itemPrice" required>
+          <label for="itemQuantity">Quantity:</label>
+          <input type="number" id="itemQuantity" name="itemQuantity" required>
+          <button type="submit">Add Sale</button>
         </form>
-      </section>
-    </main>
+      </div>
 
-    <script src="style.js"></script>
+      <!-- Footer Section -->
+      <footer>
+        <p>&copy; 2024 Sales Manager. All Rights Reserved.</p>
+      </footer>
+    </div>
   </div>
 </body>
 </html>

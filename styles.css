@@ -54,14 +54,44 @@ header button:hover {
     margin-top: 20px;
 }
 
-#sale-summary h3 {
-    font-size: 20px;
-    color: #ff9800; /* High contrast color for section titles */
+.last-sale-summary {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background-color: #333;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    max-width: 350px;
+    margin: 0 auto;
 }
 
-#sale-summary p {
-    font-size: 16px;
+.last-sale-summary h3 {
+    font-size: 18px;
+    color: #ff9800;
+    margin-bottom: 15px;
 }
+
+#calculator-video-container iframe {
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+#last-sale-info {
+    margin-top: 15px;
+    color: #fff;
+    font-size: 14px;
+}
+
+#last-sale-info p {
+    margin: 5px 0;
+}
+
+#last-sale-info strong {
+    color: #ff9800;
+}
+
 
 /* Calculator Video Section */
 #calculator-video-container {

@@ -149,8 +149,27 @@
         }
 
         .sales-history {
-            display: none;
             margin-top: 20px;
+        }
+
+        .sales-history input[type="date"], .sales-history input[type="month"] {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .sales-history button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            background: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+
+        .sales-history button:hover {
+            background: #0056b3;
         }
 
         .sales-history ul {
@@ -238,6 +257,17 @@
             <button type="submit">Add Sale</button>
         </form>
     </div>
+
+    <div id="sales-history" class="sales-history">
+        <h2>Sales History</h2>
+        <label for="sales-date">Search by Date:</label>
+        <input type="date" id="sales-date" onchange="filterSales()">
+        <label for="sales-month">Search by Month:</label>
+        <input type="month" id="sales-month" onchange="filterSales()">
+        <button onclick="exportSales()">Export Sales</button>
+
+        <ul id="sales-history-list"></ul>
+    </div>
 </div>
 
 <script>
@@ -262,40 +292,74 @@
     function showDashboard() {
         updateDashboard();
         document.getElementById('dashboard').style.display = 'block';
-        toggleMenu();
+        document.getElementById('sales-history').style.display = 'none';
+    }
+
+    function showSalesHistory() {
+        document.getElementById('sales-history').style.display = 'block';
+        document.getElementById('dashboard').style.display = 'none';
+        displaySalesHistory();
+    }
+
+    function updateDashboard() {
+        const salesTable = document.getElementById('dashboard-sales');
+        let totalSales = 0;
+        salesTable.innerHTML = '';
+        salesData.forEach((sale, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${sale.productName}</td>
+                <td>${sale.productPrice}</td>
+                <td>${sale.productQuantity}</td>
+                <td>${(sale.productPrice * sale.productQuantity).toFixed(2)}</td>
+            `;
+            salesTable.appendChild(row);
+            totalSales += sale.productPrice * sale.productQuantity;
+        });
+        document.getElementById('total-sales').innerText = totalSales.toFixed(2);
     }
 
     function addSale(event) {
         event.preventDefault();
         const productName = document.getElementById('product-name').value;
         const productPrice = parseFloat(document.getElementById('product-price').value);
-        const productQuantity = parseInt(document.getElementById('product-quantity').value, 10);
-        const total = productPrice * productQuantity;
-
-        const sale = { productName, productPrice, productQuantity, total };
-        salesData.push(sale);
+        const productQuantity = parseInt(document.getElementById('product-quantity').value);
+        
+        salesData.push({ productName, productPrice, productQuantity });
         localStorage.setItem('salesData', JSON.stringify(salesData));
-
         updateDashboard();
     }
 
-    function updateDashboard() {
-        const totalSales = salesData.reduce((total, sale) => total + sale.total, 0);
-        const salesTable = document.getElementById('dashboard-sales');
-        salesTable.innerHTML = '';
-
-        salesData.forEach(sale => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${sale.productName}</td>
-                <td>${sale.productPrice.toFixed(2)}</td>
-                <td>${sale.productQuantity}</td>
-                <td>${sale.total.toFixed(2)}</td>
-            `;
-            salesTable.appendChild(row);
+    function filterSales() {
+        const date = document.getElementById('sales-date').value;
+        const month = document.getElementById('sales-month').value;
+        const filteredSales = salesData.filter(sale => {
+            if (date && new Date(sale.date).toISOString().split('T')[0] !== date) return false;
+            if (month && new Date(sale.date).toISOString().split('T')[0].slice(0, 7) !== month) return false;
+            return true;
         });
+        displaySalesHistory(filteredSales);
+    }
 
-        document.getElementById('total-sales').innerText = totalSales.toFixed(2);
+    function displaySalesHistory(filteredSales = salesData) {
+        const salesHistoryList = document.getElementById('sales-history-list');
+        salesHistoryList.innerHTML = '';
+        filteredSales.forEach(sale => {
+            const li = document.createElement('li');
+            li.innerText = `${sale.date} - ${sale.productName} - ${sale.productPrice} x ${sale.productQuantity}`;
+            salesHistoryList.appendChild(li);
+        });
+    }
+
+    function exportSales() {
+        const dataStr = JSON.stringify(salesData, null, 2);
+        const blob = new Blob([dataStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'sales_data.json';
+        link.click();
+        URL.revokeObjectURL(url);
     }
 
     window.onload = () => {

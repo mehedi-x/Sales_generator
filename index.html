@@ -85,65 +85,16 @@
             background-color: #555;
         }
 
-        /* Dashboard Section */
-        .dashboard {
-            background-color: #2c2c2c;
-            padding: 20px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-        }
-
-        .dashboard h3 {
-            margin-bottom: 20px;
-        }
-
-        .dashboard .stats {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-        }
-
-        .dashboard .stat {
-            flex: 1;
-            background-color: #333;
-            padding: 10px;
-            text-align: center;
-            border-radius: 5px;
-        }
-
-        /* Sales History Section */
-        .sales-history {
-            display: none;
-            margin-top: 20px;
-            max-height: 300px;
-            overflow-y: auto;
-            background-color: #333;
-            border-radius: 5px;
-            padding: 10px;
-        }
-
-        .sales-history ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .sales-history ul li {
-            padding: 10px;
-            background-color: #444;
-            margin-bottom: 5px;
-            border-radius: 5px;
-        }
-
-        .sales-history ul li strong {
-            color: #ff9800;
-        }
-
         /* Form Section */
         .form-section {
             background-color: #2c2c2c;
             padding: 20px;
             border-radius: 5px;
-            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-section h3 {
+            margin-bottom: 20px;
         }
 
         .form-section label {
@@ -175,37 +126,29 @@
             background-color: #388e3c;
         }
 
-        /* Full-Screen Dashboard */
-        .full-screen-dashboard {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
+        /* Dashboard Section */
+        .dashboard {
+            background-color: #2c2c2c;
             padding: 20px;
-            z-index: 9999;
+            border-radius: 5px;
         }
 
-        .full-screen-dashboard.open {
-            display: block;
+        .dashboard h3 {
+            margin-bottom: 20px;
         }
 
-        .full-screen-dashboard .content {
+        .dashboard .stats {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .dashboard .stat {
+            flex: 1;
             background-color: #333;
-            padding: 20px;
-            border-radius: 5px;
-            height: 100%;
-            overflow-y: auto;
-        }
-
-        .sales-history-button {
-            margin-top: 20px;
-            background-color: #ff9800;
             padding: 10px;
+            text-align: center;
             border-radius: 5px;
-            cursor: pointer;
         }
     </style>
 </head>
@@ -261,40 +204,6 @@
                     <p id="top-product">N/A</p>
                 </div>
             </div>
-            <button class="sales-history-button" onclick="toggleSalesHistory()">View Sales History</button>
-        </div>
-
-        <!-- Sales History Section (Now in Full Screen) -->
-        <div class="sales-history" id="sales-history">
-            <h4>Sales History</h4>
-            <ul id="sales-history-list"></ul>
-            <button onclick="closeSalesHistory()">Close</button>
-        </div>
-    </div>
-
-    <!-- Full-Screen Dashboard -->
-    <div class="full-screen-dashboard" id="full-screen-dashboard">
-        <div class="content">
-            <h3>Full Dashboard</h3>
-            <div class="stats">
-                <div class="stat">
-                    <h4>Total Sales</h4>
-                    <p id="full-total-sales">৳0.00</p>
-                </div>
-                <div class="stat">
-                    <h4>Items Sold</h4>
-                    <p id="full-items-sold">0</p>
-                </div>
-                <div class="stat">
-                    <h4>Top Product</h4>
-                    <p id="full-top-product">N/A</p>
-                </div>
-            </div>
-            <div class="sales-history">
-                <h4>Sales History</h4>
-                <ul id="full-sales-history-list"></ul>
-            </div>
-            <button onclick="closeFullDashboard()">Close Full-Screen</button>
         </div>
     </div>
 
@@ -321,56 +230,12 @@
             document.getElementById("total-sales").innerText = `৳${totalSales.toFixed(2)}`;
             document.getElementById("items-sold").innerText = itemsSold;
             document.getElementById("top-product").innerText = topProduct;
-
-            // Update Full Dashboard
-            document.getElementById("full-total-sales").innerText = `৳${totalSales.toFixed(2)}`;
-            document.getElementById("full-items-sold").innerText = itemsSold;
-            document.getElementById("full-top-product").innerText = topProduct;
-
-            // Update Sales History List
-            updateSalesHistoryList();
-        }
-
-        // Update Sales History List
-        function updateSalesHistoryList() {
-            const salesHistoryList = document.getElementById("sales-history-list");
-            const fullSalesHistoryList = document.getElementById("full-sales-history-list");
-
-            salesHistoryList.innerHTML = "";
-            fullSalesHistoryList.innerHTML = "";
-
-            salesData.forEach((sale, index) => {
-                const listItem = document.createElement("li");
-                listItem.innerHTML = `<strong>${sale.shopName}</strong>: ${sale.productName} - ৳${sale.productPrice} x ${sale.productQuantity} = ৳${sale.total}`;
-                salesHistoryList.appendChild(listItem);
-                fullSalesHistoryList.appendChild(listItem.cloneNode(true));
-            });
         }
 
         // Toggle Slide Menu
         function toggleMenu() {
             const slideMenu = document.getElementById("slide-menu");
             slideMenu.classList.toggle("open");
-        }
-
-        // Toggle Full Dashboard
-        function toggleFullDashboard() {
-            document.getElementById("full-screen-dashboard").classList.add("open");
-        }
-
-        // Close Full Dashboard
-        function closeFullDashboard() {
-            document.getElementById("full-screen-dashboard").classList.remove("open");
-        }
-
-        // Show Sales History
-        function toggleSalesHistory() {
-            document.getElementById("sales-history").style.display = "block";
-        }
-
-        // Close Sales History
-        function closeSalesHistory() {
-            document.getElementById("sales-history").style.display = "none";
         }
 
         // Generate Sale

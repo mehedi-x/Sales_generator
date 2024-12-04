@@ -161,3 +161,27 @@ header button:hover {
 #full-sales-list li strong {
     color: #ff9800;
 }
+
+
+body.dark-mode {
+    background-color: #121212;
+    color: #fff;
+}
+
+button {
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+    background-color: #c2185b;
+    transform: scale(1.05);
+}
+
+.modal-content {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}

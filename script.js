@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const salesHistoryContainer = document.getElementById('salesHistoryContainer');
   const salesDateFilter = document.getElementById('salesDateFilter');
   const salesItemFilter = document.getElementById('salesItemFilter');
-
+  
   // Check for dark mode preference
   if (localStorage.getItem('darkMode') === 'true') {
     document.body.classList.add('dark-mode');

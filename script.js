@@ -31,76 +31,6 @@ function generateSale() {
     updateLastSaleView(product);
     resetForm();
 }
-// Menu toggle logic fixed
-menuBtn.addEventListener('click', function () {
-    if (menuPopup.style.display === 'flex') {
-        menuPopup.style.display = 'none';
-    } else {
-        menuPopup.style.display = 'flex';
-    }
-});
-
-function openFullSalesHistory() {
-    const salesHistory = salesData.map((sale, index) => `
-        <div>
-            <strong>#${index + 1}</strong><br>
-            <strong>Shop:</strong> ${sale.shopName}<br>
-            <strong>Product:</strong> ${sale.productName}<br>
-            <strong>Quantity:</strong> ${sale.productQuantity}<br>
-            <strong>Total:</strong> ৳${sale.total.toFixed(2)}<br>
-            <strong>Time:</strong> ${sale.time}<br>
-            <hr>
-        </div>
-    `).join('');
-
-    const modal = document.getElementById("history-modal");
-    const contentDiv = document.getElementById("history-content");
-
-    if (!salesData.length) {
-        contentDiv.innerHTML = "<p>No sales history available.</p>";
-    } else {
-        contentDiv.innerHTML = salesHistory;
-    }
-
-    modal.style.display = "block";
-}
-let salesData = JSON.parse(localStorage.getItem("salesData")) || [];
-
-function generateSale() {
-    const shopName = document.getElementById("shop-name").value;
-    const productName = document.getElementById("product-name").value;
-    const productPrice = parseFloat(document.getElementById("product-price").value);
-    const productQuantity = parseInt(document.getElementById("product-quantity").value);
-
-    if (!shopName || !productName || isNaN(productPrice) || isNaN(productQuantity)) {
-        alert("Please fill out all fields correctly.");
-        return;
-    }
-
-    const sale = {
-        shopName,
-        productName,
-        productPrice,
-        productQuantity,
-        total: productPrice * productQuantity,
-        time: new Date().toLocaleString(),
-    };
-
-    salesData.push(sale);
-    localStorage.setItem("salesData", JSON.stringify(salesData));
-
-    document.getElementById("sale-summary").innerHTML = `
-        <strong>Shop:</strong> ${sale.shopName}<br>
-        <strong>Product:</strong> ${sale.productName}<br>
-        <strong>Total:</strong> ৳${sale.total.toFixed(2)}
-    `;
-
-    document.getElementById("total-sale").textContent = `Total Sale: ৳${salesData.reduce((acc, cur) => acc + cur.total, 0).toFixed(2)}`;
-}
-function closeModal() {
-    const modal = document.getElementById("history-modal");
-    modal.style.display = "none";
-}
 
 // Update only the last sale view
 function updateLastSaleView(lastSale) {
@@ -133,44 +63,31 @@ function resetForm() {
     document.getElementById("product-quantity").value = "";
 }
 
-// Open full sales history modal
+// Open close store modal and show full sales history
 function openCloseStoreModal() {
     const fullSalesList = document.getElementById("full-sales-list");
-    fullSalesList.innerHTML = ""; // Clear existing list
-    
-    if (salesData.length > 0) {
-        salesData.forEach((sale, index) => {
-            const listItem = document.createElement("li");
-            listItem.innerHTML = `
-                <strong>Sale #${index + 1}:</strong><br>
-                <strong>Shop:</strong> ${sale.shopName}<br>
-                <strong>Product:</strong> ${sale.productName}<br>
-                <strong>Quantity:</strong> ${sale.productQuantity}<br>
-                <strong>Unit Price:</strong> ৳${sale.productPrice.toFixed(2)}<br>
-                <strong>Total:</strong> ৳${sale.total.toFixed(2)}<br>
-                <hr>
-            `;
-            fullSalesList.appendChild(listItem);
-        });
-    } else {
-        fullSalesList.innerHTML = "<p>No sales history available.</p>";
-    }
+    fullSalesList.innerHTML = "";
 
-    document.getElementById("close-store-modal").style.display = "block"; // Open the modal
+    salesData.forEach((sale, index) => {
+        const listItem = document.createElement("li");
+        listItem.innerHTML = `
+            <strong>${index + 1}.</strong> Shop: ${sale.shopName}, Product: ${sale.productName},
+            Quantity: ${sale.productQuantity}, Total: ৳${sale.total.toFixed(2)}
+        `;
+        fullSalesList.appendChild(listItem);
+    });
+
+    document.getElementById("close-store-modal").style.display = "block";
 }
 
 // Download sales history as PDF
 function downloadSalesHistory() {
-    let salesSummary = salesData.map((sale, index) => {
-        return `
-            Sale #${index + 1}:
-            Shop: ${sale.shopName}
-            Product: ${sale.productName}
-            Quantity: ${sale.productQuantity}
-            Unit Price: ৳${sale.productPrice.toFixed(2)}
-            Total: ৳${sale.total.toFixed(2)}
-        `;
-    }).join("\n\n");
+    const salesSummary = salesData
+        .map(
+            (sale, index) =>
+                `${index + 1}. Shop: ${sale.shopName}, Product: ${sale.productName}, Quantity: ${sale.productQuantity}, Total: ৳${sale.total.toFixed(2)}`
+        )
+        .join("\n");
 
     const blob = new Blob([salesSummary], { type: "application/pdf" });
     const url = URL.createObjectURL(blob);
@@ -178,25 +95,18 @@ function downloadSalesHistory() {
     const link = document.createElement("a");
     link.href = url;
     link.download = "Sales_History.pdf";
-    link.click(); // Trigger the download
+    link.click();
 
     URL.revokeObjectURL(url);
 }
 
-// Close store and clear sales data with confirmation
+// Close store and clear sales data
 function closeStore() {
-    // Display confirmation modal
-    const confirmation = confirm("Are you sure you want to close the store? This will delete all sales data.");
-    
-    if (confirmation) {
-        salesData = []; // Clear sales data
-        localStorage.removeItem("salesData"); // Remove from local storage
-        alert("Store closed and all sales data cleared!");
-        document.getElementById("close-store-modal").style.display = "none"; // Close the modal
-        location.reload(); // Reload the page to reset the state
-    } else {
-        alert("Store closure canceled.");
-    }
+    salesData = [];
+    localStorage.removeItem("salesData");
+    document.getElementById("close-store-modal").style.display = "none";
+    alert("Store closed and all sales data cleared!");
+    location.reload();
 }
 
 // Cancel store closure
@@ -210,66 +120,3 @@ window.onload = function () {
         updateLastSaleView(salesData[salesData.length - 1]);
     }
 };
-
-function closeStore() {
-    const isConfirmed = confirm("Are you sure you want to close the store?");
-    if (isConfirmed) {
-        localStorage.removeItem("salesData");
-        localStorage.removeItem("shopName");
-        alert("Store has been closed. All sales data has been cleared.");
-    }
-}
-
-
-
-
-function openFullSalesHistory() {
-    const salesHistory = salesData.map((sale, index) => `
-        <div>
-            <strong>#${index + 1}</strong><br>
-            <strong>Shop:</strong> ${sale.shopName}<br>
-            <strong>Product:</strong> ${sale.productName}<br>
-            <strong>Quantity:</strong> ${sale.productQuantity}<br>
-            <strong>Total:</strong> ৳${sale.total.toFixed(2)}<br>
-            <strong>Time:</strong> ${sale.time}<br>
-            <hr>
-        </div>
-    `).join('');
-    
-    if (!salesHistory) {
-        alert("No sales history available.");
-        return;
-    }
-
-    const historyPopup = document.createElement("div");
-    historyPopup.style.position = "fixed";
-    historyPopup.style.top = "10%";
-    historyPopup.style.left = "10%";
-    historyPopup.style.width = "80%";
-    historyPopup.style.height = "80%";
-    historyPopup.style.backgroundColor = "white";
-    historyPopup.style.overflowY = "scroll";
-    historyPopup.style.padding = "20px";
-    historyPopup.style.boxShadow = "0 5px 15px rgba(0,0,0,0.3)";
-    historyPopup.style.borderRadius = "10px";
-    historyPopup.style.zIndex = "1001";
-
-    historyPopup.innerHTML = `
-        <h2 style="text-align: center; color: #333;">Full Sales History</h2>
-        <div>${salesHistory}</div>
-        <button style="
-            position: absolute; 
-            top: 10px; 
-            right: 10px; 
-            padding: 5px 10px; 
-            font-size: 16px; 
-            background-color: #4CAF50; 
-            color: white; 
-            border: none; 
-            border-radius: 5px;
-            cursor: pointer;
-        " onclick="document.body.removeChild(this.parentNode)">Close</button>
-    `;
-
-    document.body.appendChild(historyPopup);
-}

@@ -1,76 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sales Tracker</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body class="dark-mode">
-    <header>
-        <div class="header-left">
-            <span class="brand-name">My Shop</span>
+<!-- Dashboard Section -->
+<div class="dashboard-section">
+    <div class="dashboard-container">
+        <div class="dashboard-box" id="software-status">
+            <h3>Software Status</h3>
+            <p id="status-text">Active</p> <!-- This will dynamically change based on status -->
         </div>
-        <div class="header-right">
-            <button id="menu-toggle">☰ Menu</button>
+        <div class="dashboard-box" id="last-sale">
+            <h3>Last Sale Price</h3>
+            <p id="last-sale-price">৳0.00</p> <!-- This will dynamically show last sale price -->
         </div>
-    </header>
-
-    <!-- Menu Modal -->
-    <div id="menu-modal" class="modal">
-        <div class="modal-content">
-            <button id="close-menu" class="close-btn">X</button>
-            <div class="menu-items">
-                <label for="product-name">Product Name:</label>
-                <input type="text" id="product-name" placeholder="Enter product name" list="suggested-products" />
-                <datalist id="suggested-products"></datalist>
-
-                <label for="filter">Filter Sales History:</label>
-                <input type="text" id="filter" placeholder="Search sales history..." />
-
-                <button onclick="downloadSalesHistory('pdf')">Download as PDF</button>
-                <button onclick="downloadSalesHistory('csv')">Download as CSV</button>
-                
-                <button id="theme-toggle">Switch to Light Mode</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Sales Section -->
-<div class="sales-section">
-    <div id="sale-summary" class="last-sale-summary">
-        <h3>Last Sale Summary:</h3>
-        <div id="calculator-video-container">
-            <iframe width="280" height="158" src="https://www.youtube.com/embed/xyz123456" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-        <div id="last-sale-info">
-            <!-- Dynamic Last Sale Information will be inserted here -->
+        <div class="dashboard-box" id="office-status">
+            <h3>Office Status</h3>
+            <p id="office-status-text">Office is Open</p> <!-- This will dynamically show office status -->
         </div>
     </div>
 </div>
 
-    <!-- Product Sale Form -->
-    <div class="form-section">
-        <h3>Sell a Product</h3>
-        <label for="shop-name">Shop Name:</label>
-        <input type="text" id="shop-name" placeholder="Enter shop name" />
-
-        <label for="product-name">Product Name:</label>
-        <input type="text" id="product-name-input" placeholder="Enter product name" />
-
-        <label for="product-price">Product Price:</label>
-        <input type="number" id="product-price" placeholder="Enter product price" />
-
-        <label for="product-quantity">Quantity:</label>
-        <input type="number" id="product-quantity" placeholder="Enter quantity" />
-
-        <button onclick="generateSale()">Generate Sale</button>
+<!-- Old Sale Section -->
+<div class="sales-section">
+    <div id="sale-summary">
+        <!-- This will now contain only the last sale price, no longer the full summary -->
     </div>
-
-    <!-- Full Sales List -->
-    <div id="full-sales-list"></div>
-
-    <!-- JavaScript -->
-    <script src="script.js"></script>
-</body>
-</html>
+</div>

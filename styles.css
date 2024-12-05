@@ -77,6 +77,25 @@
         footer nav ul li a:hover {
             color: #a7ffae;
         }
+.menu-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: none;  /* Initially hidden */
+    width: 300px;
+    text-align: center;
+}
+@media (max-width: 600px) {
+    .menu-popup {
+        width: 80%;  /* Make the menu take up more space on smaller screens */
+    }
+}
 
         /* Menu Popup */
         .menu-popup {

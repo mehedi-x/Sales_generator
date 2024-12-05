@@ -120,3 +120,14 @@ window.onload = function () {
         updateLastSaleView(salesData[salesData.length - 1]);
     }
 };
+function openProductEntry() {
+    // You can add functionality to open or focus the product entry section
+    alert("Opening Product Entry Section...");
+    // For example, you can display the Product Entry form or navigate to that section
+}
+
+function openSettings() {
+    // You can add functionality for Settings
+    alert("Opening Settings...");
+    // You can either show a settings popup or redirect to a settings page
+}

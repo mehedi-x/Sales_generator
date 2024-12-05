@@ -34,16 +34,6 @@
             color: #e91e63;
         }
 
-        .modal-content ul {
-            list-style-type: none;
-            padding: 0;
-            margin-top: 20px;
-        }
-
-        .modal-content ul li {
-            margin-bottom: 15px;
-        }
-
         .modal-content label {
             display: block;
             margin-top: 15px;
@@ -102,13 +92,26 @@
     <button onclick="openFullSalesHistory()">View Full Sales History</button>
     <button class="entry-button" onclick="openProductEntry()">Product Entry</button>
     <button class="settings-button" onclick="openSettings()">Settings</button>
+    <button class="settings-button" onclick="openSalesModal()">Sales</button>
 
-    <!-- Sales History Modal -->
-    <div id="sales-history-modal" class="modal">
+    <!-- Sales Modal -->
+    <div id="sales-modal" class="modal">
         <div class="modal-content">
-            <h3>Full Sales History</h3>
-            <ul id="full-sales-list"></ul>
-            <button onclick="closeModal()">Close</button>
+            <h3>Sales Entry</h3>
+            <form id="sales-form">
+                <label for="product-name-sales">Product Name:</label>
+                <input type="text" id="product-name-sales" list="product-suggestions" placeholder="Select or Enter Product">
+                <datalist id="product-suggestions"></datalist>
+
+                <label for="product-price-sales">Product Price:</label>
+                <input type="number" id="product-price-sales" placeholder="Enter product price" readonly>
+
+                <label for="product-quantity-sales">Product Quantity:</label>
+                <input type="number" id="product-quantity-sales" placeholder="Enter quantity" required>
+
+                <button type="button" onclick="processSale()">Process Sale</button>
+            </form>
+            <button onclick="closeSalesModal()">Close</button>
         </div>
     </div>
 
@@ -159,56 +162,21 @@
     </div>
 
     <script>
+        const products = []; // Array to hold all products for sales
+
         // Sample Sales Data (Replace with real data)
         const salesData = [
             { shopName: "Shop A", productName: "Product 1", productQuantity: 10, total: 100, time: "2024-12-01 10:00 AM" },
             { shopName: "Shop B", productName: "Product 2", productQuantity: 5, total: 50, time: "2024-12-02 11:30 AM" },
-            // Add more sales records as needed
         ];
-
-        // Modal Open/Close Logic for Sales History
-        const modal = document.getElementById('sales-history-modal');
-        const productModal = document.getElementById('product-entry-modal');
-
-        function openModal() {
-            const fullSalesList = document.getElementById('full-sales-list');
-            fullSalesList.innerHTML = '';
-
-            if (salesData.length === 0) {
-                fullSalesList.innerHTML = '<li>No sales recorded yet.</li>';
-            } else {
-                salesData.forEach((sale) => {
-                    const listItem = `
-                        <li>
-                            <strong>Shop:</strong> ${sale.shopName}<br>
-                            <strong>Product:</strong> ${sale.productName}<br>
-                            <strong>Quantity:</strong> ${sale.productQuantity}<br>
-                            <strong>Total:</strong> ৳${sale.total.toFixed(2)}<br>
-                            <strong>Time:</strong> ${sale.time}
-                        </li>
-                    `;
-                    fullSalesList.innerHTML += listItem;
-                });
-            }
-
-            modal.style.display = 'flex';
-        }
-
-        function closeModal() {
-            modal.style.display = 'none';
-        }
-
-        function openFullSalesHistory() {
-            openModal();
-        }
 
         // Product Entry Modal Logic
         function openProductEntry() {
-            productModal.style.display = 'flex';
+            document.getElementById('product-entry-modal').style.display = 'flex';
         }
 
         function closeProductEntry() {
-            productModal.style.display = 'none';
+            document.getElementById('product-entry-modal').style.display = 'none';
         }
 
         function saveProduct() {
@@ -221,30 +189,77 @@
                 return;
             }
 
-            // Add Product Entry to Sales Data (or save it to a database)
+            // Add Product Entry to Products Array
             const newProduct = {
-                productName,
-                productPrice: parseFloat(productPrice),
-                productQuantity: parseInt(productQuantity),
+                name: productName,
+                price: parseFloat(productPrice),
+                quantity: parseInt(productQuantity),
             };
 
-            // Example: Just display it in the console or store it in localStorage
-            console.log('Product Added:', newProduct);
+            products.push(newProduct);
             alert('Product added successfully!');
             closeProductEntry();
+            updateProductSuggestions();
         }
 
-        // Settings Modal Functionality
-        function openSettings() {
-            const settingsPopup = document.getElementById('settings-modal');
-            settingsPopup.style.display = 'flex';
-
-            // Close settings when clicking outside modal
-            window.addEventListener('click', (event) => {
-                if (event.target === settingsPopup) {
-                    closeSettings();
-                }
+        // Update Product Suggestions in Sales Modal
+        function updateProductSuggestions() {
+            const productSuggestions = document.getElementById('product-suggestions');
+            productSuggestions.innerHTML = '';
+            products.forEach((product) => {
+                const option = document.createElement('option');
+                option.value = product.name;
+                productSuggestions.appendChild(option);
             });
+        }
+
+        // Sales Modal Logic
+        function openSalesModal() {
+            document.getElementById('sales-modal').style.display = 'flex';
+            updateProductSuggestions(); // Update product suggestions when opening sales modal
+        }
+
+        function closeSalesModal() {
+            document.getElementById('sales-modal').style.display = 'none';
+        }
+
+        function processSale() {
+            const productName = document.getElementById('product-name-sales').value.trim();
+            const productPrice = document.getElementById('product-price-sales').value.trim();
+            const productQuantity = document.getElementById('product-quantity-sales').value.trim();
+
+            if (!productName || !productPrice || !productQuantity) {
+                alert('Please fill in all the fields.');
+                return;
+            }
+
+            // Find the selected product
+            const product = products.find(p => p.name === productName);
+
+            if (!product) {
+                alert('Product not found!');
+                return;
+            }
+
+            // Process the sale (Calculate total and save)
+            const total = parseFloat(productPrice) * parseInt(productQuantity);
+
+            const sale = {
+                shopName: localStorage.getItem("shopName") || "Default Shop",
+                productName: product.name,
+                productQuantity: productQuantity,
+                total: total,
+                time: new Date().toLocaleString(),
+            };
+
+            salesData.push(sale);
+            alert('Sale processed successfully!');
+            closeSalesModal();
+        }
+
+        // Settings Modal Logic
+        function openSettings() {
+            document.getElementById('settings-modal').style.display = 'flex';
         }
 
         function closeSettings() {

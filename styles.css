@@ -161,3 +161,52 @@ header button:hover {
 #full-sales-list li strong {
     color: #ff9800;
 }
+/* Menu Popup */
+.menu-popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9); /* Darker overlay for better visibility */
+    color: white;
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    transition: opacity 0.3s ease-in-out; /* Smooth fade-in/out transition */
+    opacity: 0;
+}
+
+.menu-popup.show {
+    display: flex;
+    opacity: 1;
+}
+
+.menu-popup a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.5em;
+    margin: 10px 0;
+    transition: color 0.3s ease-in-out;
+}
+
+.menu-popup a:hover {
+    color: #a7ffae;
+}
+
+.menu-popup button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 2em;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+}
+
+.menu-popup button:hover {
+    transform: scale(1.1);
+}

@@ -120,3 +120,29 @@ window.onload = function () {
         updateLastSaleView(salesData[salesData.length - 1]);
     }
 };
+
+// Menu toggle logic
+const menuBtn = document.getElementById('menu-btn');
+const menuPopup = document.getElementById('menu-popup');
+let isMenuOpen = false;
+
+// Toggle menu display
+menuBtn.addEventListener('click', function () {
+    isMenuOpen = !isMenuOpen;
+    menuPopup.style.display = isMenuOpen ? 'flex' : 'none';
+    document.body.style.overflow = isMenuOpen ? 'hidden' : 'auto'; // Disable scroll when menu is open
+});
+
+// Close menu function
+function closeMenu() {
+    isMenuOpen = false;
+    menuPopup.style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
+
+// Close menu when clicking outside the popup
+window.addEventListener('click', function (event) {
+    if (isMenuOpen && !menuPopup.contains(event.target) && event.target !== menuBtn) {
+        closeMenu();
+    }
+});

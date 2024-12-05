@@ -80,7 +80,7 @@
             background-color: #388e3c;
         }
 
-        .settings-button {
+        .settings-button, .entry-button {
             margin-top: 20px;
             padding: 10px 20px;
             background-color: #2196f3;
@@ -91,17 +91,16 @@
             cursor: pointer;
         }
 
-        .settings-button:hover {
+        .settings-button:hover, .entry-button:hover {
             background-color: #1976d2;
         }
     </style>
 </head>
 <body>
 
-    <!-- Button to open the sales history modal -->
+    <!-- Buttons to open modals -->
     <button onclick="openFullSalesHistory()">View Full Sales History</button>
-
-    <!-- Button to open the settings modal -->
+    <button class="entry-button" onclick="openProductEntry()">Product Entry</button>
     <button class="settings-button" onclick="openSettings()">Settings</button>
 
     <!-- Sales History Modal -->
@@ -110,6 +109,26 @@
             <h3>Full Sales History</h3>
             <ul id="full-sales-list"></ul>
             <button onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
+    <!-- Product Entry Modal -->
+    <div id="product-entry-modal" class="modal">
+        <div class="modal-content">
+            <h3>Product Entry</h3>
+            <form id="product-form">
+                <label for="product-name">Product Name:</label>
+                <input type="text" id="product-name" placeholder="Enter product name">
+                
+                <label for="product-price">Product Price:</label>
+                <input type="number" id="product-price" placeholder="Enter product price">
+                
+                <label for="product-quantity">Product Quantity:</label>
+                <input type="number" id="product-quantity" placeholder="Enter product quantity">
+
+                <button type="button" onclick="saveProduct()">Save Product</button>
+            </form>
+            <button onclick="closeProductEntry()">Close</button>
         </div>
     </div>
 
@@ -140,7 +159,7 @@
     </div>
 
     <script>
-        // Sales Data Example (Replace with real data)
+        // Sample Sales Data (Replace with real data)
         const salesData = [
             { shopName: "Shop A", productName: "Product 1", productQuantity: 10, total: 100, time: "2024-12-01 10:00 AM" },
             { shopName: "Shop B", productName: "Product 2", productQuantity: 5, total: 50, time: "2024-12-02 11:30 AM" },
@@ -149,6 +168,7 @@
 
         // Modal Open/Close Logic for Sales History
         const modal = document.getElementById('sales-history-modal');
+        const productModal = document.getElementById('product-entry-modal');
 
         function openModal() {
             const fullSalesList = document.getElementById('full-sales-list');
@@ -178,17 +198,41 @@
             modal.style.display = 'none';
         }
 
-        // Update Menu Option for Modal
         function openFullSalesHistory() {
             openModal();
         }
 
-        // Add event listener for closing modal on outside click
-        window.addEventListener('click', (event) => {
-            if (event.target === modal) {
-                closeModal();
+        // Product Entry Modal Logic
+        function openProductEntry() {
+            productModal.style.display = 'flex';
+        }
+
+        function closeProductEntry() {
+            productModal.style.display = 'none';
+        }
+
+        function saveProduct() {
+            const productName = document.getElementById('product-name').value.trim();
+            const productPrice = document.getElementById('product-price').value.trim();
+            const productQuantity = document.getElementById('product-quantity').value.trim();
+
+            if (!productName || !productPrice || !productQuantity) {
+                alert('Please fill in all the fields.');
+                return;
             }
-        });
+
+            // Add Product Entry to Sales Data (or save it to a database)
+            const newProduct = {
+                productName,
+                productPrice: parseFloat(productPrice),
+                productQuantity: parseInt(productQuantity),
+            };
+
+            // Example: Just display it in the console or store it in localStorage
+            console.log('Product Added:', newProduct);
+            alert('Product added successfully!');
+            closeProductEntry();
+        }
 
         // Settings Modal Functionality
         function openSettings() {

@@ -102,12 +102,26 @@ function SalesHistory() {
 
 // Close store and clear sales data
 function closeStore() {
-    salesData = [];
-    localStorage.removeItem("salesData");
-    document.getElementById("close-store-modal").style.display = "none";
-    alert("Store closed and all sales data cleared!");
-    location.reload();
+    // Show confirmation dialog before closing the store
+    const confirmation = confirm("Are you sure you want to close the store and clear all sales data?");
+    
+    if (confirmation) {
+        // Clear sales data and remove from localStorage
+        salesData = [];
+        localStorage.removeItem("salesData");
+        
+        // Hide modal and show a success message
+        document.getElementById("close-store-modal").style.display = "none";
+        alert("Store closed and all sales data cleared!");
+        
+        // Optionally reload the page to reset the interface
+        location.reload();
+    } else {
+        // If the user cancels, simply hide the modal without clearing data
+        document.getElementById("close-store-modal").style.display = "none";
+    }
 }
+
 
 // Cancel store closure
 function cancelStoreClosure() {

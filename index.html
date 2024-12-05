@@ -446,7 +446,7 @@
 
                 <li><a href="contact.html">Contact</a></li>
 
-                <li><a href="privacy-policy.html">Privacy Policy</a></li>
+                <li><a href="privacy-policy.html">Policy</a></li>
 
             </ul>
 
@@ -457,17 +457,14 @@
 </div>
 
 <!-- Menu Popup -->
-
-<div id="menu-popup" class="menu-popup">
-
-    <a href="#" onclick="openFullSalesHistory()">Full Sales History</a>
-
-    <a href="#" onclick="downloadSalesHistory()">Download Sales History</a>
-
-    <a href="#" onclick="closeStore()">Close Store</a>
-
-    <button onclick="closeMenu()">✖</button>
-
+<div id="menu-popup" class="menu-popup" role="dialog" aria-labelledby="menu-title" aria-hidden="true">
+    <h2 id="menu-title">Menu</h2>
+    <ul>
+        <li><a href="#" onclick="openFullSalesHistory()">Full Sales History</a></li>
+        <li><a href="#" onclick="downloadSalesHistory()">Download Sales History</a></li>
+        <li><a href="#" onclick="closeStore()">Close Store</a></li>
+    </ul>
+    <button onclick="closeMenu()" class="close-button" aria-label="Close menu">✖</button>
 </div>
 
 <script>

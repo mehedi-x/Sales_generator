@@ -3,123 +3,233 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Responsive Store</title>
+    <title>Sales History and Settings</title>
     <style>
-        /* আপনার কোডের CSS অপরিবর্তিত রাখা হয়েছে */
-        /* Pop-up Styling for Settings */
-        .settings-popup {
+        /* Modal Styles */
+        .modal {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.7);
             align-items: center;
-            color: white;
-            z-index: 1001;
+            justify-content: center;
+            z-index: 1000;
         }
 
-        .settings-content {
+        .modal-content {
             background-color: #333;
-            padding: 20px;
-            border-radius: 10px;
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-        }
-
-        .settings-content input {
-            width: 90%;
-            margin: 10px 0;
-            padding: 10px;
-            border: 1px solid #555;
+            padding: 30px;
             border-radius: 5px;
-            font-size: 1em;
+            width: 60%;
+            max-width: 600px;
+            color: #fff;
         }
 
-        .settings-content button {
-            background-color: #4CAF50;
-            color: white;
+        .modal-content h3 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #e91e63;
+        }
+
+        .modal-content ul {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        .modal-content ul li {
+            margin-bottom: 15px;
+        }
+
+        .modal-content label {
+            display: block;
+            margin-top: 15px;
+            font-size: 16px;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #444;
+            background-color: #222;
+            color: #fff;
+            border-radius: 5px;
+        }
+
+        .modal-content input:focus {
+            border-color: #e91e63;
+            outline: none;
+        }
+
+        .modal-content button {
+            margin-top: 20px;
             padding: 10px 20px;
+            background-color: #4caf50;
             border: none;
+            color: white;
+            font-size: 16px;
             border-radius: 5px;
             cursor: pointer;
         }
 
-        .settings-content button:hover {
-            background-color: #45a049;
+        .modal-content button:hover {
+            background-color: #388e3c;
+        }
+
+        .settings-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #2196f3;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .settings-button:hover {
+            background-color: #1976d2;
         }
     </style>
 </head>
 <body>
-    <div class="main-wrapper">
-        <!-- আপনার HTML অপরিবর্তিত -->
+
+    <!-- Button to open the sales history modal -->
+    <button onclick="openFullSalesHistory()">View Full Sales History</button>
+
+    <!-- Button to open the settings modal -->
+    <button class="settings-button" onclick="openSettings()">Settings</button>
+
+    <!-- Sales History Modal -->
+    <div id="sales-history-modal" class="modal">
+        <div class="modal-content">
+            <h3>Full Sales History</h3>
+            <ul id="full-sales-list"></ul>
+            <button onclick="closeModal()">Close</button>
+        </div>
     </div>
 
-    <!-- Settings Popup -->
-    <div id="settings-popup" class="settings-popup">
-        <div class="settings-content">
-            <h2>Store Settings</h2>
-            <input type="text" id="setting-shop-name" placeholder="Shop Name" required>
-            <input type="text" id="setting-location" placeholder="Shop Location" required>
-            <input type="text" id="setting-mobile" placeholder="Mobile Number" required>
-            <input type="text" id="setting-manager" placeholder="Manager Name (Optional)">
-            <input type="text" id="setting-owner" placeholder="Owner Name (Optional)">
-            <button onclick="saveSettings()">Save</button>
-            <button onclick="closeSettingsPopup()">Close</button>
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <h3>Settings</h3>
+            <form id="settings-form">
+                <label for="shop-name-setting">Shop Name:</label>
+                <input type="text" id="shop-name-setting" value="${localStorage.getItem("shopName") || ''}" placeholder="Enter shop name">
+
+                <label for="shop-location-setting">Shop Location/Address:</label>
+                <input type="text" id="shop-location-setting" value="${localStorage.getItem("shopLocation") || ''}" placeholder="Enter shop location">
+
+                <label for="mobile-number-setting">Mobile Number:</label>
+                <input type="text" id="mobile-number-setting" value="${localStorage.getItem("mobileNumber") || ''}" placeholder="Enter mobile number">
+
+                <label for="manager-name-setting">Manager's Name (Optional):</label>
+                <input type="text" id="manager-name-setting" value="${localStorage.getItem("managerName") || ''}" placeholder="Enter manager's name">
+
+                <label for="owner-name-setting">Owner's Name (Optional):</label>
+                <input type="text" id="owner-name-setting" value="${localStorage.getItem("ownerName") || ''}" placeholder="Enter owner's name">
+
+                <button type="button" onclick="saveSettings()">Save</button>
+            </form>
+            <button onclick="closeSettings()">Close</button>
         </div>
     </div>
 
     <script>
-        let shopDetails = JSON.parse(localStorage.getItem('shopDetails')) || {
-            shopName: '',
-            location: '',
-            mobile: '',
-            manager: '',
-            owner: ''
-        };
+        // Sales Data Example (Replace with real data)
+        const salesData = [
+            { shopName: "Shop A", productName: "Product 1", productQuantity: 10, total: 100, time: "2024-12-01 10:00 AM" },
+            { shopName: "Shop B", productName: "Product 2", productQuantity: 5, total: 50, time: "2024-12-02 11:30 AM" },
+            // Add more sales records as needed
+        ];
 
-        function openSettings() {
-            const popup = document.getElementById('settings-popup');
-            document.getElementById('setting-shop-name').value = shopDetails.shopName || '';
-            document.getElementById('setting-location').value = shopDetails.location || '';
-            document.getElementById('setting-mobile').value = shopDetails.mobile || '';
-            document.getElementById('setting-manager').value = shopDetails.manager || '';
-            document.getElementById('setting-owner').value = shopDetails.owner || '';
-            popup.style.display = 'flex';
+        // Modal Open/Close Logic for Sales History
+        const modal = document.getElementById('sales-history-modal');
+
+        function openModal() {
+            const fullSalesList = document.getElementById('full-sales-list');
+            fullSalesList.innerHTML = '';
+
+            if (salesData.length === 0) {
+                fullSalesList.innerHTML = '<li>No sales recorded yet.</li>';
+            } else {
+                salesData.forEach((sale) => {
+                    const listItem = `
+                        <li>
+                            <strong>Shop:</strong> ${sale.shopName}<br>
+                            <strong>Product:</strong> ${sale.productName}<br>
+                            <strong>Quantity:</strong> ${sale.productQuantity}<br>
+                            <strong>Total:</strong> ৳${sale.total.toFixed(2)}<br>
+                            <strong>Time:</strong> ${sale.time}
+                        </li>
+                    `;
+                    fullSalesList.innerHTML += listItem;
+                });
+            }
+
+            modal.style.display = 'flex';
         }
 
-        function closeSettingsPopup() {
-            document.getElementById('settings-popup').style.display = 'none';
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+
+        // Update Menu Option for Modal
+        function openFullSalesHistory() {
+            openModal();
+        }
+
+        // Add event listener for closing modal on outside click
+        window.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+
+        // Settings Modal Functionality
+        function openSettings() {
+            const settingsPopup = document.getElementById('settings-modal');
+            settingsPopup.style.display = 'flex';
+
+            // Close settings when clicking outside modal
+            window.addEventListener('click', (event) => {
+                if (event.target === settingsPopup) {
+                    closeSettings();
+                }
+            });
+        }
+
+        function closeSettings() {
+            document.getElementById('settings-modal').style.display = 'none';
         }
 
         function saveSettings() {
-            const shopName = document.getElementById('setting-shop-name').value.trim();
-            const location = document.getElementById('setting-location').value.trim();
-            const mobile = document.getElementById('setting-mobile').value.trim();
-            const manager = document.getElementById('setting-manager').value.trim();
-            const owner = document.getElementById('setting-owner').value.trim();
+            const shopName = document.getElementById('shop-name-setting').value.trim();
+            const shopLocation = document.getElementById('shop-location-setting').value.trim();
+            const mobileNumber = document.getElementById('mobile-number-setting').value.trim();
+            const managerName = document.getElementById('manager-name-setting').value.trim();
+            const ownerName = document.getElementById('owner-name-setting').value.trim();
 
-            if (!shopName || !location || !mobile) {
-                alert('Shop Name, Location, and Mobile Number are required.');
+            if (!shopName || !shopLocation || !mobileNumber) {
+                alert('Shop Name, Location, and Mobile Number are required!');
                 return;
             }
 
-            shopDetails = { shopName, location, mobile, manager, owner };
-            localStorage.setItem('shopDetails', JSON.stringify(shopDetails));
-            alert('Settings saved successfully!');
-            closeSettingsPopup();
-        }
+            // Save settings in localStorage
+            localStorage.setItem("shopName", shopName);
+            localStorage.setItem("shopLocation", shopLocation);
+            localStorage.setItem("mobileNumber", mobileNumber);
+            localStorage.setItem("managerName", managerName);
+            localStorage.setItem("ownerName", ownerName);
 
-        // Load settings on startup
-        window.onload = function () {
-            const savedDetails = JSON.parse(localStorage.getItem('shopDetails'));
-            if (savedDetails) {
-                shopDetails = savedDetails;
-            }
-        };
+            alert('Settings saved successfully.');
+            closeSettings();
+        }
     </script>
+
 </body>
 </html>

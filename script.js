@@ -36,6 +36,7 @@ function generateSale() {
 function updateLastSaleView(lastSale) {
     const saleSummary = document.getElementById("sale-summary");
     saleSummary.innerHTML = `
+        <h3>Last Sale Summary:</h3>
         <p><strong>Shop:</strong> ${lastSale.shopName}</p>
         <p><strong>Product:</strong> ${lastSale.productName}</p>
         <p><strong>Quantity:</strong> ${lastSale.productQuantity}</p>

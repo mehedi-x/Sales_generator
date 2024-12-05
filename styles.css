@@ -128,36 +128,38 @@ header button:hover {
     width: 60%;
     max-width: 600px;
     color: #fff;
+    text-align: center;
+}
+
+.modal-content h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.modal-content p {
+    font-size: 16px;
+    margin-bottom: 30px;
 }
 
 .modal-content button {
-    background-color: #ff5722; /* Red for close/cancel buttons */
-    color: #fff;
-    padding: 10px 15px;
+    background-color: #4caf50;
+    color: white;
     border: none;
+    padding: 10px 20px;
+    font-size: 18px;
+    margin: 5px;
     cursor: pointer;
-    font-size: 16px;
     border-radius: 5px;
-    margin-top: 10px;
 }
 
 .modal-content button:hover {
-    background-color: #d84315;
+    background-color: #388e3c;
 }
 
-#full-sales-list {
-    margin-top: 20px;
-    padding: 0;
+.modal-content button:nth-child(2) {
+    background-color: #e91e63;
 }
 
-#full-sales-list li {
-    list-style-type: none;
-    padding: 10px;
-    background-color: #444;
-    margin-bottom: 5px;
-    border-radius: 5px;
-}
-
-#full-sales-list li strong {
-    color: #ff9800;
+.modal-content button:nth-child(2):hover {
+    background-color: #c2185b;
 }

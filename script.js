@@ -62,6 +62,18 @@ function resetForm() {
     document.getElementById("product-price").value = "";
     document.getElementById("product-quantity").value = "";
 }
+// Function to open the menu (show the menu)
+function openMenu() {
+    const menuPopup = document.getElementById('menu-popup');
+    menuPopup.style.display = 'block'; // Show the menu
+    menuPopup.setAttribute('aria-hidden', 'false'); // Make the menu accessible to screen readers
+}
+// Function to close the menu (hide the menu)
+function closeMenu() {
+    const menuPopup = document.getElementById('menu-popup');
+    menuPopup.style.display = 'none'; // Hide the menu
+    menuPopup.setAttribute('aria-hidden', 'true'); // Hide from screen readers
+}
 
 // Open close store modal and show full sales history
 function openCloseStoreModal() {

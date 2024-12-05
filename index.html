@@ -8,6 +8,44 @@
         body {
             font-family: Arial, sans-serif;
         }
+        /* Sidebar Menu Styling */
+        .sidebar {
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #333;
+            color: white;
+            height: 100%;
+            padding-top: 20px;
+            display: none; /* Initially hidden */
+            z-index: 1;
+        }
+        .sidebar a {
+            padding: 10px;
+            text-decoration: none;
+            font-size: 18px;
+            color: white;
+            display: block;
+        }
+        .sidebar a:hover {
+            background-color: #575757;
+        }
+        .open-btn {
+            font-size: 20px;
+            cursor: pointer;
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            border: none;
+        }
+        .close-btn {
+            font-size: 30px;
+            position: absolute;
+            top: 0;
+            right: 20px;
+            cursor: pointer;
+        }
         .section {
             display: none;
             margin-top: 20px;
@@ -37,11 +75,19 @@
     </style>
 </head>
 <body>
+
     <h1>Store Management System</h1>
 
-    <!-- Navigation Buttons -->
-    <button onclick="openProductEntry()">Product Entry</button>
-    <button onclick="openSettings()">Settings</button>
+    <!-- Button to Open Sidebar Menu -->
+    <button class="open-btn" onclick="toggleSidebar()">Open Menu</button>
+
+    <!-- Sidebar Menu -->
+    <div id="sidebar" class="sidebar">
+        <span class="close-btn" onclick="toggleSidebar()">&times;</span>
+        <a href="javascript:void(0)" onclick="openProductEntry()">Product Entry</a>
+        <a href="javascript:void(0)" onclick="openSettings()">Settings</a>
+        <a href="javascript:void(0)" onclick="openCloseStoreModal()">Close Store</a>
+    </div>
 
     <!-- Product Entry Section -->
     <div id="product-entry-section" class="section">
@@ -78,6 +124,21 @@
             <input type="text" id="currency-symbol" value="৳" maxlength="1">
         </div>
         <button onclick="applySettings()">Apply Settings</button>
+    </div>
+
+    <!-- Close Store Modal -->
+    <div id="close-store-modal" style="display:none;">
+        <h3>Are you sure you want to close the store?</h3>
+        <button onclick="closeStore()">Yes, Close Store</button>
+        <button onclick="cancelStoreClosure()">Cancel</button>
+    </div>
+
+    <!-- Full Sales List Modal -->
+    <div id="full-sales-list-modal" style="display:none;">
+        <h3>Full Sales History</h3>
+        <ul id="full-sales-list"></ul>
+        <button onclick="downloadSalesHistory()">Download Sales History</button>
+        <button onclick="closeSalesHistoryModal()">Close</button>
     </div>
 
     <script>
@@ -168,12 +229,61 @@
             alert("Settings applied!");
         }
 
-        // Initialize settings on page load
-        window.onload = function() {
-            const savedCurrencySymbol = localStorage.getItem("currencySymbol");
-            if (savedCurrencySymbol) {
-                document.getElementById("currency-symbol").value = savedCurrencySymbol;
-            }
+        // Toggle Sidebar Menu visibility
+        function toggleSidebar() {
+            const sidebar = document.getElementById("sidebar");
+            sidebar.style.display = (sidebar.style.display === "none" || sidebar.style.display === "") ? "block" : "none";
+        }
+
+        // Open Close Store Modal and show full sales history
+        function openCloseStoreModal() {
+            const fullSalesList = document.getElementById("full-sales-list");
+            fullSalesList.innerHTML = "";
+
+            salesData.forEach((sale, index) => {
+                const listItem = document.createElement("li");
+                listItem.innerHTML = `
+                    <strong>${index + 1}.</strong> Shop: ${sale.shopName}, Product: ${sale.productName},
+                    Quantity: ${sale.productQuantity}, Total: ৳${sale.total.toFixed(2)}
+                `;
+                fullSalesList.appendChild(listItem);
+            });
+
+            document.getElementById("close-store-modal").style.display = "block";
+        }
+
+        // Download sales history as PDF
+        function downloadSalesHistory() {
+            const salesSummary = salesData
+                .map(
+                    (sale, index) =>
+                        `${index + 1}. Shop: ${sale.shopName}, Product: ${sale.productName}, Quantity: ${sale.productQuantity}, Total: ৳${sale.total.toFixed(2)}`
+                )
+                .join("\n");
+
+            const blob = new Blob([salesSummary], { type: "application/pdf" });
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = "Sales_History.pdf";
+            link.click();
+
+            URL.revokeObjectURL(url);
+        }
+
+        // Close store and clear sales data
+        function closeStore() {
+            salesData = [];
+            localStorage.removeItem("salesData");
+            document.getElementById("close-store-modal").style.display = "none";
+            alert("Store closed and all sales data cleared!");
+            location.reload();
+        }
+
+        // Cancel store closure
+        function cancelStoreClosure() {
+            document.getElementById("close-store-modal").style.display = "none";
         }
     </script>
 </body>

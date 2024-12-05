@@ -63,21 +63,35 @@ function resetForm() {
     document.getElementById("product-quantity").value = "";
 }
 
-// Open close store modal and show full sales history
+// Open the Close Store Modal
 function openCloseStoreModal() {
-    const fullSalesList = document.getElementById("full-sales-list");
-    fullSalesList.innerHTML = "";
+    document.getElementById("close-store-modal").style.display = "flex";
+}
 
-    salesData.forEach((sale, index) => {
-        const listItem = document.createElement("li");
-        listItem.innerHTML = `
-            <strong>${index + 1}.</strong> Shop: ${sale.shopName}, Product: ${sale.productName},
-            Quantity: ${sale.productQuantity}, Total: ৳${sale.total.toFixed(2)}
-        `;
-        fullSalesList.appendChild(listItem);
-    });
+// Close the Modal without taking any action
+function cancelStoreClosure() {
+    document.getElementById("close-store-modal").style.display = "none";
+}
 
-    document.getElementById("close-store-modal").style.display = "block";
+// Close store and clear sales data after confirmation
+function closeStore() {
+    const confirmation = confirm("Are you sure you want to close the store and clear all sales data?");
+    
+    if (confirmation) {
+        // Clear sales data and remove from localStorage
+        salesData = [];
+        localStorage.removeItem("salesData");
+        
+        // Hide modal and show a success message
+        document.getElementById("close-store-modal").style.display = "none";
+        alert("Store closed and all sales data cleared!");
+        
+        // Optionally reload the page to reset the interface
+        location.reload();
+    } else {
+        // If the user cancels, simply hide the modal without clearing data
+        document.getElementById("close-store-modal").style.display = "none";
+    }
 }
 
 // Download sales history as PDF

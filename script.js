@@ -9,7 +9,7 @@ function generateSale() {
     const productQuantity = parseFloat(document.getElementById("product-quantity").value) || 1;
 
     if (!shopName || !productName || isNaN(productPrice)) {
-        alert("Please fill out all required fields.");
+        alert("Please fill out all required fields.");F
         return;
     }
 
@@ -80,7 +80,7 @@ function openCloseStoreModal() {
 }
 
 // Download sales history as PDF
-function downloadSalesHistory() {
+function SalesHistory() {
     const salesSummary = salesData
         .map(
             (sale, index) =>

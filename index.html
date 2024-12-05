@@ -469,6 +469,18 @@
     let salesData = JSON.parse(localStorage.getItem("salesData")) || [];
 
     let shopNameStored = localStorage.getItem("shopName");
+<!-- Modal for Store Closure Confirmation -->
+<div id="close-store-modal" class="modal">
+    <div class="modal-content">
+        <h2>Are you sure you want to close the store?</h2>
+        <p>This will clear all sales data permanently.</p>
+        <button onclick="closeStore()">Yes, Close Store</button>
+        <button onclick="cancelStoreClosure()">Cancel</button>
+    </div>
+</div>
+
+<!-- Close Store Button (visible on the main page) -->
+<button onclick="openCloseStoreModal()">Close Store</button>
 
     // Menu toggle logic
 

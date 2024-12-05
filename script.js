@@ -120,19 +120,3 @@ window.onload = function () {
         updateLastSaleView(salesData[salesData.length - 1]);
     }
 };
-
-// Open Product Entry section
-function openProductEntry() {
-    // Show the Product Entry Section (or focus the form)
-    const productEntrySection = document.getElementById("product-entry-section");
-    productEntrySection.style.display = "block"; // Shows the section
-    alert("Opening Product Entry Section..."); // You can replace this with more functionality later.
-}
-
-// Open Settings section
-function openSettings() {
-    // Show the Settings Section (or open a settings modal)
-    const settingsSection = document.getElementById("settings-section");
-    settingsSection.style.display = "block"; // Shows the section
-    alert("Opening Settings..."); // You can replace this with more functionality later.
-}

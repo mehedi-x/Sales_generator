@@ -231,11 +231,6 @@
         <button id="close-store">Close Store</button>
       </div>
     </div>
-
-    <!-- Settings Button -->
-    <div class="settings-container">
-      <button class="settings-button" id="open-settings">Open Settings</button>
-    </div>
   </main>
 
   <script>
@@ -313,7 +308,7 @@
       totalProductsDisplay.textContent = storeData.totalProducts;
     }
 
-    document.getElementById("open-settings").addEventListener("click", () => {
+    document.getElementById("settings-icon").addEventListener("click", () => {
       loadingSection.style.display = "block";
       setTimeout(() => {
         loadingSection.style.display = "none";

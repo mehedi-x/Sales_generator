@@ -13,7 +13,7 @@
     }
 
     body {
-      font-family: 'Roboto', sans-serif;
+      font-family: 'Arial', sans-serif;
       background-color: #121212;
       color: #ffffff;
     }
@@ -57,6 +57,20 @@
       box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
     }
 
+    .hidden {
+      display: none;
+    }
+
+    .loading-icon {
+      font-size: 2rem;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
     input, button {
       margin: 10px;
       padding: 10px;
@@ -80,22 +94,12 @@
     button:hover {
       background-color: #ffaa00;
     }
-
-    .hidden {
-      display: none;
-    }
-
-    canvas {
-      max-width: 100%;
-      margin: 20px auto;
-      display: block;
-    }
   </style>
 </head>
 <body>
   <header>
     <h1>Store Management System</h1>
-    <div class="settings-icon" onclick="toggleDatabase()">⚙️</div>
+    <div class="settings-icon" onclick="loadDashboard()">⚙️</div>
   </header>
 
   <div class="container">
@@ -103,90 +107,71 @@
     <div id="main-page" class="card">
       <h2>Set Your Store Name</h2>
       <input type="text" id="storeNameInput" placeholder="Enter Store Name">
-      <button id="startStoreBtn" onclick="setStoreName()">Start</button>
+      <button onclick="setStoreName()">Start</button>
     </div>
 
     <!-- Store Name Display -->
-    <div id="store-name-card" class="card hidden">
+    <div id="store-info-card" class="card hidden">
       <h2 id="storeNameDisplay"></h2>
+      <p>Total Sales: $<span id="totalSales">0</span></p>
     </div>
 
     <!-- Dashboard -->
-    <div id="dashboard-card" class="card hidden">
-      <h3>Dashboard</h3>
-      <canvas id="salesChart"></canvas>
+    <div id="loading-card" class="card hidden">
+      <h2>Loading Dashboard...</h2>
+      <div class="loading-icon">⏳</div>
     </div>
 
-    <!-- Database Settings -->
-    <div id="database-card" class="card hidden">
-      <h3>Database Options</h3>
-      <p>Database settings will be displayed here.</p>
-      <button onclick="replaceEntry()">Replace Entry</button>
+    <div id="dashboard-card" class="card hidden">
+      <h2>Dashboard</h2>
+      <p>Here you can view all details:</p>
+      <ul>
+        <li>Total Sales: $<span id="totalSalesDetails">0</span></li>
+        <li>Total Products Sold: <span id="totalProductsSold">0</span></li>
+        <li>Last Bill Amount: $<span id="lastBill">0</span></li>
+      </ul>
+      <button onclick="printLastBill()">Print Last Bill</button>
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
     let storeName = '';
     let totalSales = 0;
     let totalProductsSold = 0;
+    let lastBillAmount = 0;
 
     // Set Store Name
     function setStoreName() {
       const storeInput = document.getElementById('storeNameInput').value.trim();
       if (storeInput) {
         storeName = storeInput;
-
-        // Update UI
         document.getElementById('main-page').classList.add('hidden');
-        document.getElementById('store-name-card').classList.remove('hidden');
+        document.getElementById('store-info-card').classList.remove('hidden');
         document.getElementById('storeNameDisplay').textContent = `Welcome to ${storeName}`;
-        document.getElementById('dashboard-card').classList.remove('hidden');
-
-        loadChart();
-        alert(`Welcome to ${storeName}!`);
       } else {
         alert('Please enter a valid store name!');
       }
     }
 
-    // Load Chart
-    function loadChart() {
-      const ctx = document.getElementById('salesChart').getContext('2d');
-      new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: ['Total Sales', 'Products Sold'],
-          datasets: [{
-            label: 'Store Data',
-            data: [totalSales, totalProductsSold],
-            backgroundColor: ['#ffcc00', '#ffaa00']
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              display: false
-            }
-          }
-        }
-      });
+    // Load Dashboard
+    function loadDashboard() {
+      document.getElementById('loading-card').classList.remove('hidden');
+      setTimeout(() => {
+        document.getElementById('loading-card').classList.add('hidden');
+        document.getElementById('dashboard-card').classList.remove('hidden');
+        document.getElementById('totalSalesDetails').textContent = totalSales;
+        document.getElementById('totalProductsSold').textContent = totalProductsSold;
+        document.getElementById('lastBill').textContent = lastBillAmount;
+      }, 2000);
     }
 
-    // Toggle Database Settings
-    function toggleDatabase() {
-      const databaseCard = document.getElementById('database-card');
-      if (databaseCard.classList.contains('hidden')) {
-        databaseCard.classList.remove('hidden');
-      } else {
-        databaseCard.classList.add('hidden');
-      }
-    }
-
-    // Replace Entry Section
-    function replaceEntry() {
-      document.getElementById('database-card').classList.add('hidden');
+    // Print Last Bill
+    function printLastBill() {
+      const printContent = `Last Bill Amount: $${lastBillAmount}`;
+      const newWindow = window.open('', '', 'width=300,height=200');
+      newWindow.document.write(`<p>${printContent}</p>`);
+      newWindow.print();
+      newWindow.close();
     }
   </script>
 </body>

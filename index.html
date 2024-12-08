@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Store Management System</title>
+  <title>Modern Store Management</title>
   <style>
     /* Global Styles */
     * {
@@ -62,6 +62,23 @@
 
     .dashboard {
       display: none;
+      padding: 20px;
+      background-color: #1e1e1e;
+      border: 1px solid #333333;
+      border-radius: 10px;
+      margin: 10px;
+      text-align: left;
+    }
+
+    .dashboard h2 {
+      margin-bottom: 20px;
+    }
+
+    .dashboard-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      border-bottom: 1px solid #333333;
     }
 
     button {
@@ -120,6 +137,24 @@
       <input type="number" id="product-quantity" placeholder="Product Quantity">
       <button id="generate-sale">Generate Sale</button>
     </div>
+
+    <!-- Dashboard Section -->
+    <div id="dashboard" class="dashboard hidden">
+      <h2>Dashboard</h2>
+      <div class="dashboard-item">
+        <span>Total Sales:</span>
+        <span id="dashboard-sales">৳0</span>
+      </div>
+      <div class="dashboard-item">
+        <span>Last Sale:</span>
+        <span id="last-sale">N/A</span>
+      </div>
+      <div class="dashboard-item">
+        <span>Wholesale Orders:</span>
+        <span id="wholesale-orders">0</span>
+      </div>
+      <button id="close-dashboard">Close Dashboard</button>
+    </div>
   </main>
 
   <script>
@@ -127,34 +162,56 @@
     const storeSection = document.getElementById("store-section");
     const totalSalesSection = document.getElementById("total-sales-section");
     const productSection = document.getElementById("product-section");
+    const dashboard = document.getElementById("dashboard");
+    const settingsIcon = document.getElementById("settings-icon");
+    const closeDashboard = document.getElementById("close-dashboard");
     const storeNameInput = document.getElementById("store-name");
     const startStoreButton = document.getElementById("start-store");
+    const totalSales = document.getElementById("total-sales");
+    const dashboardSales = document.getElementById("dashboard-sales");
+    const lastSale = document.getElementById("last-sale");
 
-    // Check if store name is already saved in localStorage
+    let salesData = {
+      total: 0,
+      last: "N/A",
+      wholesaleOrders: 0,
+    };
+
+    // Load saved data
     document.addEventListener("DOMContentLoaded", () => {
       const savedStoreName = localStorage.getItem("storeName");
       if (savedStoreName) {
-        // If store name exists, show Total Sales and Product Entry
         storeSection.classList.add("hidden");
         totalSalesSection.classList.remove("hidden");
         productSection.classList.remove("hidden");
       }
     });
 
-    // Handle Start Store button click
+    // Start Store
     startStoreButton.addEventListener("click", () => {
       const storeName = storeNameInput.value.trim();
       if (storeName) {
-        // Save store name in localStorage
         localStorage.setItem("storeName", storeName);
-
-        // Hide store setup section and show Total Sales section
         storeSection.classList.add("hidden");
         totalSalesSection.classList.remove("hidden");
         productSection.classList.remove("hidden");
       } else {
         alert("Please enter a valid store name.");
       }
+    });
+
+    // Settings Icon Click
+    settingsIcon.addEventListener("click", () => {
+      totalSalesSection.classList.add("hidden");
+      productSection.classList.add("hidden");
+      dashboard.classList.remove("hidden");
+    });
+
+    // Close Dashboard
+    closeDashboard.addEventListener("click", () => {
+      totalSalesSection.classList.remove("hidden");
+      productSection.classList.remove("hidden");
+      dashboard.classList.add("hidden");
     });
   </script>
 </body>

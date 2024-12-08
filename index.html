@@ -120,30 +120,20 @@
   </header>
 
   <div class="container">
-    <!-- Main Page -->
-    <div id="main-page" class="card">
-      <h2>Set Your Store Name</h2>
-      <input type="text" id="storeNameInput" placeholder="Enter Store Name">
-      <button onclick="setStoreName()">Start</button>
-    </div>
-
-    <!-- Store Info -->
-    <div id="store-info-card" class="card hidden">
-      <h2 id="storeNameDisplay"></h2>
-      <p id="totalSalesDisplay">Total Sales: ৳0.00</p>
-    </div>
-
     <!-- Sales Generate Section -->
-    <div id="sales-generate-card" class="card hidden">
+    <div id="sales-generate-card" class="card">
       <h2>Generate Sale</h2>
+      <!-- Product Name -->
       <label for="productName">Product Name:</label>
       <input type="text" id="productName" placeholder="Enter Product Name" required>
 
-      <label for="quantity">Quantity (Optional):</label>
-      <input type="number" id="quantity" placeholder="Enter Quantity">
-
+      <!-- Product Price -->
       <label for="price">Price per Unit:</label>
       <input type="number" id="price" placeholder="Enter Price" required>
+
+      <!-- Quantity (Optional) -->
+      <label for="quantity">Quantity (Optional):</label>
+      <input type="number" id="quantity" placeholder="Enter Quantity">
 
       <button onclick="generateSale()">Generate Sale</button>
     </div>
@@ -173,26 +163,8 @@
     let salesData = JSON.parse(localStorage.getItem('salesData')) || [];
     
     if (storeName) {
-      document.getElementById('main-page').classList.add('hidden');
-      document.getElementById('store-info-card').classList.remove('hidden');
       document.getElementById('sales-generate-card').classList.remove('hidden');
-      document.getElementById('storeNameDisplay').textContent = `Welcome to ${storeName}`;
       updateTotalSales();
-    }
-
-    function setStoreName() {
-      const storeInput = document.getElementById('storeNameInput').value.trim();
-      if (storeInput) {
-        storeName = storeInput;
-        localStorage.setItem('storeName', storeName);
-        document.getElementById('main-page').classList.add('hidden');
-        document.getElementById('store-info-card').classList.remove('hidden');
-        document.getElementById('sales-generate-card').classList.remove('hidden');
-        document.getElementById('storeNameDisplay').textContent = `Welcome to ${storeName}`;
-        updateTotalSales();
-      } else {
-        alert('Please enter a valid store name!');
-      }
     }
 
     function generateSale() {
@@ -224,7 +196,6 @@
 
     function updateTotalSales() {
       const totalSales = salesData.reduce((total, sale) => total + sale.total, 0);
-      document.getElementById('totalSalesDisplay').textContent = `Total Sales: ৳${totalSales.toFixed(2)}`;
       document.getElementById('dashboardTotalSales').textContent = `৳${totalSales.toFixed(2)}`;
     }
 
@@ -250,14 +221,8 @@
     }
 
     function toggleSettings() {
-      document.getElementById('main-page').classList.add('hidden');
-      document.getElementById('store-info-card').classList.add('hidden');
       document.getElementById('sales-generate-card').classList.add('hidden');
-      document.getElementById('loadingIcon').classList.remove('hidden');
-      setTimeout(() => {
-        document.getElementById('loadingIcon').classList.add('hidden');
-        document.getElementById('settings-card').classList.remove('hidden');
-      }, 1000);
+      document.getElementById('settings-card').classList.remove('hidden');
     }
 
     function closeStore() {
@@ -268,9 +233,7 @@
 
     function goHome() {
       document.getElementById('settings-card').classList.add('hidden');
-      document.getElementById('main-page').classList.remove('hidden');
-      document.getElementById('store-info-card').classList.add('hidden');
-      document.getElementById('sales-generate-card').classList.add('hidden');
+      document.getElementById('sales-generate-card').classList.remove('hidden');
     }
   </script>
 </body>

@@ -106,13 +106,9 @@
       <button id="startStoreBtn" onclick="setStoreName()">Start</button>
     </div>
 
-    <!-- Entry Section -->
-    <div id="product-entry-card" class="card hidden">
-      <h2>Product Entry</h2>
-      <input type="text" id="productName" placeholder="Product Name">
-      <input type="number" id="productPrice" placeholder="Product Price">
-      <input type="number" id="productQuantity" placeholder="Product Quantity">
-      <button onclick="generateSale()">Add</button>
+    <!-- Store Name Display -->
+    <div id="store-name-card" class="card hidden">
+      <h2 id="storeNameDisplay"></h2>
     </div>
 
     <!-- Dashboard -->
@@ -140,33 +136,17 @@
       const storeInput = document.getElementById('storeNameInput').value.trim();
       if (storeInput) {
         storeName = storeInput;
+
+        // Update UI
         document.getElementById('main-page').classList.add('hidden');
-        document.getElementById('product-entry-card').classList.remove('hidden');
+        document.getElementById('store-name-card').classList.remove('hidden');
+        document.getElementById('storeNameDisplay').textContent = `Welcome to ${storeName}`;
         document.getElementById('dashboard-card').classList.remove('hidden');
+
         loadChart();
         alert(`Welcome to ${storeName}!`);
       } else {
         alert('Please enter a valid store name!');
-      }
-    }
-
-    // Generate Sale
-    function generateSale() {
-      const productName = document.getElementById('productName').value.trim();
-      const productPrice = parseFloat(document.getElementById('productPrice').value);
-      const productQuantity = parseInt(document.getElementById('productQuantity').value);
-
-      if (productName && productPrice > 0 && productQuantity > 0) {
-        totalSales += productPrice * productQuantity;
-        totalProductsSold += productQuantity;
-
-        loadChart();
-        alert('Product added successfully!');
-        document.getElementById('productName').value = '';
-        document.getElementById('productPrice').value = '';
-        document.getElementById('productQuantity').value = '';
-      } else {
-        alert('Please fill out all fields with valid values.');
       }
     }
 
@@ -197,10 +177,8 @@
     // Toggle Database Settings
     function toggleDatabase() {
       const databaseCard = document.getElementById('database-card');
-      const entryCard = document.getElementById('product-entry-card');
       if (databaseCard.classList.contains('hidden')) {
         databaseCard.classList.remove('hidden');
-        entryCard.classList.add('hidden');
       } else {
         databaseCard.classList.add('hidden');
       }
@@ -209,7 +187,6 @@
     // Replace Entry Section
     function replaceEntry() {
       document.getElementById('database-card').classList.add('hidden');
-      document.getElementById('product-entry-card').classList.remove('hidden');
     }
   </script>
 </body>

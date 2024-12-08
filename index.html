@@ -3,60 +3,181 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Android-Style Store Manager</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Modern Store Management</title>
+  <style>
+    /* Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #121212;
+      color: #ffffff;
+      line-height: 1.6;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      background-color: #1f1f1f;
+      border-bottom: 1px solid #333333;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #ffffff;
+    }
+
+    header button {
+      background: none;
+      border: none;
+      color: #ffffff;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    /* Main Content */
+    main {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .card {
+      background-color: #1e1e1e;
+      border: 1px solid #333333;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
+    }
+
+    .card h2 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+    }
+
+    input[type="text"], input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #444444;
+      border-radius: 5px;
+      background-color: #2a2a2a;
+      color: #ffffff;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #ffcc00;
+      border: none;
+      border-radius: 5px;
+      color: #121212;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #ffaa00;
+    }
+
+    /* Total Sales */
+    .total-sales {
+      background-color: #1e1e1e;
+      text-align: center;
+      padding: 15px;
+      border-radius: 10px;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 10px;
+      background-color: #1f1f1f;
+      color: #888888;
+      font-size: 0.9rem;
+    }
+
+    footer a {
+      color: #ffcc00;
+      text-decoration: none;
+    }
+  </style>
 </head>
 <body>
-  <div id="app">
-    <!-- Navigation Drawer -->
-    <nav id="drawer">
-      <ul>
-        <li><button id="view-overview">📊 Overview</button></li>
-        <li><button id="view-history">🕒 Sales History</button></li>
-        <li><button id="download-history">⬇️ Download Data</button></li>
-        <li><button id="close-store">🔒 Close Store</button></li>
-      </ul>
-    </nav>
+  <!-- Header -->
+  <header>
+    <h1>Store Manager</h1>
+    <button id="menu-toggle">☰</button>
+  </header>
 
-    <!-- Header -->
-    <header>
-      <button id="menu-toggle">☰</button>
-      <h1>Store Manager</h1>
-    </header>
+  <!-- Main Content -->
+  <main>
+    <!-- Store Name Section -->
+    <div class="card">
+      <h2>Set Your Store Name</h2>
+      <input type="text" id="store-name" placeholder="Enter Store Name">
+      <button id="start-store">Start Store</button>
+    </div>
 
-    <!-- Main Content -->
-    <main>
-      <section id="dashboard">
-        <!-- Store Info -->
-        <div id="store-info">
-          <h2>Set Store Name</h2>
-          <input type="text" id="store-name-input" placeholder="Enter Store Name">
-          <button id="set-store">Start</button>
-        </div>
+    <!-- Add Product Section -->
+    <div class="card">
+      <h2>Add Product</h2>
+      <input type="text" id="product-name" placeholder="Product Name">
+      <input type="number" id="product-price" placeholder="Price">
+      <input type="number" id="product-quantity" placeholder="Quantity">
+      <button id="add-product">Add Product</button>
+    </div>
 
-        <!-- Add Product -->
-        <div id="add-product">
-          <h2>Add New Product</h2>
-          <input type="text" id="product-name" placeholder="Product Name">
-          <input type="number" id="product-price" placeholder="Price">
-          <input type="number" id="product-quantity" placeholder="Quantity">
-          <button id="generate-sale">Generate Sale</button>
-        </div>
+    <!-- Last Sale Summary -->
+    <div class="card">
+      <h2>Last Sale Summary</h2>
+      <p>No sales recorded yet.</p>
+    </div>
 
-        <!-- Last Sale -->
-        <div id="last-sale">
-          <h2>Last Sale Summary</h2>
-          <p>No sales recorded yet.</p>
-        </div>
-      </section>
+    <!-- Total Sales Display -->
+    <div class="total-sales">
+      Total Sales: ৳<span id="total-sales">0</span>
+    </div>
+  </main>
 
-      <!-- Total Sales -->
-      <div id="total-sales-display">
-        <h2>Total Sales: <span id="total-sales">৳0</span></h2>
-      </div>
-    </main>
-  </div>
+  <!-- Footer -->
+  <footer>
+    &copy; 2024 <a href="#">Store Manager Inc.</a> All rights reserved.
+  </footer>
 
-  <script src="script.js"></script>
+  <script>
+    // JavaScript for basic functionality
+    document.getElementById("start-store").addEventListener("click", () => {
+      const storeName = document.getElementById("store-name").value;
+      if (storeName.trim() !== "") {
+        alert(`Store "${storeName}" started successfully!`);
+      } else {
+        alert("Please enter a valid store name.");
+      }
+    });
+
+    document.getElementById("add-product").addEventListener("click", () => {
+      const productName = document.getElementById("product-name").value;
+      const productPrice = parseFloat(document.getElementById("product-price").value);
+      const productQuantity = parseInt(document.getElementById("product-quantity").value);
+
+      if (productName && productPrice > 0 && productQuantity > 0) {
+        alert(`Product "${productName}" added successfully!`);
+      } else {
+        alert("Please enter valid product details.");
+      }
+    });
+  </script>
 </body>
 </html>

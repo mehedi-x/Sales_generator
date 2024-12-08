@@ -32,14 +32,14 @@
       color: #ffffff;
     }
 
-    .menu-icon {
+    .settings-icon {
       font-size: 1.5rem;
       cursor: pointer;
       color: #ffcc00;
       transition: color 0.3s ease;
     }
 
-    .menu-icon:hover {
+    .settings-icon:hover {
       color: #ffaa00;
     }
 
@@ -85,13 +85,13 @@
       background-color: #ffaa00;
     }
 
-    .last-sale {
+    .last-sale, .dashboard, .sales-history {
       text-align: left;
       margin-top: 20px;
       font-size: 0.9rem;
     }
 
-    .print-button {
+    .print-button, .home-button {
       display: block;
       margin: 20px auto;
       background-color: #00cc00;
@@ -102,15 +102,21 @@
       border-radius: 5px;
     }
 
-    .print-button:hover {
+    .print-button:hover, .home-button:hover {
       background-color: #009900;
+    }
+
+    .loading {
+      text-align: center;
+      font-size: 18px;
+      margin: 20px auto;
     }
   </style>
 </head>
 <body>
   <header>
     <h1>Store Management</h1>
-    <div class="menu-icon" onclick="toggleLastSale()">☰</div>
+    <div class="settings-icon" onclick="openSettings()">⚙</div>
   </header>
 
   <div class="container">
@@ -138,11 +144,21 @@
       <button onclick="generateSale()">Generate Sale</button>
     </div>
 
-    <!-- Last Sale Section -->
-    <div id="last-sale-card" class="card hidden">
-      <h2>Last Sale</h2>
-      <div class="last-sale" id="lastSaleDetails"></div>
-      <button class="print-button" onclick="printLastSale()">Print Last Sale</button>
+    <!-- Dashboard Section -->
+    <div id="dashboard-card" class="card hidden">
+      <div class="loading hidden" id="loading">Loading...</div>
+      <div id="dashboard-content" class="hidden">
+        <button class="home-button" onclick="goHome()">Home</button>
+        <div class="dashboard">
+          <h2>Total Sales: ৳<span id="total-sales">0</span></h2>
+          <h3>Last Sale:</h3>
+          <div id="last-sale-details"></div>
+        </div>
+        <div class="sales-history">
+          <h3>Sales History:</h3>
+          <div id="sales-history">No history available.</div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -150,22 +166,15 @@
     let storeName = localStorage.getItem('storeName') || '';
     let salesData = JSON.parse(localStorage.getItem('salesData')) || [];
 
-    if (storeName) {
-      document.getElementById('main-page').classList.add('hidden');
-      document.getElementById('store-info-card').classList.remove('hidden');
-      document.getElementById('sales-generate-card').classList.remove('hidden');
-      document.getElementById('storeNameDisplay').textContent = `Welcome to ${storeName}`;
-    }
-
     function setStoreName() {
       const storeInput = document.getElementById('storeNameInput').value.trim();
       if (storeInput) {
         storeName = storeInput;
         localStorage.setItem('storeName', storeName);
+        document.getElementById('storeNameDisplay').textContent = `Welcome to ${storeName}`;
         document.getElementById('main-page').classList.add('hidden');
         document.getElementById('store-info-card').classList.remove('hidden');
         document.getElementById('sales-generate-card').classList.remove('hidden');
-        document.getElementById('storeNameDisplay').textContent = `Welcome to ${storeName}`;
       } else {
         alert('Please enter a valid store name!');
       }
@@ -178,59 +187,31 @@
 
       if (productName && price) {
         const total = parseFloat(price) * parseInt(quantity);
-        const sale = {
-          storeName,
-          productName,
-          quantity: parseInt(quantity),
-          price: parseFloat(price),
-          total
-        };
+        const sale = { productName, quantity, price, total };
         salesData.push(sale);
         localStorage.setItem('salesData', JSON.stringify(salesData));
-        updateLastSale(sale);
-        alert(`Sale Generated for: ${productName}, Total: ৳${total.toFixed(2)}`);
-        document.getElementById('productName').value = '';
-        document.getElementById('quantity').value = '';
-        document.getElementById('price').value = '';
+        alert(`Sale generated! Total: ৳${total.toFixed(2)}`);
       } else {
-        alert('Please fill in all required fields!');
+        alert('Fill required fields!');
       }
     }
 
-    function updateLastSale(sale) {
-      const lastSaleDetails = `
-        <p><strong>Store Name:</strong> ${sale.storeName}</p>
-        <p><strong>Product Name:</strong> ${sale.productName}</p>
-        <p><strong>Quantity:</strong> ${sale.quantity}</p>
-        <p><strong>Price per Unit:</strong> ৳${sale.price.toFixed(2)}</p>
-        <p><strong>Total:</strong> ৳${sale.total.toFixed(2)}</p>
-      `;
-      document.getElementById('lastSaleDetails').innerHTML = lastSaleDetails;
+    function openSettings() {
+      document.getElementById('main-page').classList.add('hidden');
+      document.getElementById('sales-generate-card').classList.add('hidden');
+      document.getElementById('dashboard-card').classList.remove('hidden');
+      document.getElementById('loading').classList.remove('hidden');
+
+      setTimeout(() => {
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('dashboard-content').classList.remove('hidden');
+      }, 1000);
     }
 
-    function toggleLastSale() {
-      const lastSaleCard = document.getElementById('last-sale-card');
-      if (lastSaleCard.classList.contains('hidden')) {
-        const lastSale = salesData[salesData.length - 1];
-        if (lastSale) {
-          updateLastSale(lastSale);
-          lastSaleCard.classList.remove('hidden');
-        } else {
-          alert('No sales data available!');
-        }
-      } else {
-        lastSaleCard.classList.add('hidden');
-      }
-    }
-
-    function printLastSale() {
-      const printContent = document.getElementById('lastSaleDetails').innerHTML;
-      const printWindow = window.open('', '_blank');
-      printWindow.document.write('<html><head><title>Print Last Sale</title></head><body>');
-      printWindow.document.write(printContent);
-      printWindow.document.write('</body></html>');
-      printWindow.document.close();
-      printWindow.print();
+    function goHome() {
+      document.getElementById('dashboard-card').classList.add('hidden');
+      document.getElementById('main-page').classList.remove('hidden');
+      document.getElementById('sales-generate-card').classList.remove('hidden');
     }
   </script>
 </body>

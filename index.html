@@ -178,10 +178,18 @@
       <div id="loadingIcon" class="loading">Loading...</div>
       <div id="dashboardDetails" class="hidden">
         <div class="dashboard-section">
-          <p><strong>Total Sales:</strong> <span id="dashboardTotalSales">৳0.00</span></p>
-          <p><strong>Last Sale:</strong> <span id="dashboardLastSale">N/A</span></p>
-          <p><strong>Total Number of Sales:</strong> <span id="totalSalesCount">0</span></p>
-          <p><strong>Total Quantity Sold:</strong> <span id="totalQuantitySold">0</span></p>
+          <div class="box">
+            <h3>Total Sales</h3>
+            <p>৳<span id="dashboardTotalSales">৳0.00</span></p>
+          </div>
+          <div class="box">
+            <h3>Total Sales Count</h3>
+            <p><span id="dashboardTotalSalesCount">0</span> Sales</p>
+          </div>
+          <div class="box">
+            <h3>Last Sale</h3>
+            <p id="dashboardLastSale">N/A</p>
+          </div>
           <button onclick="closeStore()">Close Store</button>
           <button onclick="goHome()">Home</button>
         </div>
@@ -256,55 +264,38 @@
         document.getElementById('price').value = '';
         updateTotalSales();
       } else {
-        alert('Please fill all fields!');
+        alert('Please fill out all fields!');
       }
     }
 
     function updateTotalSales() {
-      const totalSales = salesData.reduce((acc, sale) => acc + sale.total, 0);
-      const lastSale = salesData[salesData.length - 1];
-      document.getElementById('dashboardTotalSales').innerText = `৳${totalSales.toFixed(2)}`;
-      document.getElementById('dashboardLastSale').innerText = lastSale ? lastSale.productName : 'N/A';
+      let totalSales = 0;
+      let salesCount = 0;
+      salesData.forEach(sale => {
+        totalSales += sale.total;
+        salesCount++;
+      });
+
       document.getElementById('totalSalesAmount').innerText = totalSales.toFixed(2);
-      document.getElementById('totalSalesCount').innerText = salesData.length;
-      document.getElementById('totalQuantitySold').innerText = salesData.reduce((acc, sale) => acc + sale.quantity, 0);
+      document.getElementById('totalSalesCount').innerText = salesCount;
+      document.getElementById('dashboardTotalSales').innerText = totalSales.toFixed(2);
+      document.getElementById('dashboardTotalSalesCount').innerText = salesCount;
     }
 
     function updateLastSale(sale) {
-      const lastSaleDetails = `
-        <strong>Product Name:</strong> ${sale.productName}<br>
-        <strong>Quantity:</strong> ${sale.quantity}<br>
-        <strong>Total:</strong> ৳${sale.total.toFixed(2)}
-      `;
-      document.getElementById('lastSaleDetails').innerHTML = lastSaleDetails;
+      const lastSale = `Product: ${sale.productName}, Quantity: ${sale.quantity}, Total: ৳${sale.total.toFixed(2)}`;
+      document.getElementById('lastSaleDetails').innerText = lastSale;
+      document.getElementById('dashboardLastSale').innerText = lastSale;
     }
 
     function closeStore() {
-      salesData = [];
-      localStorage.setItem('salesData', JSON.stringify(salesData));
-      localStorage.removeItem('storeName');  // Remove store name when closing the store
-      updateTotalSales();
-      alert('Store Closed');
-      location.reload(); // Refresh the page to ask for store name again
+      localStorage.removeItem('storeName');
+      localStorage.removeItem('salesData');
+      location.reload();
     }
 
     function goHome() {
-      const dashboardSection = document.getElementById('settings-card');
-      const homePage = document.getElementById('sales-generate-card');
-      dashboardSection.classList.add('hidden');
-      homePage.classList.remove('hidden');
-    }
-
-    function toggleSettings() {
-      const settingsCard = document.getElementById('settings-card');
-      const loadingIcon = document.getElementById('loadingIcon');
-      const dashboardDetails = document.getElementById('dashboardDetails');
-      settingsCard.classList.toggle('hidden');
-      loadingIcon.style.display = 'block';
-      setTimeout(() => {
-        loadingIcon.style.display = 'none';
-        dashboardDetails.classList.remove('hidden');
-      }, 1000);
+      location.reload();
     }
   </script>
 </body>

@@ -79,12 +79,17 @@
       background-color: #ffaa00;
     }
 
-    .loading {
+    input {
+      padding: 10px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 5px;
+      width: 90%;
+      max-width: 300px;
+    }
+
+    .hidden {
       display: none;
-      text-align: center;
-      font-size: 1.5rem;
-      color: #ffaa00;
-      margin-top: 20px;
     }
   </style>
 </head>
@@ -103,67 +108,53 @@
     </div>
 
     <!-- Total Sales Section -->
-    <div id="total-sales-section" class="card" style="display: none;">
+    <div id="total-sales-section" class="card hidden">
       <h3>Total Sales: ৳<span id="total-sales">0</span></h3>
     </div>
 
     <!-- Product Entry Section -->
-    <div id="product-section" class="card" style="display: none;">
+    <div id="product-section" class="card hidden">
       <h2>Product Entry</h2>
       <input type="text" id="product-name" placeholder="Product Name">
       <input type="number" id="product-price" placeholder="Product Price">
       <input type="number" id="product-quantity" placeholder="Product Quantity">
       <button id="generate-sale">Generate Sale</button>
     </div>
-
-    <!-- Loading Animation -->
-    <div class="loading" id="loading">Loading...</div>
-
-    <!-- Dashboard Section -->
-    <div id="dashboard" class="dashboard card">
-      <h2>Dashboard</h2>
-      <button id="wholesale-history">Wholesale History</button>
-      <button id="last-history">Last Transaction History</button>
-      <button id="print">Print</button>
-    </div>
   </main>
 
   <script>
+    // Initialize variables
+    const storeSection = document.getElementById("store-section");
+    const totalSalesSection = document.getElementById("total-sales-section");
+    const productSection = document.getElementById("product-section");
+    const storeNameInput = document.getElementById("store-name");
+    const startStoreButton = document.getElementById("start-store");
+
+    // Check if store name is already saved in localStorage
     document.addEventListener("DOMContentLoaded", () => {
-      const storeSection = document.getElementById("store-section");
-      const totalSalesSection = document.getElementById("total-sales-section");
-      const productSection = document.getElementById("product-section");
-      const dashboard = document.getElementById("dashboard");
-      const settingsIcon = document.getElementById("settings-icon");
-      const loading = document.getElementById("loading");
+      const savedStoreName = localStorage.getItem("storeName");
+      if (savedStoreName) {
+        // If store name exists, show Total Sales and Product Entry
+        storeSection.classList.add("hidden");
+        totalSalesSection.classList.remove("hidden");
+        productSection.classList.remove("hidden");
+      }
+    });
 
-      // Show Dashboard on Settings Icon Click
-      settingsIcon.addEventListener("click", () => {
-        // Show loading animation
-        loading.style.display = "block";
+    // Handle Start Store button click
+    startStoreButton.addEventListener("click", () => {
+      const storeName = storeNameInput.value.trim();
+      if (storeName) {
+        // Save store name in localStorage
+        localStorage.setItem("storeName", storeName);
 
-        // Hide other sections after 1 second
-        setTimeout(() => {
-          loading.style.display = "none";
-          storeSection.style.display = "none";
-          totalSalesSection.style.display = "none";
-          productSection.style.display = "none";
-          dashboard.style.display = "block";
-        }, 1000);
-      });
-
-      // Add event listeners for dashboard buttons
-      document.getElementById("wholesale-history").addEventListener("click", () => {
-        alert("Wholesale History will be displayed here.");
-      });
-
-      document.getElementById("last-history").addEventListener("click", () => {
-        alert("Last Transaction History will be displayed here.");
-      });
-
-      document.getElementById("print").addEventListener("click", () => {
-        alert("Print functionality will be implemented.");
-      });
+        // Hide store setup section and show Total Sales section
+        storeSection.classList.add("hidden");
+        totalSalesSection.classList.remove("hidden");
+        productSection.classList.remove("hidden");
+      } else {
+        alert("Please enter a valid store name.");
+      }
     });
   </script>
 </body>

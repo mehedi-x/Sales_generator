@@ -1,150 +1,100 @@
-let salesData = JSON.parse(localStorage.getItem("salesData")) || [];
-let suggestedProducts = new Set();
+document.addEventListener('DOMContentLoaded', () => {
+  const storeNameInput = document.getElementById('store-name-input');
+  const setStoreNameButton = document.getElementById('set-store-name');
+  const storeNameDisplay = document.getElementById('store-name-display');
+  const totalSalesDisplay = document.getElementById('total-sales');
+  const productName = document.getElementById('product-name');
+  const productPrice = document.getElementById('product-price');
+  const productQuantity = document.getElementById('product-quantity');
+  const addSaleButton = document.getElementById('add-sale');
+  const saleSummary = document.getElementById('sale-summary');
+  const menuButton = document.getElementById('menu-button');
+  const menu = document.getElementById('menu');
+  const closeModalButton = document.getElementById('close-modal');
+  const modal = document.getElementById('modal');
+  const historyContainer = document.getElementById('history');
 
-// Add product and generate sale
-function generateSale() {
-    const shopName = document.getElementById("shop-name").value;
-    const productName = document.getElementById("product-name").value;
-    const productPrice = parseFloat(document.getElementById("product-price").value);
-    const productQuantity = parseFloat(document.getElementById("product-quantity").value) || 1;
+  let salesHistory = [];
+  let totalSales = 0;
 
-    if (!shopName || !productName || isNaN(productPrice)) {
-        alert("Please fill out all required fields.");F
-        return;
+  // Set store name
+  setStoreNameButton.addEventListener('click', () => {
+    const storeName = storeNameInput.value.trim();
+    if (storeName) {
+      localStorage.setItem('storeName', storeName);
+      storeNameDisplay.textContent = storeName;
+      storeNameInput.style.display = 'none';
+      setStoreNameButton.style.display = 'none';
     }
+  });
 
-    const product = {
-        shopName,
-        productName,
-        productPrice,
-        productQuantity,
-        total: productPrice * productQuantity,
-    };
+  // Load store name on refresh
+  const savedStoreName = localStorage.getItem('storeName');
+  if (savedStoreName) {
+    storeNameDisplay.textContent = savedStoreName;
+    storeNameInput.style.display = 'none';
+    setStoreNameButton.style.display = 'none';
+  }
 
-    // Update sales data and save to local storage
-    salesData.push(product);
-    localStorage.setItem("salesData", JSON.stringify(salesData));
+  // Generate sale
+  addSaleButton.addEventListener('click', () => {
+    const name = productName.value.trim();
+    const price = parseFloat(productPrice.value);
+    const quantity = parseInt(productQuantity.value, 10);
+    if (name && price > 0 && quantity > 0) {
+      const sale = { name, price, quantity, total: price * quantity, time: new Date().toLocaleString() };
+      salesHistory.push(sale);
+      totalSales += sale.total;
 
-    // Update suggestions and sales display
-    suggestedProducts.add(productName);
-    updateSuggestions();
-    updateLastSaleView(product);
-    resetForm();
-}
-
-// Update only the last sale view
-function updateLastSaleView(lastSale) {
-    const saleSummary = document.getElementById("sale-summary");
-    saleSummary.innerHTML = `
-        <h3>Last Sale Summary:</h3>
-        <p><strong>Shop:</strong> ${lastSale.shopName}</p>
-        <p><strong>Product:</strong> ${lastSale.productName}</p>
-        <p><strong>Quantity:</strong> ${lastSale.productQuantity}</p>
-        <p><strong>Total:</strong> ৳${lastSale.total.toFixed(2)}</p>
-    `;
-}
-
-// Update datalist for suggested products
-function updateSuggestions() {
-    const datalist = document.getElementById("suggested-products");
-    datalist.innerHTML = "";
-    suggestedProducts.forEach((product) => {
-        const option = document.createElement("option");
-        option.value = product;
-        datalist.appendChild(option);
-    });
-}
-
-// Reset input fields
-function resetForm() {
-    document.getElementById("shop-name").value = "";
-    document.getElementById("product-name").value = "";
-    document.getElementById("product-price").value = "";
-    document.getElementById("product-quantity").value = "";
-}
-
-// Open the Close Store Modal
-function openCloseStoreModal() {
-    document.getElementById("close-store-modal").style.display = "flex";
-}
-
-// Close the Modal without taking any action
-function cancelStoreClosure() {
-    document.getElementById("close-store-modal").style.display = "none";
-}
-
-// Close store and clear sales data after confirmation
-function closeStore() {
-    const confirmation = confirm("Are you sure you want to close the store and clear all sales data?");
-    
-    if (confirmation) {
-        // Clear sales data and remove from localStorage
-        salesData = [];
-        localStorage.removeItem("salesData");
-        
-        // Hide modal and show a success message
-        document.getElementById("close-store-modal").style.display = "none";
-        alert("Store closed and all sales data cleared!");
-        
-        // Optionally reload the page to reset the interface
-        location.reload();
-    } else {
-        // If the user cancels, simply hide the modal without clearing data
-        document.getElementById("close-store-modal").style.display = "none";
+      totalSalesDisplay.textContent = `Total Sales: ৳${totalSales}`;
+      saleSummary.innerHTML = `
+        Product: ${sale.name} <br>
+        Price: ৳${sale.price} <br>
+        Quantity: ${sale.quantity} <br>
+        Total: ৳${sale.total} <br>
+        Time: ${sale.time}
+      `;
     }
-}
+  });
 
-// Download sales history as PDF
-function SalesHistory() {
-    const salesSummary = salesData
-        .map(
-            (sale, index) =>
-                `${index + 1}. Shop: ${sale.shopName}, Product: ${sale.productName}, Quantity: ${sale.productQuantity}, Total: ৳${sale.total.toFixed(2)}`
-        )
-        .join("\n");
+  // View sales history
+  document.getElementById('view-history').addEventListener('click', () => {
+    modal.classList.remove('hidden');
+    historyContainer.innerHTML = salesHistory.map(sale => `
+      <div>
+        Product: ${sale.name}, Price: ৳${sale.price}, Quantity: ${sale.quantity}, Total: ৳${sale.total}, Time: ${sale.time}
+      </div>
+    `).join('');
+  });
 
-    const blob = new Blob([salesSummary], { type: "application/pdf" });
-    const url = URL.createObjectURL(blob);
+  closeModalButton.addEventListener('click', () => {
+    modal.classList.add('hidden');
+  });
 
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "Sales_History.pdf";
-    link.click();
+  // Download history
+  document.getElementById('download-history').addEventListener('click', () => {
+    const dataStr = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(salesHistory))}`;
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.setAttribute('href', dataStr);
+    downloadAnchor.setAttribute('download', 'sales_history.json');
+    downloadAnchor.click();
+  });
 
-    URL.revokeObjectURL(url);
-}
-
-// Close store and clear sales data
-function closeStore() {
-    // Show confirmation dialog before closing the store
-    const confirmation = confirm("Are you sure you want to close the store and clear all sales data?");
-    
-    if (confirmation) {
-        // Clear sales data and remove from localStorage
-        salesData = [];
-        localStorage.removeItem("salesData");
-        
-        // Hide modal and show a success message
-        document.getElementById("close-store-modal").style.display = "none";
-        alert("Store closed and all sales data cleared!");
-        
-        // Optionally reload the page to reset the interface
-        location.reload();
-    } else {
-        // If the user cancels, simply hide the modal without clearing data
-        document.getElementById("close-store-modal").style.display = "none";
+  // Close store
+  document.getElementById('close-store').addEventListener('click', () => {
+    if (confirm('Are you sure you want to close the store?')) {
+      salesHistory = [];
+      totalSales = 0;
+      totalSalesDisplay.textContent = 'Total Sales: ৳0';
+      saleSummary.innerHTML = '';
+      localStorage.removeItem('storeName');
+      storeNameInput.style.display = '';
+      setStoreNameButton.style.display = '';
     }
-}
+  });
 
-
-// Cancel store closure
-function cancelStoreClosure() {
-    document.getElementById("close-store-modal").style.display = "none";
-}
-
-// Initialize sales view on page load
-window.onload = function () {
-    if (salesData.length > 0) {
-        updateLastSaleView(salesData[salesData.length - 1]);
-    }
-};
+  // Toggle menu
+  menuButton.addEventListener('click', () => {
+    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+  });
+});

@@ -170,22 +170,6 @@
       background-color: #218838;
     }
 
-    .all-in-one-page {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-top: 30px;
-    }
-
-    .all-in-one-card {
-      margin: 20px;
-      padding: 20px;
-      background-color: #1f1f1f;
-      border-radius: 10px;
-      width: 90%;
-      max-width: 600px;
-    }
-
     /* Styling for Last Sale section */
     #last-sale-display {
       font-size: 1.2rem;
@@ -247,21 +231,9 @@
       <input type="number" id="productQuantity" placeholder="Product Quantity">
       <button id="generateSaleBtn" onclick="generateSale()">Generate Sale</button>
     </div>
-
-    <div class="all-in-one-page">
-      <button onclick="showAll()">All-in-One Page</button>
-    </div>
-
-    <div id="last-sale-display" class="hidden">
-      <h4>Last Sale:</h4>
-      <p class="detail">Product Name: <span id="last-sale-name">-</span></p>
-      <p class="detail">Price: ৳<span id="last-sale-price">0</span></p>
-      <p class="detail">Quantity: <span id="last-sale-quantity">0</span></p>
-      <p class="detail">Total Amount: ৳<span id="last-sale-total">0</span></p>
-    </div>
   </div>
 
-  <div class="settings-container hidden" id="settingsContainer">
+  <div id="settingsContainer" class="settings-container hidden">
     <h2>Live Dashboard</h2>
     <div id="liveDashboard" class="sales-box">
       <p>Last Sale</p>
@@ -272,6 +244,14 @@
       <button class="print-button" onclick="printData()">Print</button>
     </div>
     <button class="settings-button" onclick="closeStore()">Close Store</button>
+  </div>
+
+  <div id="last-sale-display" class="hidden">
+    <h4>Last Sale:</h4>
+    <p class="detail">Product Name: <span id="last-sale-name">-</span></p>
+    <p class="detail">Price: ৳<span id="last-sale-price">0</span></p>
+    <p class="detail">Quantity: <span id="last-sale-quantity">0</span></p>
+    <p class="detail">Total Amount: ৳<span id="last-sale-total">0</span></p>
   </div>
 
   <script>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Store System</title>
+  <title>Store Management</title>
   <style>
     /* Global Styles */
     * {
@@ -32,14 +32,14 @@
       color: #ffffff;
     }
 
-    .settings-icon {
+    .menu-icon {
       font-size: 1.5rem;
       cursor: pointer;
       color: #ffcc00;
       transition: color 0.3s ease;
     }
 
-    .settings-icon:hover {
+    .menu-icon:hover {
       color: #ffaa00;
     }
 
@@ -109,8 +109,8 @@
 </head>
 <body>
   <header>
-    <h1>Store System</h1>
-    <div class="settings-icon" onclick="loadDashboard()">⚙️</div>
+    <h1>Store Management</h1>
+    <div class="menu-icon" onclick="toggleLastSale()">☰</div>
   </header>
 
   <div class="container">
@@ -121,7 +121,7 @@
       <button onclick="setStoreName()">Start</button>
     </div>
 
-    <!-- Store Name Display -->
+    <!-- Store Info -->
     <div id="store-info-card" class="card hidden">
       <h2 id="storeNameDisplay"></h2>
     </div>
@@ -138,30 +138,17 @@
       <button onclick="generateSale()">Generate Sale</button>
     </div>
 
-    <!-- Dashboard -->
-    <div id="dashboard-card" class="card hidden">
-      <h2>Dashboard</h2>
-      <p>Total Sales: ৳<span id="totalSales">0</span></p>
-      <button onclick="closeStore()">Close Store</button>
-    </div>
-
     <!-- Last Sale Section -->
     <div id="last-sale-card" class="card hidden">
       <h2>Last Sale</h2>
-      <div class="last-sale" id="lastSaleDetails">
-        <p><strong>Product Name:</strong> N/A</p>
-        <p><strong>Quantity:</strong> N/A</p>
-        <p><strong>Price per Unit:</strong> N/A</p>
-        <p><strong>Total:</strong> ৳0.00</p>
-      </div>
+      <div class="last-sale" id="lastSaleDetails"></div>
       <button class="print-button" onclick="printLastSale()">Print Last Sale</button>
     </div>
   </div>
 
   <script>
     let storeName = localStorage.getItem('storeName') || '';
-    let totalSales = 0;
-    let lastSale = {};
+    let salesData = JSON.parse(localStorage.getItem('salesData')) || [];
 
     if (storeName) {
       document.getElementById('main-page').classList.add('hidden');
@@ -186,24 +173,22 @@
 
     function generateSale() {
       const productName = document.getElementById('productName').value.trim();
-      const quantity = document.getElementById('quantity').value.trim();
+      const quantity = document.getElementById('quantity').value.trim() || 1;
       const price = document.getElementById('price').value.trim();
 
       if (productName && price) {
-        const qty = quantity ? parseInt(quantity) : 1;
-        const total = qty * parseFloat(price);
-        totalSales += total;
-
-        lastSale = {
+        const total = parseFloat(price) * parseInt(quantity);
+        const sale = {
+          storeName,
           productName,
-          quantity: qty,
+          quantity: parseInt(quantity),
           price: parseFloat(price),
           total
         };
-
-        updateLastSale();
-        alert(`Sale Generated: \nProduct: ${productName}\nTotal: ৳${total.toFixed(2)}`);
-        document.getElementById('totalSales').textContent = totalSales.toFixed(2);
+        salesData.push(sale);
+        localStorage.setItem('salesData', JSON.stringify(salesData));
+        updateLastSale(sale);
+        alert(`Sale Generated for: ${productName}, Total: ৳${total.toFixed(2)}`);
         document.getElementById('productName').value = '';
         document.getElementById('quantity').value = '';
         document.getElementById('price').value = '';
@@ -212,15 +197,30 @@
       }
     }
 
-    function updateLastSale() {
-      document.getElementById('last-sale-card').classList.remove('hidden');
-      const details = `
-        <p><strong>Product Name:</strong> ${lastSale.productName}</p>
-        <p><strong>Quantity:</strong> ${lastSale.quantity}</p>
-        <p><strong>Price per Unit:</strong> ৳${lastSale.price.toFixed(2)}</p>
-        <p><strong>Total:</strong> ৳${lastSale.total.toFixed(2)}</p>
+    function updateLastSale(sale) {
+      const lastSaleDetails = `
+        <p><strong>Store Name:</strong> ${sale.storeName}</p>
+        <p><strong>Product Name:</strong> ${sale.productName}</p>
+        <p><strong>Quantity:</strong> ${sale.quantity}</p>
+        <p><strong>Price per Unit:</strong> ৳${sale.price.toFixed(2)}</p>
+        <p><strong>Total:</strong> ৳${sale.total.toFixed(2)}</p>
       `;
-      document.getElementById('lastSaleDetails').innerHTML = details;
+      document.getElementById('lastSaleDetails').innerHTML = lastSaleDetails;
+    }
+
+    function toggleLastSale() {
+      const lastSaleCard = document.getElementById('last-sale-card');
+      if (lastSaleCard.classList.contains('hidden')) {
+        const lastSale = salesData[salesData.length - 1];
+        if (lastSale) {
+          updateLastSale(lastSale);
+          lastSaleCard.classList.remove('hidden');
+        } else {
+          alert('No sales data available!');
+        }
+      } else {
+        lastSaleCard.classList.add('hidden');
+      }
     }
 
     function printLastSale() {
@@ -231,29 +231,6 @@
       printWindow.document.write('</body></html>');
       printWindow.document.close();
       printWindow.print();
-    }
-
-    function loadDashboard() {
-      document.getElementById('store-info-card').classList.add('hidden');
-      document.getElementById('sales-generate-card').classList.add('hidden');
-      document.getElementById('dashboard-card').classList.remove('hidden');
-    }
-
-    function closeStore() {
-      const confirm1 = confirm("Are you sure you want to close the store?");
-      if (confirm1) {
-        const confirm2 = confirm("This will reset the system. Confirm again?");
-        if (confirm2) {
-          localStorage.removeItem('storeName');
-          document.getElementById('dashboard-card').classList.add('hidden');
-          document.getElementById('main-page').classList.remove('hidden');
-          document.getElementById('last-sale-card').classList.add('hidden');
-          storeName = '';
-          totalSales = 0;
-          lastSale = {};
-          alert("Store has been closed and reset.");
-        }
-      }
     }
   </script>
 </body>

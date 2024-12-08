@@ -87,17 +87,25 @@
       font-size: 1.5rem;
       color: #ffcc00;
     }
+
+    .hidden {
+      display: none;
+    }
+
+    .sales-summary {
+      font-size: 1.2rem;
+      margin: 15px 0;
+    }
   </style>
 </head>
 <body>
-
   <header>
     <h1>Store Management System</h1>
     <div class="settings-icon" onclick="openSettings()">⚙️</div>
   </header>
 
   <div class="container">
-    <!-- Main Content (Initial Page) -->
+    <!-- Main Page -->
     <div id="main-page" class="card">
       <h2>Set Your Store Name</h2>
       <input type="text" id="storeNameInput" placeholder="Enter Store Name">
@@ -106,65 +114,90 @@
     </div>
 
     <!-- Sales Data -->
-    <div id="sales-card" class="card" style="display:none;">
-      <h2>Total Sales: <span id="totalSales">৳0</span></h2>
-      <h2>Total Products Sold: <span id="totalProductsSold">0</span></h2>
+    <div id="sales-card" class="card hidden">
+      <h2>Welcome to <span id="storeNameDisplay"></span></h2>
+      <h3 class="sales-summary">Total Sales: ৳<span id="totalSales">0</span></h3>
+      <h3 class="sales-summary">Total Products Sold: <span id="totalProductsSold">0</span></h3>
+      <button onclick="resetStore()">Close Store</button>
     </div>
 
     <!-- Product Entry -->
-    <div id="product-entry-card" class="card" style="display:none;">
+    <div id="product-entry-card" class="card hidden">
       <h2>Product Entry</h2>
       <input type="text" id="productName" placeholder="Product Name">
       <input type="number" id="productPrice" placeholder="Product Price">
       <input type="number" id="productQuantity" placeholder="Product Quantity">
-      <button id="generateSaleBtn" onclick="generateSale()">Generate Sale</button>
+      <button onclick="generateSale()">Generate Sale</button>
+    </div>
+
+    <!-- Last Sale Display -->
+    <div id="last-sale-card" class="card hidden">
+      <h3>Last Sale</h3>
+      <p>Product Name: <span id="lastProductName">-</span></p>
+      <p>Price: ৳<span id="lastProductPrice">0</span></p>
+      <p>Quantity: <span id="lastProductQuantity">0</span></p>
+      <p>Total Amount: ৳<span id="lastTotalAmount">0</span></p>
     </div>
   </div>
 
   <script>
-    let storeName = "";
+    let storeName = '';
+    let totalSales = 0;
+    let totalProductsSold = 0;
 
     // Set Store Name
     function setStoreName() {
-      const storeNameInput = document.getElementById('storeNameInput').value.trim();
-      if (storeNameInput) {
-        storeName = storeNameInput;
-        localStorage.setItem('storeName', storeName);
-
-        // Disable input and button after setting store name
-        document.getElementById('storeNameInput').disabled = true;
-        document.getElementById('startStoreBtn').disabled = true;
-
-        // Show Sales Data and Product Entry sections
-        document.getElementById('sales-card').style.display = "block";
-        document.getElementById('product-entry-card').style.display = "block";
-
-        alert(`Welcome to ${storeName}! Store is ready.`);
+      const storeInput = document.getElementById('storeNameInput').value.trim();
+      if (storeInput) {
+        storeName = storeInput;
+        document.getElementById('storeNameDisplay').innerText = storeName;
+        document.getElementById('main-page').classList.add('hidden');
+        document.getElementById('sales-card').classList.remove('hidden');
+        document.getElementById('product-entry-card').classList.remove('hidden');
+        document.getElementById('last-sale-card').classList.remove('hidden');
+        alert(`Welcome to ${storeName}!`);
       } else {
-        alert("Please enter a valid store name!");
+        alert('Please enter a valid store name!');
       }
     }
 
-    // Load Store Name from LocalStorage
-    window.onload = () => {
-      const savedStoreName = localStorage.getItem('storeName');
-      if (savedStoreName) {
-        storeName = savedStoreName;
-        document.getElementById('storeNameInput').value = storeName;
-        document.getElementById('storeNameInput').disabled = true;
-        document.getElementById('startStoreBtn').disabled = true;
+    // Generate Sale
+    function generateSale() {
+      const productName = document.getElementById('productName').value.trim();
+      const productPrice = parseFloat(document.getElementById('productPrice').value);
+      const productQuantity = parseInt(document.getElementById('productQuantity').value);
 
-        // Show Sales Data and Product Entry sections
-        document.getElementById('sales-card').style.display = "block";
-        document.getElementById('product-entry-card').style.display = "block";
+      if (productName && productPrice > 0 && productQuantity > 0) {
+        const totalAmount = productPrice * productQuantity;
+        totalSales += totalAmount;
+        totalProductsSold += productQuantity;
+
+        document.getElementById('totalSales').innerText = totalSales;
+        document.getElementById('totalProductsSold').innerText = totalProductsSold;
+        document.getElementById('lastProductName').innerText = productName;
+        document.getElementById('lastProductPrice').innerText = productPrice;
+        document.getElementById('lastProductQuantity').innerText = productQuantity;
+        document.getElementById('lastTotalAmount').innerText = totalAmount;
+
+        document.getElementById('productName').value = '';
+        document.getElementById('productPrice').value = '';
+        document.getElementById('productQuantity').value = '';
+      } else {
+        alert('Please fill out all fields with valid values.');
       }
-    };
+    }
 
-    // Open Settings (Placeholder Function)
+    // Reset Store
+    function resetStore() {
+      if (confirm('Are you sure you want to reset the store?')) {
+        location.reload();
+      }
+    }
+
+    // Placeholder for Settings
     function openSettings() {
-      alert("Settings page will be implemented later.");
+      alert('Settings feature coming soon!');
     }
   </script>
-
 </body>
 </html>

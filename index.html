@@ -159,6 +159,11 @@
       display: none;
     }
 
+    /* Hide Cards for Live Dashboard */
+    .hidden-dashboard {
+      display: none;
+    }
+
   </style>
 </head>
 <body>
@@ -169,19 +174,22 @@
   </header>
 
   <div class="container">
-    <div class="card" id="store-name-card">
+    <!-- Main Content (Initial Page) -->
+    <div id="main-page" class="card">
       <h2>Set Your Store Name</h2>
       <input type="text" id="storeNameInput" placeholder="Enter Store Name">
       <button id="startStoreBtn" onclick="setStoreName()">Start Store</button>
       <div id="loading" class="hidden">Loading...</div>
     </div>
 
-    <div class="card" id="sales-card">
+    <!-- Sales Data -->
+    <div id="sales-card" class="card">
       <h2>Total Sales: <span id="totalSales">৳0</span></h2>
       <h2>Total Products Sold: <span id="totalProductsSold">0</span></h2>
     </div>
 
-    <div class="card" id="product-entry-card">
+    <!-- Product Entry -->
+    <div id="product-entry-card" class="card">
       <h2>Product Entry</h2>
       <input type="text" id="productName" placeholder="Product Name">
       <input type="number" id="productPrice" placeholder="Product Price">
@@ -190,8 +198,8 @@
     </div>
   </div>
 
-  <!-- All-in-One Page -->
-  <div id="all-in-one-page">
+  <!-- All-in-One Page (Live Dashboard) -->
+  <div id="all-in-one-page" class="hidden-dashboard">
     <h2>Live Dashboard</h2>
     <div id="liveDashboard" class="sales-box">
       <p>Last Sale</p>
@@ -204,7 +212,8 @@
     <button class="settings-button" onclick="closeStore()">Close Store</button>
   </div>
 
-  <div id="last-sale-display" class="hidden">
+  <!-- Last Sale Display (For All-in-One Page) -->
+  <div id="last-sale-display" class="hidden-dashboard">
     <h4>Last Sale:</h4>
     <p class="detail">Product Name: <span id="last-sale-name">-</span></p>
     <p class="detail">Price: ৳<span id="last-sale-price">0</span></p>
@@ -258,12 +267,12 @@
         document.getElementById('last-sale-quantity').innerText = lastSale.productQuantity;
         document.getElementById('last-sale-total').innerText = lastSale.totalAmount;
 
+        // Live Dashboard Update
         document.getElementById('live-product-name').innerText = lastSale.productName;
         document.getElementById('live-price').innerText = lastSale.productPrice;
         document.getElementById('live-quantity').innerText = lastSale.productQuantity;
         document.getElementById('live-total-amount').innerText = lastSale.totalAmount;
 
-        // Clear Inputs
         document.getElementById('productName').value = '';
         document.getElementById('productPrice').value = '';
         document.getElementById('productQuantity').value = '';
@@ -277,10 +286,12 @@
         document.getElementById('loading').classList.add('hidden');
         document.getElementById('all-in-one-page').style.display = "block";
         document.getElementById('last-sale-display').classList.remove('hidden');
+        document.getElementById('sales-card').style.display = "none";
+        document.getElementById('product-entry-card').style.display = "none";
       }, 1000);
     }
 
-    // Close Store
+    // Close Store and Reset Everything
     function closeStore() {
       if (confirm("Are you sure you want to close the store?")) {
         if (confirm("Are you absolutely sure?")) {
@@ -295,8 +306,8 @@
           document.getElementById('live-total-amount').innerText = "0";
           document.getElementById('last-sale-display').classList.add('hidden');
           document.getElementById('all-in-one-page').style.display = "none";
+          document.getElementById('sales-card').style.display = "block";
           document.getElementById('product-entry-card').style.display = "block";
-          document.getElementById('sales-card').style.display = "none";
         }
       }
     }

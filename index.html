@@ -120,7 +120,7 @@
     <!-- Dashboard -->
     <div id="dashboard-card" class="card hidden">
       <h2>Dashboard</h2>
-      <p>Total Sales: $<span id="totalSales">0</span></p>
+      <p>Total Sales: ৳<span id="totalSales">0</span></p>
     </div>
   </div>
 
@@ -152,7 +152,7 @@
       if (productName && price) {
         const total = (quantity ? parseInt(quantity) : 1) * parseFloat(price);
         totalSales += total;
-        alert(`Sale Generated: \nProduct: ${productName}\nTotal: $${total.toFixed(2)}`);
+        alert(`Sale Generated: \nProduct: ${productName}\nTotal: ৳${total.toFixed(2)}`);
         document.getElementById('totalSales').textContent = totalSales.toFixed(2);
         document.getElementById('productName').value = '';
         document.getElementById('quantity').value = '';

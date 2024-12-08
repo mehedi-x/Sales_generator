@@ -19,15 +19,28 @@
     }
 
     header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       background-color: #1f1f1f;
-      padding: 15px;
-      text-align: center;
+      padding: 15px 20px;
       border-bottom: 1px solid #333333;
     }
 
     header h1 {
       color: #ffffff;
       font-size: 1.8rem;
+    }
+
+    .settings-icon {
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #ffcc00;
+      transition: color 0.3s ease;
+    }
+
+    .settings-icon:hover {
+      color: #ffaa00;
     }
 
     .container {
@@ -47,14 +60,8 @@
       text-align: center;
     }
 
-    input[type="text"], input[type="number"] {
-      width: 90%;
-      padding: 10px;
-      margin: 10px 0;
-      border: 1px solid #444444;
-      border-radius: 5px;
-      background-color: #2a2a2a;
-      color: #ffffff;
+    .dashboard {
+      display: none;
     }
 
     button {
@@ -71,11 +78,20 @@
     button:hover {
       background-color: #ffaa00;
     }
+
+    .loading {
+      display: none;
+      text-align: center;
+      font-size: 1.5rem;
+      color: #ffaa00;
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
   <header>
     <h1>Store Management System</h1>
+    <i class="settings-icon" id="settings-icon">⚙</i>
   </header>
 
   <main class="container">
@@ -100,7 +116,16 @@
       <button id="generate-sale">Generate Sale</button>
     </div>
 
-    <button id="close-store" style="display: none; margin-top: 20px; background-color: #ff4d4d;">Close Store</button>
+    <!-- Loading Animation -->
+    <div class="loading" id="loading">Loading...</div>
+
+    <!-- Dashboard Section -->
+    <div id="dashboard" class="dashboard card">
+      <h2>Dashboard</h2>
+      <button id="wholesale-history">Wholesale History</button>
+      <button id="last-history">Last Transaction History</button>
+      <button id="print">Print</button>
+    </div>
   </main>
 
   <script>
@@ -108,83 +133,37 @@
       const storeSection = document.getElementById("store-section");
       const totalSalesSection = document.getElementById("total-sales-section");
       const productSection = document.getElementById("product-section");
-      const startStoreButton = document.getElementById("start-store");
-      const storeNameInput = document.getElementById("store-name");
-      const totalSalesElement = document.getElementById("total-sales");
-      const productNameInput = document.getElementById("product-name");
-      const productPriceInput = document.getElementById("product-price");
-      const productQuantityInput = document.getElementById("product-quantity");
-      const generateSaleButton = document.getElementById("generate-sale");
-      const closeStoreButton = document.getElementById("close-store");
+      const dashboard = document.getElementById("dashboard");
+      const settingsIcon = document.getElementById("settings-icon");
+      const loading = document.getElementById("loading");
 
-      let totalSales = 0;
+      // Show Dashboard on Settings Icon Click
+      settingsIcon.addEventListener("click", () => {
+        // Show loading animation
+        loading.style.display = "block";
 
-      // Load store name and total sales from localStorage
-      const loadStoreData = () => {
-        const storeName = localStorage.getItem("storeName");
-        const savedSales = localStorage.getItem("totalSales");
-
-        if (storeName) {
+        // Hide other sections after 1 second
+        setTimeout(() => {
+          loading.style.display = "none";
           storeSection.style.display = "none";
-          totalSalesSection.style.display = "block";
-          productSection.style.display = "block";
-          closeStoreButton.style.display = "block";
-          totalSales = savedSales ? parseInt(savedSales) : 0;
-          totalSalesElement.textContent = totalSales;
-        }
-      };
-
-      // Start Store
-      startStoreButton.addEventListener("click", () => {
-        const storeName = storeNameInput.value.trim();
-        if (storeName) {
-          localStorage.setItem("storeName", storeName);
-          localStorage.setItem("totalSales", 0);
-          storeSection.style.display = "none";
-          totalSalesSection.style.display = "block";
-          productSection.style.display = "block";
-          closeStoreButton.style.display = "block";
-        } else {
-          alert("Please enter a valid store name.");
-        }
+          totalSalesSection.style.display = "none";
+          productSection.style.display = "none";
+          dashboard.style.display = "block";
+        }, 1000);
       });
 
-      // Generate Sale
-      generateSaleButton.addEventListener("click", () => {
-        const productName = productNameInput.value.trim();
-        const productPrice = parseFloat(productPriceInput.value);
-        const productQuantity = parseInt(productQuantityInput.value);
-
-        if (productName && productPrice > 0 && productQuantity > 0) {
-          const saleAmount = productPrice * productQuantity;
-          totalSales += saleAmount;
-          localStorage.setItem("totalSales", totalSales);
-          totalSalesElement.textContent = totalSales;
-
-          alert(`Sale Generated: ${productName}, Total: ৳${saleAmount}`);
-          productNameInput.value = "";
-          productPriceInput.value = "";
-          productQuantityInput.value = "";
-        } else {
-          alert("Please provide valid product details.");
-        }
+      // Add event listeners for dashboard buttons
+      document.getElementById("wholesale-history").addEventListener("click", () => {
+        alert("Wholesale History will be displayed here.");
       });
 
-      // Close Store
-      closeStoreButton.addEventListener("click", () => {
-        localStorage.removeItem("storeName");
-        localStorage.removeItem("totalSales");
-        totalSales = 0;
-        totalSalesElement.textContent = totalSales;
-        storeSection.style.display = "block";
-        totalSalesSection.style.display = "none";
-        productSection.style.display = "none";
-        closeStoreButton.style.display = "none";
-        storeNameInput.value = "";
+      document.getElementById("last-history").addEventListener("click", () => {
+        alert("Last Transaction History will be displayed here.");
       });
 
-      // Initial Load
-      loadStoreData();
+      document.getElementById("print").addEventListener("click", () => {
+        alert("Print functionality will be implemented.");
+      });
     });
   </script>
 </body>

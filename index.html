@@ -304,14 +304,13 @@
       }
     }
 
-    // Show all data
-    function showAll() {
-      document.getElementById('settingsContainer').classList.remove('hidden');
-    }
-
     // Open Settings
     function openSettings() {
       document.getElementById('settingsContainer').classList.toggle('hidden');
+      document.getElementById('loading').classList.remove('hidden');
+      setTimeout(function() {
+        document.getElementById('loading').classList.add('hidden');
+      }, 1000);
     }
 
     // Close Store
@@ -333,6 +332,5 @@
       window.print();
     }
   </script>
-
 </body>
 </html>

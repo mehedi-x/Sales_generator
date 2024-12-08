@@ -111,6 +111,14 @@
       color: #ffcc00;
       display: none;
     }
+
+    .dashboard-section {
+      text-align: left;
+    }
+
+    .dashboard-section p {
+      margin: 10px 0;
+    }
   </style>
 </head>
 <body>
@@ -150,10 +158,14 @@
       <h2>Dashboard</h2>
       <div id="loadingIcon" class="loading">Loading...</div>
       <div id="dashboardDetails" class="hidden">
-        <p><strong>Total Sales:</strong> <span id="dashboardTotalSales">৳0.00</span></p>
-        <p><strong>Last Sale:</strong> <span id="dashboardLastSale">N/A</span></p>
-        <button onclick="closeStore()">Close Store</button>
-        <button onclick="goHome()">Home</button>
+        <div class="dashboard-section">
+          <p><strong>Total Sales:</strong> <span id="dashboardTotalSales">৳0.00</span></p>
+          <p><strong>Last Sale:</strong> <span id="dashboardLastSale">N/A</span></p>
+          <p><strong>Total Number of Sales:</strong> <span id="totalSalesCount">0</span></p>
+          <p><strong>Total Quantity Sold:</strong> <span id="totalQuantitySold">0</span></p>
+          <button onclick="closeStore()">Close Store</button>
+          <button onclick="goHome()">Home</button>
+        </div>
       </div>
     </div>
   </div>
@@ -161,7 +173,7 @@
   <script>
     let storeName = localStorage.getItem('storeName') || '';
     let salesData = JSON.parse(localStorage.getItem('salesData')) || [];
-    
+
     if (storeName) {
       document.getElementById('sales-generate-card').classList.remove('hidden');
       updateTotalSales();
@@ -196,7 +208,10 @@
 
     function updateTotalSales() {
       const totalSales = salesData.reduce((total, sale) => total + sale.total, 0);
+      const totalQuantity = salesData.reduce((total, sale) => total + sale.quantity, 0);
       document.getElementById('dashboardTotalSales').textContent = `৳${totalSales.toFixed(2)}`;
+      document.getElementById('totalSalesCount').textContent = salesData.length;
+      document.getElementById('totalQuantitySold').textContent = totalQuantity;
     }
 
     function updateLastSale(sale) {
@@ -222,7 +237,13 @@
 
     function toggleSettings() {
       document.getElementById('sales-generate-card').classList.add('hidden');
+      document.getElementById('last-sale-card').classList.add('hidden');
       document.getElementById('settings-card').classList.remove('hidden');
+      document.getElementById('loadingIcon').style.display = 'block';
+      setTimeout(function() {
+        document.getElementById('loadingIcon').style.display = 'none';
+        document.getElementById('dashboardDetails').classList.remove('hidden');
+      }, 1000);
     }
 
     function closeStore() {
@@ -234,6 +255,7 @@
     function goHome() {
       document.getElementById('settings-card').classList.add('hidden');
       document.getElementById('sales-generate-card').classList.remove('hidden');
+      document.getElementById('last-sale-card').classList.remove('hidden');
     }
   </script>
 </body>

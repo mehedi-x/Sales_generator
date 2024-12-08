@@ -251,19 +251,46 @@
       document.getElementById('lastSaleDetails').innerHTML = lastSaleDetails;
     }
 
-    // Function to go to home page
+    // Toggle settings view and load the dashboard
+    function toggleSettings() {
+      const loadingElement = document.getElementById('loading');
+      const settingsCard = document.getElementById('settings-card');
+      const mainPage = document.getElementById('main-page');
+      const dashboardCard = document.getElementById('dashboard-card');
+
+      mainPage.classList.add('hidden');
+      settingsCard.classList.remove('hidden');
+      loadingElement.style.display = 'block';
+
+      setTimeout(() => {
+        loadingElement.style.display = 'none';
+        dashboardCard.classList.remove('hidden');
+      }, 1000);
+    }
+
+    // Navigate to the home page
     function goHome() {
       document.getElementById('settings-card').classList.add('hidden');
       document.getElementById('main-page').classList.remove('hidden');
     }
 
-    // Function to close the store
+    // Close store and reset data
     function closeStore() {
       localStorage.clear();
       document.getElementById('main-page').classList.remove('hidden');
       document.getElementById('store-info-card').classList.add('hidden');
       document.getElementById('sales-generate-card').classList.add('hidden');
       document.getElementById('settings-card').classList.add('hidden');
+    }
+
+    // Print the last sale details
+    function printLastSale() {
+      const lastSaleDetails = document.getElementById('lastSaleDetails').innerHTML;
+      const newWindow = window.open();
+      newWindow.document.write('<html><body>');
+      newWindow.document.write(lastSaleDetails);
+      newWindow.document.write('</body></html>');
+      newWindow.print();
     }
   </script>
 </body>

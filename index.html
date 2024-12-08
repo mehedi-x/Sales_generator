@@ -150,11 +150,14 @@
     <div id="dashboard" class="hidden">
       <h2>Live Dashboard</h2>
       <div class="dashboard-item">
-        <h3>Sales Summary</h3>
-        <p>Total Products Sold: <span id="dashboard-products">0</span></p>
-        <p>Total Sales: ৳<span id="dashboard-sales">0</span></p>
+        <h3>Last Sale</h3>
+        <p>Product Name: <span id="last-sale-name">-</span></p>
+        <p>Price: ৳<span id="last-sale-price">0</span></p>
+        <p>Quantity: <span id="last-sale-quantity">0</span></p>
+        <p>Total Amount: ৳<span id="last-sale-total">0</span></p>
       </div>
       <button id="close-dashboard">Close Dashboard</button>
+      <button id="close-store">Close Store</button>
     </div>
   </main>
 
@@ -169,10 +172,16 @@
     const totalProducts = document.getElementById("total-products");
     const dashboardProducts = document.getElementById("dashboard-products");
 
+    const lastSaleName = document.getElementById("last-sale-name");
+    const lastSalePrice = document.getElementById("last-sale-price");
+    const lastSaleQuantity = document.getElementById("last-sale-quantity");
+    const lastSaleTotal = document.getElementById("last-sale-total");
+
     let storeData = JSON.parse(localStorage.getItem("storeData")) || {
       storeName: "",
       totalSales: 0,
       totalProducts: 0,
+      lastSale: {}
     };
 
     document.addEventListener("DOMContentLoaded", () => {
@@ -210,6 +219,14 @@
         const saleAmount = productPrice * productQuantity;
         storeData.totalSales += saleAmount;
         storeData.totalProducts += productQuantity;
+
+        storeData.lastSale = {
+          productName,
+          productPrice,
+          productQuantity,
+          saleAmount
+        };
+
         localStorage.setItem("storeData", JSON.stringify(storeData));
         updateDashboard();
         alert(`${productName} sold for ৳${saleAmount}`);
@@ -220,9 +237,15 @@
 
     function updateDashboard() {
       totalSales.textContent = storeData.totalSales;
-      dashboardSales.textContent = storeData.totalSales;
       totalProducts.textContent = storeData.totalProducts;
-      dashboardProducts.textContent = storeData.totalProducts;
+
+      // Update Last Sale Data
+      if (storeData.lastSale.productName) {
+        lastSaleName.textContent = storeData.lastSale.productName;
+        lastSalePrice.textContent = storeData.lastSale.productPrice;
+        lastSaleQuantity.textContent = storeData.lastSale.productQuantity;
+        lastSaleTotal.textContent = storeData.lastSale.saleAmount;
+      }
     }
 
     document.getElementById("settings-icon").addEventListener("click", () => {
@@ -239,6 +262,19 @@
       dashboard.classList.add("hidden");
       totalSalesSection.classList.remove("hidden");
       productSection.classList.remove("hidden");
+    });
+
+    document.getElementById("close-store").addEventListener("click", () => {
+      const confirm1 = confirm("Are you sure you want to close the store?");
+      if (confirm1) {
+        const confirm2 = confirm("This will delete all your data. Proceed?");
+        if (confirm2) {
+          localStorage.clear();
+          storeData = {};
+          dashboard.classList.add("hidden");
+          storeSection.classList.remove("hidden");
+        }
+      }
     });
   </script>
 </body>

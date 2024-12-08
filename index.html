@@ -85,10 +85,42 @@
       background-color: #ffaa00;
     }
 
-    .last-sale {
+    .loading {
+      font-size: 1.5rem;
+      color: #ffcc00;
+      display: none;
+    }
+
+    .dashboard-section {
       text-align: left;
-      margin-top: 20px;
-      font-size: 0.9rem;
+    }
+
+    .dashboard-section p {
+      margin: 10px 0;
+    }
+
+    .setting-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .setting-card .box {
+      background-color: #1f1f1f;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+      width: 45%;
+      display: inline-block;
+      vertical-align: top;
+    }
+
+    .box h3 {
+      margin-bottom: 10px;
+    }
+
+    .box p {
+      font-size: 1.2rem;
     }
 
     .print-button {
@@ -106,37 +138,46 @@
       background-color: #009900;
     }
 
-    .loading {
-      font-size: 1.5rem;
-      color: #ffcc00;
-      display: none;
-    }
-
-    .dashboard-section {
-      text-align: left;
-    }
-
-    .dashboard-section p {
-      margin: 10px 0;
-    }
-
-    .setting-card, .sales-card, .last-sale-card {
+    .chart-container {
+      margin: 20px auto;
+      width: 80%;
+      height: 200px;
+      background-color: #333;
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
+      color: #fff;
+      font-size: 1.5rem;
     }
 
-    .setting-card .box, .sales-card .box, .last-sale-card .box {
-      margin: 10px;
-      background-color: #1f1f1f;
-      padding: 15px;
-      border-radius: 8px;
-      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
-      width: 45%;
+    .close-store-btn {
+      display: block;
+      margin: 20px auto;
+      background-color: #e74c3c;
+      color: #fff;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 5px;
+      border: none;
+    }
+
+    .close-store-btn:hover {
+      background-color: #c0392b;
+    }
+
+    .home-btn {
       display: inline-block;
-      vertical-align: top;
+      margin-top: 20px;
+      background-color: #3498db;
+      color: #fff;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 5px;
     }
 
+    .home-btn:hover {
+      background-color: #2980b9;
+    }
   </style>
 </head>
 <body>
@@ -146,15 +187,8 @@
   </header>
 
   <div class="container">
-    <!-- Store Name Setup -->
-    <div id="store-name-setup" class="card">
-      <h2>Set Store Name</h2>
-      <input type="text" id="storeName" placeholder="Enter Your Store Name" required>
-      <button onclick="setStoreName()">Set Store Name</button>
-    </div>
-
-    <!-- Sales Generate Section -->
-    <div id="sales-generate-card" class="card hidden">
+    <!-- Sales Generate Section (Main Page) -->
+    <div id="sales-generate-card" class="card">
       <h2>Generate Sale</h2>
       <label for="productName">Product Name:</label>
       <input type="text" id="productName" placeholder="Enter Product Name" required>
@@ -165,74 +199,60 @@
       <button onclick="generateSale()">Generate Sale</button>
     </div>
 
-    <!-- Last Sale Section -->
-    <div id="last-sale-card" class="card hidden">
-      <h2>Last Sale</h2>
-      <div class="last-sale" id="lastSaleDetails"></div>
-      <button class="print-button" onclick="printLastSale()">Print Last Sale</button>
-    </div>
-
-    <!-- Settings Section (Dashboard) -->
+    <!-- Settings Section -->
     <div id="settings-card" class="card hidden">
       <h2>Dashboard</h2>
       <div id="loadingIcon" class="loading">Loading...</div>
       <div id="dashboardDetails" class="hidden">
         <div class="dashboard-section">
+          <!-- Total Sales and Last Sale Section -->
           <div class="box">
             <h3>Total Sales</h3>
             <p>৳<span id="dashboardTotalSales">৳0.00</span></p>
           </div>
           <div class="box">
-            <h3>Total Sales Count</h3>
-            <p><span id="dashboardTotalSalesCount">0</span> Sales</p>
-          </div>
-          <div class="box">
             <h3>Last Sale</h3>
             <p id="dashboardLastSale">N/A</p>
           </div>
-          <button onclick="closeStore()">Close Store</button>
-          <button onclick="goHome()">Home</button>
+          <div class="box">
+            <h3>Total Sales Count</h3>
+            <p><span id="dashboardTotalSalesCount">0</span> Sales</p>
+          </div>
+
+          <!-- Chart Container -->
+          <div class="chart-container">
+            <p>Sales Chart (Visual Representation)</p>
+          </div>
+
+          <!-- Print Button -->
+          <button class="print-button" onclick="printDashboard()">Print Dashboard</button>
+          
+          <!-- Close Store Button -->
+          <button class="close-store-btn" onclick="closeStore()">Close Store</button>
+
+          <!-- Home Button -->
+          <button class="home-btn" onclick="goHome()">Home</button>
         </div>
       </div>
     </div>
 
-    <div id="sales-card" class="setting-card">
-      <div class="box">
-        <h3>Total Sales</h3>
-        <p>৳<span id="totalSalesAmount">0.00</span></p>
-      </div>
-      <div class="box">
-        <h3>Total Sales Count</h3>
-        <p><span id="totalSalesCount">0</span> Sales</p>
-      </div>
-    </div>
-
-    <div id="last-sale-card" class="last-sale-card">
-      <div class="box">
-        <h3>Last Sale</h3>
-        <p id="lastSaleDetails">N/A</p>
-      </div>
-    </div>
   </div>
 
   <script>
-    // Check if Store Name is already set
+    // Data Initialization
     let storeName = localStorage.getItem('storeName') || '';
     let salesData = JSON.parse(localStorage.getItem('salesData')) || [];
 
     if (storeName) {
-      // If store name is set, hide the setup and show sales generate card
-      document.getElementById('store-name-setup').classList.add('hidden');
       document.getElementById('sales-generate-card').classList.remove('hidden');
       updateTotalSales();
     }
 
+    // Set Store Name
     function setStoreName() {
       storeName = document.getElementById('storeName').value.trim();
       if (storeName) {
-        // Save store name in localStorage and hide the setup section
         localStorage.setItem('storeName', storeName);
-        document.getElementById('store-name-setup').classList.add('hidden');
         document.getElementById('sales-generate-card').classList.remove('hidden');
         alert(`Store Name: ${storeName} has been set.`);
         updateTotalSales();
@@ -241,6 +261,7 @@
       }
     }
 
+    // Generate Sale Function
     function generateSale() {
       const productName = document.getElementById('productName').value.trim();
       const quantity = document.getElementById('quantity').value.trim() || 1;
@@ -268,6 +289,7 @@
       }
     }
 
+    // Update Total Sales and Last Sale Data
     function updateTotalSales() {
       let totalSales = 0;
       let salesCount = 0;
@@ -275,28 +297,35 @@
         totalSales += sale.total;
         salesCount++;
       });
-      document.getElementById('totalSalesAmount').innerText = totalSales.toFixed(2);
-      document.getElementById('totalSalesCount').innerText = salesCount;
       document.getElementById('dashboardTotalSales').innerText = totalSales.toFixed(2);
       document.getElementById('dashboardTotalSalesCount').innerText = salesCount;
     }
 
     function updateLastSale(sale) {
       const lastSale = `Product: ${sale.productName}, Quantity: ${sale.quantity}, Total: ৳${sale.total.toFixed(2)}`;
-      document.getElementById('lastSaleDetails').innerText = lastSale;
       document.getElementById('dashboardLastSale').innerText = lastSale;
     }
 
-    function closeStore() {
-      localStorage.removeItem('storeName');
-      localStorage.removeItem('salesData');
-      location.reload();
+    // Print Dashboard
+    function printDashboard() {
+      window.print();
     }
 
+    // Close Store
+    function closeStore() {
+      if (confirm('Are you sure you want to close the store?')) {
+        localStorage.removeItem('storeName');
+        localStorage.removeItem('salesData');
+        location.reload();
+      }
+    }
+
+    // Navigate to Home
     function goHome() {
       location.reload();
     }
 
+    // Toggle Settings View
     function toggleSettings() {
       document.getElementById('loadingIcon').style.display = 'block';
       setTimeout(function() {

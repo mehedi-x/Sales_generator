@@ -146,8 +146,8 @@
       Loading Dashboard...
     </div>
 
-    <!-- Dashboard Section -->
-    <div id="dashboard" class="hidden">
+    <!-- Settings Section - Will be visible when Settings is clicked -->
+    <div id="settings-section" class="hidden">
       <h2>Live Dashboard</h2>
       <div class="dashboard-item">
         <h3>Last Sale</h3>
@@ -166,11 +166,9 @@
     const totalSalesSection = document.getElementById("total-sales-section");
     const productSection = document.getElementById("product-section");
     const loadingSection = document.getElementById("loading");
-    const dashboard = document.getElementById("dashboard");
+    const settingsSection = document.getElementById("settings-section");
     const totalSales = document.getElementById("total-sales");
-    const dashboardSales = document.getElementById("dashboard-sales");
     const totalProducts = document.getElementById("total-products");
-    const dashboardProducts = document.getElementById("dashboard-products");
 
     const lastSaleName = document.getElementById("last-sale-name");
     const lastSalePrice = document.getElementById("last-sale-price");
@@ -254,12 +252,12 @@
       productSection.classList.add("hidden");
       setTimeout(() => {
         loadingSection.style.display = "none";
-        dashboard.classList.remove("hidden");
+        settingsSection.classList.remove("hidden");
       }, 1000);
     });
 
     document.getElementById("close-dashboard").addEventListener("click", () => {
-      dashboard.classList.add("hidden");
+      settingsSection.classList.add("hidden");
       totalSalesSection.classList.remove("hidden");
       productSection.classList.remove("hidden");
     });
@@ -271,7 +269,7 @@
         if (confirm2) {
           localStorage.clear();
           storeData = {};
-          dashboard.classList.add("hidden");
+          settingsSection.classList.add("hidden");
           storeSection.classList.remove("hidden");
         }
       }

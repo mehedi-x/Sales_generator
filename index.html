@@ -169,6 +169,22 @@
     .print-button:hover {
       background-color: #218838;
     }
+
+    .all-in-one-page {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 30px;
+    }
+
+    .all-in-one-card {
+      margin: 20px;
+      padding: 20px;
+      background-color: #1f1f1f;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 600px;
+    }
   </style>
 </head>
 <body>
@@ -177,22 +193,22 @@
     <i id="settings-icon" class="settings-icon">⚙</i>
   </header>
 
-  <main class="container">
+  <main class="container all-in-one-page">
     <!-- Store Setup Section -->
-    <div id="store-section" class="card">
+    <div id="store-section" class="all-in-one-card">
       <h2>Set Your Store Name</h2>
       <input type="text" id="store-name" placeholder="Enter Store Name">
       <button id="start-store">Start Store</button>
     </div>
 
     <!-- Total Sales Section -->
-    <div id="total-sales-section" class="card hidden card-border">
+    <div id="total-sales-section" class="all-in-one-card hidden card-border">
       <h3>Total Sales: ৳<span id="total-sales">0</span></h3>
       <h4>Total Products Sold: <span id="total-products">0</span></h4>
     </div>
 
     <!-- Product Entry Section -->
-    <div id="product-section" class="card hidden card-border">
+    <div id="product-section" class="all-in-one-card hidden card-border">
       <h2>Product Entry</h2>
       <input type="text" id="product-name" placeholder="Product Name">
       <input type="number" id="product-price" placeholder="Product Price">
@@ -267,8 +283,9 @@
         storeSection.classList.add("hidden");
         totalSalesSection.classList.remove("hidden");
         productSection.classList.remove("hidden");
+        updateDashboard();
       } else {
-        alert("Please enter a store name!");
+        alert("Please enter a valid store name.");
       }
     });
 
@@ -276,21 +293,13 @@
       const productName = document.getElementById("product-name").value.trim();
       const productPrice = parseFloat(document.getElementById("product-price").value);
       const productQuantity = parseInt(document.getElementById("product-quantity").value);
-      
-      if (productName && !isNaN(productPrice) && !isNaN(productQuantity)) {
-        const totalAmount = productPrice * productQuantity;
-        
+      const totalAmount = productPrice * productQuantity;
+
+      if (productName && !isNaN(productPrice) && !isNaN(productQuantity) && totalAmount > 0) {
         storeData.totalSales += totalAmount;
         storeData.totalProducts += productQuantity;
-        storeData.lastSale = {
-          productName,
-          productPrice,
-          productQuantity,
-          totalAmount
-        };
-
+        storeData.lastSale = { productName, productPrice, productQuantity, totalAmount };
         localStorage.setItem("storeData", JSON.stringify(storeData));
-
         updateDashboard();
       } else {
         alert("Please fill all fields correctly.");

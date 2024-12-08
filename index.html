@@ -146,8 +146,15 @@
   </header>
 
   <div class="container">
+    <!-- Store Name Setup -->
+    <div id="store-name-setup" class="card">
+      <h2>Set Store Name</h2>
+      <input type="text" id="storeName" placeholder="Enter Your Store Name" required>
+      <button onclick="setStoreName()">Set Store Name</button>
+    </div>
+
     <!-- Sales Generate Section -->
-    <div id="sales-generate-card" class="card">
+    <div id="sales-generate-card" class="card hidden">
       <h2>Generate Sale</h2>
       <label for="productName">Product Name:</label>
       <input type="text" id="productName" placeholder="Enter Product Name" required>
@@ -201,12 +208,29 @@
   </div>
 
   <script>
+    // Check if Store Name is already set
     let storeName = localStorage.getItem('storeName') || '';
     let salesData = JSON.parse(localStorage.getItem('salesData')) || [];
 
     if (storeName) {
+      // If store name is set, hide the setup and show sales generate card
+      document.getElementById('store-name-setup').classList.add('hidden');
       document.getElementById('sales-generate-card').classList.remove('hidden');
       updateTotalSales();
+    }
+
+    function setStoreName() {
+      storeName = document.getElementById('storeName').value.trim();
+      if (storeName) {
+        // Save store name in localStorage and hide the setup section
+        localStorage.setItem('storeName', storeName);
+        document.getElementById('store-name-setup').classList.add('hidden');
+        document.getElementById('sales-generate-card').classList.remove('hidden');
+        alert(`Store Name: ${storeName} has been set.`);
+        updateTotalSales();
+      } else {
+        alert('Please enter a store name!');
+      }
     }
 
     function generateSale() {
@@ -232,65 +256,55 @@
         document.getElementById('price').value = '';
         updateTotalSales();
       } else {
-        alert('Please fill in all required fields!');
+        alert('Please fill all fields!');
       }
     }
 
     function updateTotalSales() {
-      const totalSales = salesData.reduce((total, sale) => total + sale.total, 0);
-      const totalQuantity = salesData.reduce((total, sale) => total + sale.quantity, 0);
-      document.getElementById('dashboardTotalSales').textContent = `৳${totalSales.toFixed(2)}`;
-      document.getElementById('totalSalesAmount').textContent = totalSales.toFixed(2);
-      document.getElementById('totalSalesCount').textContent = salesData.length;
-      document.getElementById('totalQuantitySold').textContent = totalQuantity;
+      const totalSales = salesData.reduce((acc, sale) => acc + sale.total, 0);
+      const lastSale = salesData[salesData.length - 1];
+      document.getElementById('dashboardTotalSales').innerText = `৳${totalSales.toFixed(2)}`;
+      document.getElementById('dashboardLastSale').innerText = lastSale ? lastSale.productName : 'N/A';
+      document.getElementById('totalSalesAmount').innerText = totalSales.toFixed(2);
+      document.getElementById('totalSalesCount').innerText = salesData.length;
+      document.getElementById('totalQuantitySold').innerText = salesData.reduce((acc, sale) => acc + sale.quantity, 0);
     }
 
     function updateLastSale(sale) {
       const lastSaleDetails = `
-        <p><strong>Store Name:</strong> ${sale.storeName}</p>
-        <p><strong>Product Name:</strong> ${sale.productName}</p>
-        <p><strong>Quantity:</strong> ${sale.quantity}</p>
-        <p><strong>Price per Unit:</strong> ৳${sale.price.toFixed(2)}</p>
-        <p><strong>Total:</strong> ৳${sale.total.toFixed(2)}</p>
+        <strong>Product Name:</strong> ${sale.productName}<br>
+        <strong>Quantity:</strong> ${sale.quantity}<br>
+        <strong>Total:</strong> ৳${sale.total.toFixed(2)}
       `;
       document.getElementById('lastSaleDetails').innerHTML = lastSaleDetails;
     }
 
-    function printLastSale() {
-      const lastSale = document.getElementById('lastSaleDetails').innerHTML;
-      const printWindow = window.open('', '', 'height=400,width=600');
-      printWindow.document.write('<html><head><title>Print Last Sale</title></head><body>');
-      printWindow.document.write(lastSale);
-      printWindow.document.write('</body></html>');
-      printWindow.document.close();
-      printWindow.print();
+    function closeStore() {
+      salesData = [];
+      localStorage.setItem('salesData', JSON.stringify(salesData));
+      localStorage.removeItem('storeName');  // Remove store name when closing the store
+      updateTotalSales();
+      alert('Store Closed');
+      location.reload(); // Refresh the page to ask for store name again
+    }
+
+    function goHome() {
+      const dashboardSection = document.getElementById('settings-card');
+      const homePage = document.getElementById('sales-generate-card');
+      dashboardSection.classList.add('hidden');
+      homePage.classList.remove('hidden');
     }
 
     function toggleSettings() {
       const settingsCard = document.getElementById('settings-card');
       const loadingIcon = document.getElementById('loadingIcon');
       const dashboardDetails = document.getElementById('dashboardDetails');
-
       settingsCard.classList.toggle('hidden');
       loadingIcon.style.display = 'block';
       setTimeout(() => {
         loadingIcon.style.display = 'none';
         dashboardDetails.classList.remove('hidden');
       }, 1000);
-    }
-
-    function closeStore() {
-      salesData = [];
-      localStorage.setItem('salesData', JSON.stringify(salesData));
-      updateTotalSales();
-      alert('Store Closed');
-    }
-
-    function goHome() {
-      const dashboardSection = document.getElementById('dashboardDetails');
-      const homePage = document.getElementById('sales-generate-card');
-      dashboardSection.classList.add('hidden');
-      homePage.classList.remove('hidden');
     }
   </script>
 </body>

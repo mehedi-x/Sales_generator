@@ -90,6 +90,7 @@
       display: none;
       text-align: center;
       font-size: 1.5rem;
+      color: #ffcc00;
     }
 
     #dashboard {
@@ -109,6 +110,14 @@
 
     .hidden {
       display: none;
+    }
+
+    .sales-box {
+      border: 2px solid #ffcc00;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 15px;
+      text-align: left;
     }
   </style>
 </head>
@@ -149,13 +158,15 @@
     <!-- Settings Section - Will be visible when Settings is clicked -->
     <div id="settings-section" class="hidden">
       <h2>Live Dashboard</h2>
-      <div class="dashboard-item">
+      <!-- Sales Data Box -->
+      <div class="sales-box">
         <h3>Last Sale</h3>
         <p>Product Name: <span id="last-sale-name">-</span></p>
         <p>Price: ৳<span id="last-sale-price">0</span></p>
         <p>Quantity: <span id="last-sale-quantity">0</span></p>
         <p>Total Amount: ৳<span id="last-sale-total">0</span></p>
       </div>
+      
       <button id="close-dashboard">Close Dashboard</button>
       <button id="close-store">Close Store</button>
     </div>
@@ -265,12 +276,13 @@
     document.getElementById("close-store").addEventListener("click", () => {
       const confirm1 = confirm("Are you sure you want to close the store?");
       if (confirm1) {
-        const confirm2 = confirm("This will delete all your data. Proceed?");
+        const confirm2 = confirm("Are you absolutely sure?");
         if (confirm2) {
           localStorage.clear();
           storeData = {};
-          settingsSection.classList.add("hidden");
           storeSection.classList.remove("hidden");
+          totalSalesSection.classList.add("hidden");
+          productSection.classList.add("hidden");
         }
       }
     });

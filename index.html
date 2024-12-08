@@ -276,14 +276,10 @@
         document.getElementById('last-sale-quantity').innerText = lastSale.productQuantity;
         document.getElementById('last-sale-total').innerText = lastSale.totalAmount;
 
-        // Show last sale in Live Dashboard
         document.getElementById('live-product-name').innerText = lastSale.productName;
         document.getElementById('live-price').innerText = lastSale.productPrice;
         document.getElementById('live-quantity').innerText = lastSale.productQuantity;
         document.getElementById('live-total-amount').innerText = lastSale.totalAmount;
-
-        document.getElementById('all-in-one-page').style.display = "block";
-        document.getElementById('last-sale-display').classList.remove('hidden');
       }
     }
 

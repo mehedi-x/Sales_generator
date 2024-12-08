@@ -93,23 +93,10 @@
       color: #ffcc00;
     }
 
-    #dashboard {
+    /* All-in-One Page Styling */
+    #all-in-one-page {
       display: none;
       padding: 20px;
-      text-align: center;
-    }
-
-    .dashboard-item {
-      background-color: #1f1f1f;
-      padding: 15px;
-      border: 1px solid #ffcc00;
-      border-radius: 5px;
-      text-align: center;
-      margin: 10px 0;
-    }
-
-    .hidden {
-      display: none;
     }
 
     .sales-box {
@@ -153,23 +140,6 @@
       background-color: #ffaa00;
     }
 
-    .setting-options {
-      margin-top: 20px;
-    }
-
-    .print-button {
-      background-color: #28a745;
-      color: white;
-      padding: 12px 20px;
-      border-radius: 5px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .print-button:hover {
-      background-color: #218838;
-    }
-
     /* Styling for Last Sale section */
     #last-sale-display {
       font-size: 1.2rem;
@@ -202,6 +172,12 @@
     #last-sale-display .detail span {
       font-weight: bold;
     }
+
+    /* Hide All Sales Data by Default */
+    .hidden {
+      display: none;
+    }
+
   </style>
 </head>
 <body>
@@ -233,7 +209,8 @@
     </div>
   </div>
 
-  <div id="settingsContainer" class="settings-container hidden">
+  <!-- All-in-One Page -->
+  <div id="all-in-one-page">
     <h2>Live Dashboard</h2>
     <div id="liveDashboard" class="sales-box">
       <p>Last Sale</p>
@@ -299,18 +276,20 @@
         document.getElementById('last-sale-quantity').innerText = lastSale.productQuantity;
         document.getElementById('last-sale-total').innerText = lastSale.totalAmount;
 
-        // Show last sale
+        // Show last sale in Live Dashboard
+        document.getElementById('live-product-name').innerText = lastSale.productName;
+        document.getElementById('live-price').innerText = lastSale.productPrice;
+        document.getElementById('live-quantity').innerText = lastSale.productQuantity;
+        document.getElementById('live-total-amount').innerText = lastSale.totalAmount;
+
+        document.getElementById('all-in-one-page').style.display = "block";
         document.getElementById('last-sale-display').classList.remove('hidden');
       }
     }
 
-    // Open Settings
+    // Open Settings and Toggle View
     function openSettings() {
-      document.getElementById('settingsContainer').classList.toggle('hidden');
-      document.getElementById('loading').classList.remove('hidden');
-      setTimeout(function() {
-        document.getElementById('loading').classList.add('hidden');
-      }, 1000);
+      document.getElementById('all-in-one-page').style.display = "block";
     }
 
     // Close Store
@@ -322,7 +301,12 @@
           lastSale = {};
           document.getElementById('totalSales').innerText = "৳0";
           document.getElementById('totalProductsSold').innerText = "0";
+          document.getElementById('live-product-name').innerText = "-";
+          document.getElementById('live-price').innerText = "0";
+          document.getElementById('live-quantity').innerText = "0";
+          document.getElementById('live-total-amount').innerText = "0";
           document.getElementById('last-sale-display').classList.add('hidden');
+          document.getElementById('all-in-one-page').style.display = "none";
         }
       }
     }
@@ -332,5 +316,6 @@
       window.print();
     }
   </script>
+
 </body>
 </html>

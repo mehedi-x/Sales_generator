@@ -264,7 +264,7 @@
         document.getElementById('price').value = '';
         updateTotalSales();
       } else {
-        alert('Please fill out all fields!');
+        alert('Please enter valid product details!');
       }
     }
 
@@ -275,7 +275,6 @@
         totalSales += sale.total;
         salesCount++;
       });
-
       document.getElementById('totalSalesAmount').innerText = totalSales.toFixed(2);
       document.getElementById('totalSalesCount').innerText = salesCount;
       document.getElementById('dashboardTotalSales').innerText = totalSales.toFixed(2);
@@ -296,6 +295,15 @@
 
     function goHome() {
       location.reload();
+    }
+
+    function toggleSettings() {
+      document.getElementById('loadingIcon').style.display = 'block';
+      setTimeout(function() {
+        document.getElementById('loadingIcon').style.display = 'none';
+        document.getElementById('sales-generate-card').classList.add('hidden');
+        document.getElementById('dashboardDetails').classList.remove('hidden');
+      }, 1000);
     }
   </script>
 </body>

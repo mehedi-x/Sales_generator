@@ -266,6 +266,8 @@
       lastSale: {}
     };
 
+    let isSettingsActive = false;
+
     document.addEventListener("DOMContentLoaded", () => {
       if (storeData.storeName) {
         storeSection.classList.add("hidden");
@@ -318,10 +320,18 @@
     }
 
     document.getElementById("settings-icon").addEventListener("click", () => {
+      if (isSettingsActive) {
+        return;
+      }
+
+      isSettingsActive = true;
       loadingSection.style.display = "block";
+
       setTimeout(() => {
         loadingSection.style.display = "none";
         settingsSection.classList.remove("hidden");
+        totalSalesSection.classList.add("hidden");
+        productSection.classList.add("hidden");
       }, 1000);
     });
 

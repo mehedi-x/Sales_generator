@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Modern Store Management</title>
+  <title>Store Management Dashboard</title>
   <style>
-    /* Base Styles */
+    /* Global Styles */
     * {
       margin: 0;
       padding: 0;
@@ -16,40 +16,23 @@
       font-family: 'Roboto', sans-serif;
       background-color: #121212;
       color: #ffffff;
-      line-height: 1.6;
     }
 
     header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px 20px;
       background-color: #1f1f1f;
+      padding: 15px;
+      text-align: center;
       border-bottom: 1px solid #333333;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
     }
 
     header h1 {
+      color: #ffffff;
       font-size: 1.8rem;
-      font-weight: bold;
-      color: #ffffff;
     }
 
-    header button {
-      background: none;
-      border: none;
-      color: #ffffff;
-      font-size: 1.5rem;
-      cursor: pointer;
-    }
-
-    main {
+    .container {
+      text-align: center;
       padding: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      height: 100vh;
-      justify-content: center;
     }
 
     .card {
@@ -57,27 +40,14 @@
       border: 1px solid #333333;
       border-radius: 10px;
       padding: 20px;
-      margin: 10px 0;
-      width: 100%;
+      margin: 10px auto;
+      width: 90%;
       max-width: 500px;
       box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
       text-align: center;
-      opacity: 1;
-      transition: opacity 0.5s ease-out, transform 0.5s ease-out;
     }
 
-    .hide {
-      opacity: 0;
-      transform: scale(0.9);
-      pointer-events: none;
-    }
-
-    h2 {
-      font-size: 1.5rem;
-      margin-bottom: 15px;
-    }
-
-    input[type="text"], input[type="number"] {
+    input[type="text"] {
       width: 90%;
       padding: 10px;
       margin: 10px 0;
@@ -102,45 +72,47 @@
       background-color: #ffaa00;
     }
 
-    .total-sales {
+    #dashboard-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      color: #ffffff;
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #dashboard-modal .modal-content {
       background-color: #1e1e1e;
-      padding: 15px;
       border-radius: 10px;
-      font-size: 1.5rem;
-      font-weight: bold;
-      display: none; /* Initially hidden */
+      padding: 20px;
+      width: 90%;
+      max-width: 700px;
       text-align: center;
-      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
     }
 
-    .show {
-      display: block;
-    }
-
-    footer {
-      text-align: center;
-      padding: 10px;
-      background-color: #1f1f1f;
-      color: #888888;
-      font-size: 0.9rem;
-    }
-
-    footer a {
-      color: #ffcc00;
-      text-decoration: none;
+    .close-modal {
+      background-color: #ff4d4d;
+      color: #ffffff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
-  <!-- Header -->
   <header>
-    <h1>Store Manager</h1>
-    <button id="menu-toggle">☰</button>
+    <h1>Store Management System</h1>
   </header>
 
-  <!-- Main Content -->
-  <main>
-    <!-- Store Name Section -->
+  <main class="container">
+    <!-- Store Setup Section -->
     <div id="store-section" class="card">
       <h2>Set Your Store Name</h2>
       <input type="text" id="store-name" placeholder="Enter Store Name">
@@ -148,30 +120,24 @@
     </div>
 
     <!-- Total Sales Section -->
-    <div id="total-sales-section" class="total-sales">
-      Total Sales: ৳<span id="total-sales">0</span>
+    <div id="total-sales-section" class="card" style="display: none;">
+      <h3>Total Sales: ৳<span id="total-sales">0</span></h3>
+      <button id="close-store">Close Store</button>
     </div>
 
-    <!-- Add Product Section -->
-    <div class="card">
-      <h2>Add Product</h2>
-      <input type="text" id="product-name" placeholder="Product Name">
-      <input type="number" id="product-price" placeholder="Price">
-      <input type="number" id="product-quantity" placeholder="Quantity">
-      <button id="add-product">Add Product</button>
-    </div>
-
-    <!-- Last Sale Summary -->
-    <div class="card">
-      <h2>Last Sale Summary</h2>
-      <p id="last-sale-summary">No sales recorded yet.</p>
-    </div>
+    <!-- Free Dot for Dashboard -->
+    <button id="free-dot" style="margin-top: 20px; background-color: #00ccff;">Open Dashboard</button>
   </main>
 
-  <!-- Footer -->
-  <footer>
-    &copy; 2024 <a href="#">Store Manager Inc.</a> All rights reserved.
-  </footer>
+  <!-- Dashboard Modal -->
+  <div id="dashboard-modal">
+    <div class="modal-content">
+      <h2>Store Dashboard</h2>
+      <p>Here is the full professional dashboard view with all the features.</p>
+      <!-- Add your dashboard details here -->
+      <button class="close-modal">Close</button>
+    </div>
+  </div>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
@@ -179,68 +145,63 @@
       const totalSalesSection = document.getElementById("total-sales-section");
       const startStoreButton = document.getElementById("start-store");
       const storeNameInput = document.getElementById("store-name");
-      const productNameInput = document.getElementById("product-name");
-      const productPriceInput = document.getElementById("product-price");
-      const productQuantityInput = document.getElementById("product-quantity");
-      const addProductButton = document.getElementById("add-product");
-      const lastSaleSummary = document.getElementById("last-sale-summary");
+      const totalSalesElement = document.getElementById("total-sales");
+      const closeStoreButton = document.getElementById("close-store");
+      const freeDotButton = document.getElementById("free-dot");
+      const dashboardModal = document.getElementById("dashboard-modal");
+      const closeModalButton = document.querySelector(".close-modal");
 
       let totalSales = 0;
 
-      // Check if store name exists in local storage
-      if (localStorage.getItem("storeName")) {
-        showTotalSales();
-      }
+      // Load store name and total sales from localStorage
+      const loadStoreData = () => {
+        const storeName = localStorage.getItem("storeName");
+        const savedSales = localStorage.getItem("totalSales");
 
-      // Handle Start Store button click
+        if (storeName) {
+          storeSection.style.display = "none";
+          totalSalesSection.style.display = "block";
+          totalSales = savedSales ? parseInt(savedSales) : 0;
+          totalSalesElement.textContent = totalSales;
+        }
+      };
+
+      // Start Store
       startStoreButton.addEventListener("click", () => {
         const storeName = storeNameInput.value.trim();
         if (storeName) {
-          // Save store name in local storage
           localStorage.setItem("storeName", storeName);
-
-          // Animate and hide the store section
-          storeSection.classList.add("hide");
-          setTimeout(() => {
-            storeSection.style.display = "none";
-            showTotalSales();
-          }, 500); // Match the animation duration
+          localStorage.setItem("totalSales", 0);
+          storeSection.style.display = "none";
+          totalSalesSection.style.display = "block";
         } else {
           alert("Please enter a valid store name.");
         }
       });
 
-      // Show Total Sales section
-      function showTotalSales() {
-        totalSalesSection.classList.add("show");
-        document.getElementById("total-sales").textContent = totalSales;
-      }
-
-      // Handle Add Product button click
-      addProductButton.addEventListener("click", () => {
-        const productName = productNameInput.value.trim();
-        const productPrice = parseFloat(productPriceInput.value);
-        const productQuantity = parseInt(productQuantityInput.value);
-
-        if (productName && !isNaN(productPrice) && !isNaN(productQuantity) && productQuantity > 0) {
-          // Update the last sale summary
-          const saleAmount = productPrice * productQuantity;
-          totalSales += saleAmount;
-
-          // Show last sale summary
-          lastSaleSummary.textContent = `Product: ${productName}, Quantity: ${productQuantity}, Total: ৳${saleAmount}`;
-
-          // Update total sales
-          document.getElementById("total-sales").textContent = totalSales;
-
-          // Clear input fields
-          productNameInput.value = '';
-          productPriceInput.value = '';
-          productQuantityInput.value = '';
-        } else {
-          alert("Please enter valid product details.");
-        }
+      // Close Store
+      closeStoreButton.addEventListener("click", () => {
+        localStorage.removeItem("storeName");
+        localStorage.removeItem("totalSales");
+        totalSales = 0;
+        totalSalesElement.textContent = totalSales;
+        storeSection.style.display = "block";
+        totalSalesSection.style.display = "none";
+        storeNameInput.value = "";
       });
+
+      // Open Dashboard Modal
+      freeDotButton.addEventListener("click", () => {
+        dashboardModal.style.display = "flex";
+      });
+
+      // Close Dashboard Modal
+      closeModalButton.addEventListener("click", () => {
+        dashboardModal.style.display = "none";
+      });
+
+      // Initial Load
+      loadStoreData();
     });
   </script>
 </body>

@@ -121,6 +121,7 @@
     <div id="dashboard-card" class="card hidden">
       <h2>Dashboard</h2>
       <p>Total Sales: ৳<span id="totalSales">0</span></p>
+      <button onclick="closeStore()">Close Store</button>
     </div>
   </div>
 
@@ -130,7 +131,6 @@
 
     // Check if store name is already set
     if (storeName) {
-      // If Store Name exists, hide the main page and show the store info and sales generate section
       document.getElementById('main-page').classList.add('hidden');
       document.getElementById('store-info-card').classList.remove('hidden');
       document.getElementById('sales-generate-card').classList.remove('hidden');
@@ -176,6 +176,22 @@
       document.getElementById('store-info-card').classList.add('hidden');
       document.getElementById('sales-generate-card').classList.add('hidden');
       document.getElementById('dashboard-card').classList.remove('hidden');
+    }
+
+    // Close Store
+    function closeStore() {
+      const confirm1 = confirm("Are you sure you want to close the store?");
+      if (confirm1) {
+        const confirm2 = confirm("This will reset the system. Confirm again?");
+        if (confirm2) {
+          localStorage.removeItem('storeName'); // Clear store name
+          document.getElementById('dashboard-card').classList.add('hidden');
+          document.getElementById('main-page').classList.remove('hidden');
+          storeName = '';
+          totalSales = 0;
+          alert("Store has been closed and reset.");
+        }
+      }
     }
   </script>
 </body>

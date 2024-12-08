@@ -3,41 +3,39 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Store Management</title>
+  <title>Future Store Management</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1 id="store-name-display">Store Management System</h1>
-    <input type="text" id="store-name-input" placeholder="Enter Store Name">
-    <button id="set-store-name">Generate Sale</button>
-    <div id="total-sales">Total Sales: ৳0</div>
-  </header>
-  <main>
-    <section id="product-entry">
-      <h2>Add Product</h2>
-      <input type="text" id="product-name" placeholder="Product Name">
-      <input type="number" id="product-price" placeholder="Price">
-      <input type="number" id="product-quantity" placeholder="Quantity">
-      <button id="add-sale">Generate Sale</button>
-    </section>
-    <section id="last-sale">
+  <div id="dashboard">
+    <header>
+      <h1>Future Store Dashboard</h1>
+      <input type="text" id="store-name-input" placeholder="Enter Store Name">
+      <button id="set-store-name">Set Store</button>
+    </header>
+    <div id="main-content">
+      <div id="sales-overview">
+        <h2>Sales Overview</h2>
+        <canvas id="sales-chart"></canvas>
+        <div>Total Sales: <span id="total-sales">৳0</span></div>
+      </div>
+      <div id="product-entry">
+        <h2>Add Product</h2>
+        <input type="text" id="product-name" placeholder="Product Name">
+        <input type="number" id="product-price" placeholder="Price">
+        <input type="number" id="product-quantity" placeholder="Quantity">
+        <button id="add-sale">Generate Sale</button>
+      </div>
+    </div>
+    <div id="last-sale">
       <h2>Last Sale Summary</h2>
       <div id="sale-summary"></div>
-    </section>
-  </main>
-  <nav>
-    <button id="menu-button">☰</button>
-    <ul id="menu">
-      <li id="view-history">Full Sales History</li>
-      <li id="download-history">Download Sales History</li>
-      <li id="close-store">Close Store</li>
-    </ul>
-  </nav>
-  <div id="modal" class="hidden">
-    <h2>Sales History</h2>
-    <div id="history"></div>
-    <button id="close-modal">Close</button>
+    </div>
+    <footer>
+      <button id="view-history">View Sales History</button>
+      <button id="download-history">Download Sales Data</button>
+      <button id="close-store">Close Store</button>
+    </footer>
   </div>
   <script src="script.js"></script>
 </body>

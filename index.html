@@ -3,38 +3,55 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Future Store Management</title>
+  <title>2040 Dark Mode Store Management</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="dashboard">
+  <div id="app">
     <header>
-      <h1>Future Store Dashboard</h1>
-      <input type="text" id="store-name-input" placeholder="Enter Store Name">
-      <button id="set-store-name">Set Store</button>
+      <h1>🚀 Store Management System</h1>
+      <div id="store-info">
+        <input type="text" id="store-name-input" placeholder="Enter Your Store Name">
+        <button id="set-store">Start Store</button>
+      </div>
     </header>
-    <div id="main-content">
-      <div id="sales-overview">
-        <h2>Sales Overview</h2>
-        <canvas id="sales-chart"></canvas>
-        <div>Total Sales: <span id="total-sales">৳0</span></div>
-      </div>
-      <div id="product-entry">
-        <h2>Add Product</h2>
-        <input type="text" id="product-name" placeholder="Product Name">
-        <input type="number" id="product-price" placeholder="Price">
-        <input type="number" id="product-quantity" placeholder="Quantity">
-        <button id="add-sale">Generate Sale</button>
-      </div>
-    </div>
-    <div id="last-sale">
-      <h2>Last Sale Summary</h2>
-      <div id="sale-summary"></div>
-    </div>
+
+    <main>
+      <section id="dashboard">
+        <div id="overview">
+          <h2>📊 Sales Overview</h2>
+          <canvas id="sales-chart"></canvas>
+          <div id="total-sales-summary">
+            <h3>Total Sales</h3>
+            <p><span id="total-sales">৳0</span></p>
+          </div>
+        </div>
+
+        <div id="add-product">
+          <h2>➕ Add Product</h2>
+          <form id="product-form">
+            <input type="text" id="product-name" placeholder="Product Name">
+            <input type="number" id="product-price" placeholder="Price">
+            <input type="number" id="product-quantity" placeholder="Quantity">
+            <button type="button" id="generate-sale">Generate Sale</button>
+          </form>
+        </div>
+      </section>
+
+      <section id="last-sale">
+        <h2>🛒 Last Sale Summary</h2>
+        <div id="sale-summary">
+          <p>No sales recorded yet.</p>
+        </div>
+      </section>
+    </main>
+
     <footer>
-      <button id="view-history">View Sales History</button>
-      <button id="download-history">Download Sales Data</button>
-      <button id="close-store">Close Store</button>
+      <div id="actions">
+        <button id="view-history">View History</button>
+        <button id="download-history">Download History</button>
+        <button id="close-store">Close Store</button>
+      </div>
     </footer>
   </div>
   <script src="script.js"></script>

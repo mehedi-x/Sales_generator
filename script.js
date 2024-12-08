@@ -1,95 +1,147 @@
-// Global Variables
-let storeName = '';
-let totalSales = 0;
-let totalProductsSold = 0;
-let lastSale = {};
+let storeName = localStorage.getItem('storeName') || '';
+let salesData = JSON.parse(localStorage.getItem('salesData')) || [];
 
-// Set Store Name and Start Store
-function setStoreName() {
-  const storeNameInput = document.getElementById('storeNameInput').value;
-
-  if (storeNameInput) {
-    storeName = storeNameInput;
-    localStorage.setItem('storeName', storeName);
-
-    // Hide "Set Your Store Name" Section
+// সিস্টেম চালু হলে স্টোর নাম ও সেল ডেটা লোড করা
+window.onload = function () {
+  if (storeName) {
     document.getElementById('main-page').classList.add('hidden');
+    document.getElementById('store-info-card').classList.remove('hidden');
+    document.getElementById('sales-generate-card').classList.remove('hidden');
+    document.getElementById('storeNameDisplay').textContent = `Welcome to ${storeName}`;
+  }
+};
 
-    // Show Sales and Product Entry
-    document.getElementById('sales-card').classList.remove('hidden');
-    document.getElementById('product-entry-card').classList.remove('hidden');
+// স্টোর নাম সেট করা
+function setStoreName() {
+  const storeInput = document.getElementById('storeNameInput').value.trim();
+  if (storeInput) {
+    storeName = storeInput;
+    localStorage.setItem('storeName', storeName);
+    document.getElementById('storeNameDisplay').textContent = `Welcome to ${storeName}`;
+    document.getElementById('main-page').classList.add('hidden');
+    document.getElementById('store-info-card').classList.remove('hidden');
+    document.getElementById('sales-generate-card').classList.remove('hidden');
   } else {
-    alert("Please enter a store name!");
+    alert('Please enter a valid store name!');
   }
 }
 
-// Generate Sale
+// সেল জেনারেট করা
 function generateSale() {
-  const productName = document.getElementById('productName').value;
-  const productPrice = parseFloat(document.getElementById('productPrice').value);
-  const productQuantity = parseInt(document.getElementById('productQuantity').value);
+  const productName = document.getElementById('productName').value.trim();
+  const quantity = document.getElementById('quantity').value.trim() || 1;
+  const price = document.getElementById('price').value.trim();
 
-  if (productName && productPrice > 0 && productQuantity > 0) {
-    const saleAmount = productPrice * productQuantity;
-
-    // Update Sales Data
-    totalSales += saleAmount;
-    totalProductsSold += productQuantity;
-    lastSale = {
+  if (productName && price) {
+    const total = parseFloat(price) * parseInt(quantity);
+    const sale = {
+      storeName,
       productName,
-      productPrice,
-      productQuantity,
-      totalAmount: saleAmount
+      quantity: parseInt(quantity),
+      price: parseFloat(price),
+      total
     };
 
-    // Update Display
-    document.getElementById('totalSales').innerText = `৳${totalSales}`;
-    document.getElementById('totalProductsSold').innerText = totalProductsSold;
-    document.getElementById('live-product-name').innerText = productName;
-    document.getElementById('live-price').innerText = `৳${productPrice}`;
-    document.getElementById('live-quantity').innerText = productQuantity;
-    document.getElementById('live-total-amount').innerText = `৳${saleAmount}`;
+    // সেল ডেটা লোকাল স্টোরেজে সেভ করা
+    salesData.push(sale);
+    localStorage.setItem('salesData', JSON.stringify(salesData));
+
+    // লাস্ট সেল আপডেট করা
+    updateLastSale(sale);
+    alert(`Sale Generated for: ${productName}, Total: ৳${total.toFixed(2)}`);
+
+    // ইনপুট ফিল্ড ক্লিয়ার করা
+    document.getElementById('productName').value = '';
+    document.getElementById('quantity').value = '';
+    document.getElementById('price').value = '';
   } else {
-    alert("Please fill in all product details correctly!");
+    alert('Please fill in all required fields!');
   }
 }
 
-// Open Settings (Live Dashboard)
-function openSettings() {
-  // Show Loading
-  const settingsPage = document.getElementById('settings-page');
-  const salesCard = document.getElementById('sales-card');
-  const productEntryCard = document.getElementById('product-entry-card');
-
-  salesCard.classList.add('hidden');
-  productEntryCard.classList.add('hidden');
-
-  setTimeout(() => {
-    settingsPage.classList.remove('hidden');
-  }, 1000); // 1-second loading effect
+// লাস্ট সেল আপডেট করা
+function updateLastSale(sale) {
+  const lastSaleDetails = `
+    <p><strong>Store Name:</strong> ${sale.storeName}</p>
+    <p><strong>Product Name:</strong> ${sale.productName}</p>
+    <p><strong>Quantity:</strong> ${sale.quantity}</p>
+    <p><strong>Price per Unit:</strong> ৳${sale.price.toFixed(2)}</p>
+    <p><strong>Total:</strong> ৳${sale.total.toFixed(2)}</p>
+  `;
+  document.getElementById('lastSaleDetails').innerHTML = lastSaleDetails;
 }
 
-// Close Store
+// লাস্ট সেল প্রিন্ট করা
+function printLastSale() {
+  const printContent = document.getElementById('lastSaleDetails').innerHTML;
+  const printWindow = window.open('', '_blank');
+  printWindow.document.write('<html><head><title>Print Last Sale</title></head><body>');
+  printWindow.document.write(printContent);
+  printWindow.document.write('</body></html>');
+  printWindow.document.close();
+  printWindow.print();
+}
+
+// লাস্ট সেল টগল করা
+function toggleLastSale() {
+  const lastSaleCard = document.getElementById('last-sale-card');
+  if (lastSaleCard.classList.contains('hidden')) {
+    const lastSale = salesData[salesData.length - 1];
+    if (lastSale) {
+      updateLastSale(lastSale);
+      lastSaleCard.classList.remove('hidden');
+    } else {
+      alert('No sales data available!');
+    }
+  } else {
+    lastSaleCard.classList.add('hidden');
+  }
+}
+
+// সেটিংস মেনু শো করা
+function showSettings() {
+  document.getElementById('main-page').classList.add('hidden');
+  document.getElementById('store-info-card').classList.add('hidden');
+  document.getElementById('sales-generate-card').classList.add('hidden');
+
+  // লোডিং ইফেক্ট যোগ করা
+  setTimeout(() => {
+    document.getElementById('dashboard').classList.remove('hidden');
+  }, 1000);
+}
+
+// হোম পেজে ফিরে যাওয়া
+function goToHome() {
+  document.getElementById('dashboard').classList.add('hidden');
+  document.getElementById('store-info-card').classList.remove('hidden');
+  document.getElementById('sales-generate-card').classList.remove('hidden');
+}
+
+// সেল হিস্ট্রি আপডেট করা
+function updateSalesHistory() {
+  const historyContainer = document.getElementById('salesHistory');
+  historyContainer.innerHTML = '';
+  salesData.slice(-5).reverse().forEach((sale, index) => {
+    const saleEntry = `
+      <div>
+        <p><strong>${index + 1}. Product Name:</strong> ${sale.productName}</p>
+        <p><strong>Quantity:</strong> ${sale.quantity}</p>
+        <p><strong>Total:</strong> ৳${sale.total.toFixed(2)}</p>
+      </div>
+      <hr>
+    `;
+    historyContainer.innerHTML += saleEntry;
+  });
+}
+
+// ক্লোজ স্টোর ফাংশন
 function closeStore() {
-  if (confirm("Are you sure you want to close the store?")) {
-    if (confirm("Are you absolutely sure?")) {
-      totalSales = 0;
-      totalProductsSold = 0;
-      lastSale = {};
-
-      // Reset Display
-      document.getElementById('totalSales').innerText = "৳0";
-      document.getElementById('totalProductsSold').innerText = "0";
-      document.getElementById('live-product-name').innerText = "-";
-      document.getElementById('live-price').innerText = "৳0";
-      document.getElementById('live-quantity').innerText = "0";
-      document.getElementById('live-total-amount').innerText = "৳0";
-
-      // Reset UI
-      document.getElementById('main-page').classList.remove('hidden');
-      document.getElementById('sales-card').classList.add('hidden');
-      document.getElementById('product-entry-card').classList.add('hidden');
-      document.getElementById('settings-page').classList.add('hidden');
+  if (confirm('Are you sure you want to close the store?')) {
+    if (confirm('This will reset all data. Proceed?')) {
+      localStorage.clear();
+      salesData = [];
+      alert('Store data cleared!');
+      location.reload();
     }
   }
 }

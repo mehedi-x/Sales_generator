@@ -84,6 +84,27 @@
     button:hover {
       background-color: #ffaa00;
     }
+
+    .last-sale {
+      text-align: left;
+      margin-top: 20px;
+      font-size: 0.9rem;
+    }
+
+    .print-button {
+      display: block;
+      margin: 20px auto;
+      background-color: #00cc00;
+      color: #ffffff;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .print-button:hover {
+      background-color: #009900;
+    }
   </style>
 </head>
 <body>
@@ -123,13 +144,25 @@
       <p>Total Sales: ৳<span id="totalSales">0</span></p>
       <button onclick="closeStore()">Close Store</button>
     </div>
+
+    <!-- Last Sale Section -->
+    <div id="last-sale-card" class="card hidden">
+      <h2>Last Sale</h2>
+      <div class="last-sale" id="lastSaleDetails">
+        <p><strong>Product Name:</strong> N/A</p>
+        <p><strong>Quantity:</strong> N/A</p>
+        <p><strong>Price per Unit:</strong> N/A</p>
+        <p><strong>Total:</strong> ৳0.00</p>
+      </div>
+      <button class="print-button" onclick="printLastSale()">Print Last Sale</button>
+    </div>
   </div>
 
   <script>
-    let storeName = localStorage.getItem('storeName') || ''; // Get from localStorage or set to empty string
+    let storeName = localStorage.getItem('storeName') || '';
     let totalSales = 0;
+    let lastSale = {};
 
-    // Check if store name is already set
     if (storeName) {
       document.getElementById('main-page').classList.add('hidden');
       document.getElementById('store-info-card').classList.remove('hidden');
@@ -137,12 +170,11 @@
       document.getElementById('storeNameDisplay').textContent = `Welcome to ${storeName}`;
     }
 
-    // Set Store Name
     function setStoreName() {
       const storeInput = document.getElementById('storeNameInput').value.trim();
       if (storeInput) {
         storeName = storeInput;
-        localStorage.setItem('storeName', storeName); // Save to local storage
+        localStorage.setItem('storeName', storeName);
         document.getElementById('main-page').classList.add('hidden');
         document.getElementById('store-info-card').classList.remove('hidden');
         document.getElementById('sales-generate-card').classList.remove('hidden');
@@ -152,15 +184,24 @@
       }
     }
 
-    // Generate Sale
     function generateSale() {
       const productName = document.getElementById('productName').value.trim();
       const quantity = document.getElementById('quantity').value.trim();
       const price = document.getElementById('price').value.trim();
 
       if (productName && price) {
-        const total = (quantity ? parseInt(quantity) : 1) * parseFloat(price);
+        const qty = quantity ? parseInt(quantity) : 1;
+        const total = qty * parseFloat(price);
         totalSales += total;
+
+        lastSale = {
+          productName,
+          quantity: qty,
+          price: parseFloat(price),
+          total
+        };
+
+        updateLastSale();
         alert(`Sale Generated: \nProduct: ${productName}\nTotal: ৳${total.toFixed(2)}`);
         document.getElementById('totalSales').textContent = totalSales.toFixed(2);
         document.getElementById('productName').value = '';
@@ -171,24 +212,45 @@
       }
     }
 
-    // Load Dashboard
+    function updateLastSale() {
+      document.getElementById('last-sale-card').classList.remove('hidden');
+      const details = `
+        <p><strong>Product Name:</strong> ${lastSale.productName}</p>
+        <p><strong>Quantity:</strong> ${lastSale.quantity}</p>
+        <p><strong>Price per Unit:</strong> ৳${lastSale.price.toFixed(2)}</p>
+        <p><strong>Total:</strong> ৳${lastSale.total.toFixed(2)}</p>
+      `;
+      document.getElementById('lastSaleDetails').innerHTML = details;
+    }
+
+    function printLastSale() {
+      const printContent = document.getElementById('lastSaleDetails').innerHTML;
+      const printWindow = window.open('', '_blank');
+      printWindow.document.write('<html><head><title>Print Last Sale</title></head><body>');
+      printWindow.document.write(printContent);
+      printWindow.document.write('</body></html>');
+      printWindow.document.close();
+      printWindow.print();
+    }
+
     function loadDashboard() {
       document.getElementById('store-info-card').classList.add('hidden');
       document.getElementById('sales-generate-card').classList.add('hidden');
       document.getElementById('dashboard-card').classList.remove('hidden');
     }
 
-    // Close Store
     function closeStore() {
       const confirm1 = confirm("Are you sure you want to close the store?");
       if (confirm1) {
         const confirm2 = confirm("This will reset the system. Confirm again?");
         if (confirm2) {
-          localStorage.removeItem('storeName'); // Clear store name
+          localStorage.removeItem('storeName');
           document.getElementById('dashboard-card').classList.add('hidden');
           document.getElementById('main-page').classList.remove('hidden');
+          document.getElementById('last-sale-card').classList.add('hidden');
           storeName = '';
           totalSales = 0;
+          lastSale = {};
           alert("Store has been closed and reset.");
         }
       }

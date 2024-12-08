@@ -272,8 +272,12 @@
 
     // Open Settings and Toggle View
     function openSettings() {
-      document.getElementById('all-in-one-page').style.display = "block";
-      document.getElementById('last-sale-display').classList.remove('hidden');
+      document.getElementById('loading').classList.remove('hidden');
+      setTimeout(() => {
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('all-in-one-page').style.display = "block";
+        document.getElementById('last-sale-display').classList.remove('hidden');
+      }, 1000);
     }
 
     // Close Store
@@ -291,6 +295,8 @@
           document.getElementById('live-total-amount').innerText = "0";
           document.getElementById('last-sale-display').classList.add('hidden');
           document.getElementById('all-in-one-page').style.display = "none";
+          document.getElementById('product-entry-card').style.display = "block";
+          document.getElementById('sales-card').style.display = "none";
         }
       }
     }
@@ -299,6 +305,17 @@
     function printData() {
       window.print();
     }
+
+    // Load Store Name from LocalStorage
+    window.onload = () => {
+      const savedStoreName = localStorage.getItem('storeName');
+      if (savedStoreName) {
+        storeName = savedStoreName;
+        document.getElementById('storeNameInput').disabled = true;
+        document.getElementById('startStoreBtn').disabled = true;
+      }
+    };
   </script>
+
 </body>
 </html>

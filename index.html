@@ -5,63 +5,62 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sales Manager</title>
     <style>
-        /* Body and Background Color */
+        /* Global Styling */
         body {
             font-family: Arial, sans-serif;
             background-color: #121212;
-            color: #fff;
+            color: white;
             margin: 0;
             padding: 0;
-        }
-
-        /* Container and Layout */
-        .container {
-            max-width: 1200px;
-            margin: 50px auto;
-            padding: 20px;
         }
 
         /* Header Styling */
         .header {
             display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 20px;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #1e1e1e;
+            padding: 15px 20px;
         }
 
-        .header button {
-            background-color: #333;
-            padding: 12px 20px;
-            color: white;
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #fff;
+        }
+
+        .settings-icon {
+            background-color: #4CAF50;
+            color: #fff;
             border: none;
+            padding: 10px 15px;
             border-radius: 5px;
-            font-size: 18px;
+            font-size: 16px;
             cursor: pointer;
             transition: 0.3s ease;
         }
 
-        .header button:hover {
-            background-color: #4CAF50;
+        .settings-icon:hover {
+            background-color: #45a049;
         }
 
-        /* Loading Icon */
-        #loading-icon {
-            display: none;
-            color: #4CAF50;
-            font-size: 24px;
-            margin-top: 20px;
-        }
-
-        /* Sales Generator and Dashboard */
-        .sales-generator, .dashboard {
-            display: none;
+        /* Main Page Content */
+        .sales-generator {
+            display: block;
             background-color: #1e1e1e;
             padding: 20px;
+            margin: 20px auto;
+            width: 90%;
+            max-width: 500px;
             border-radius: 10px;
             box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
         }
 
-        /* Input Fields */
+        .sales-generator h3 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
         input[type="text"], input[type="number"] {
             width: 100%;
             padding: 12px;
@@ -69,197 +68,148 @@
             border: 1px solid #444;
             border-radius: 5px;
             background-color: #222;
-            color: #fff;
+            color: white;
             font-size: 16px;
         }
 
-        /* Buttons Styling */
         button {
             background-color: #4CAF50;
-            padding: 12px 20px;
             color: white;
             border: none;
-            border-radius: 5px;
+            padding: 12px 20px;
+            font-size: 16px;
             cursor: pointer;
-            font-size: 18px;
+            border-radius: 5px;
+            margin-top: 10px;
             width: 100%;
-            transition: 0.3s ease;
         }
 
         button:hover {
             background-color: #45a049;
         }
 
-        /* Box Styling */
+        /* Settings Section */
+        .settings-section {
+            display: none;
+            padding: 20px;
+            margin: 20px auto;
+            width: 90%;
+            max-width: 800px;
+            background-color: #1e1e1e;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .settings-section h3 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
         .box {
             background-color: #333;
             padding: 20px;
-            margin-top: 10px;
-            border-radius: 8px;
+            margin: 10px 0;
+            border-radius: 5px;
             box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .box h4 {
-            margin: 0;
-            font-size: 20px;
+            margin: 0 0 10px 0;
         }
 
-        /* Media Queries for Mobile Responsiveness */
+        /* Media Query for Mobile */
         @media (max-width: 768px) {
-            .header {
-                flex-direction: column;
-            }
-
-            .header button {
-                width: 100%;
-                margin-bottom: 10px;
-            }
-
-            .box {
-                padding: 15px;
-                margin-top: 15px;
+            .sales-generator, .settings-section {
+                width: 95%;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <button onclick="openSalesGenerator()">Sales Generator</button>
-            <button onclick="openDashboard()">Dashboard</button>
-            <button onclick="openSettings()">Settings</button>
+    <!-- Header -->
+    <div class="header">
+        <h1>Sales Manager</h1>
+        <button class="settings-icon" onclick="toggleSettings()">Settings</button>
+    </div>
+
+    <!-- Sales Generator Section -->
+    <div class="sales-generator" id="sales-generator">
+        <h3>Generate Sale</h3>
+        <input type="text" id="product-name" placeholder="Product Name">
+        <input type="number" id="product-price" placeholder="Product Price">
+        <input type="number" id="product-quantity" placeholder="Quantity (Optional)">
+        <button onclick="generateSale()">Generate Sale</button>
+    </div>
+
+    <!-- Settings Section -->
+    <div class="settings-section" id="settings-section">
+        <h3>Dashboard</h3>
+        <div class="box">
+            <h4>Total Sales</h4>
+            <p>৳<span id="total-sales">0.00</span></p>
         </div>
-
-        <div id="loading-icon">Loading...</div>
-
-        <!-- Sales Generator Section -->
-        <div class="sales-generator" id="sales-generator">
-            <h3>Generate Sale</h3>
-            <input type="text" id="product-name" placeholder="Product Name" />
-            <input type="number" id="product-price" placeholder="Product Price" />
-            <input type="number" id="product-quantity" placeholder="Quantity (Optional)" />
-            <button onclick="generateSale()">Generate Sale</button>
+        <div class="box">
+            <h4>Total Sales Count</h4>
+            <p><span id="sales-count">0</span> Sales</p>
         </div>
-
-        <!-- Dashboard Section -->
-        <div class="dashboard" id="dashboard">
-            <h3>Dashboard</h3>
-            <div class="box" id="total-sales-box">
-                <h4>Total Sales</h4>
-                <p>৳<span id="total-sales">0.00</span></p>
-            </div>
-            <div class="box" id="last-sale-box">
-                <h4>Last Sale</h4>
-                <p><span id="last-sale">N/A</span></p>
-            </div>
-            <div class="box">
-                <button onclick="printSales()">Print Sales Report</button>
-            </div>
-            <div class="box">
-                <button onclick="closeStore()">Close Store</button>
-            </div>
-            <div class="box">
-                <button onclick="goHome()">Go Home</button>
-            </div>
+        <div class="box">
+            <h4>Last Sale</h4>
+            <p><span id="last-sale">N/A</span></p>
+        </div>
+        <div class="box">
+            <button onclick="printSales()">Print Report</button>
+        </div>
+        <div class="box">
+            <button onclick="closeStore()">Close Store</button>
         </div>
     </div>
 
     <script>
-        // Show loading icon
-        function showLoading() {
-            document.getElementById('loading-icon').style.display = 'block';
-        }
+        // Toggle Settings Section
+        function toggleSettings() {
+            const salesGenerator = document.getElementById('sales-generator');
+            const settingsSection = document.getElementById('settings-section');
 
-        // Hide loading icon
-        function hideLoading() {
-            document.getElementById('loading-icon').style.display = 'none';
-        }
-
-        // Open Sales Generator Section
-        function openSalesGenerator() {
-            showLoading();
-            setTimeout(function() {
-                hideLoading();
-                document.getElementById('sales-generator').style.display = 'block';
-                document.getElementById('dashboard').style.display = 'none';
-            }, 1000);
-        }
-
-        // Open Dashboard Section
-        function openDashboard() {
-            showLoading();
-            setTimeout(function() {
-                document.getElementById('sales-generator').style.display = 'none';
-                document.getElementById('dashboard').style.display = 'block';
-                hideLoading();
-                updateDashboard(); // Update the dashboard with sales data
-            }, 1000);
-        }
-
-        // Open Settings Section
-        function openSettings() {
-            showLoading();
-            setTimeout(function() {
-                alert("Settings will be updated soon.");
-                hideLoading();
-            }, 1000);
-        }
-
-        // Save Sale Data in LocalStorage
-        function saveSaleData(productName, price, quantity) {
-            let totalSale = price * quantity;
-            let saleData = { productName: productName, price: price, quantity: quantity, totalSale: totalSale };
-            localStorage.setItem('saleData', JSON.stringify(saleData));
-        }
-
-        // Update Dashboard with Sale Data
-        function updateDashboard() {
-            let saleData = getSaleData();
-            if (saleData) {
-                document.getElementById('total-sales').innerText = saleData.totalSale;
-                document.getElementById('last-sale').innerText = saleData.productName;
+            // Hide Sales Generator and Show Settings
+            if (settingsSection.style.display === 'none' || settingsSection.style.display === '') {
+                salesGenerator.style.display = 'none';
+                settingsSection.style.display = 'block';
+            } else {
+                // Show Sales Generator and Hide Settings
+                salesGenerator.style.display = 'block';
+                settingsSection.style.display = 'none';
             }
-        }
-
-        // Retrieve Sale Data from LocalStorage
-        function getSaleData() {
-            return JSON.parse(localStorage.getItem('saleData'));
         }
 
         // Generate Sale
         function generateSale() {
-            let productName = document.getElementById('product-name').value;
-            let price = parseFloat(document.getElementById('product-price').value);
-            let quantity = parseInt(document.getElementById('product-quantity').value) || 1;
-            saveSaleData(productName, price, quantity);
-            alert("Sale Generated!");
+            const productName = document.getElementById('product-name').value;
+            const productPrice = parseFloat(document.getElementById('product-price').value) || 0;
+            const productQuantity = parseInt(document.getElementById('product-quantity').value) || 1;
+            const total = productPrice * productQuantity;
+
+            // Save data in Local Storage
+            localStorage.setItem('lastSale', productName + " - ৳" + total);
+            const currentSales = parseFloat(localStorage.getItem('totalSales') || 0);
+            const currentCount = parseInt(localStorage.getItem('salesCount') || 0);
+
+            localStorage.setItem('totalSales', currentSales + total);
+            localStorage.setItem('salesCount', currentCount + 1);
+
+            alert('Sale Generated!');
         }
 
         // Print Sales Report
         function printSales() {
-            let salesReport = document.getElementById('dashboard').innerHTML;
-            let printWindow = window.open('', '', 'height=400,width=600');
-            printWindow.document.write(salesReport);
-            printWindow.document.close();
-            printWindow.print();
+            window.print();
         }
 
         // Close Store
         function closeStore() {
-            let confirmation1 = confirm("Are you sure you want to close the store?");
-            if (confirmation1) {
-                let confirmation2 = confirm("Are you absolutely sure?");
-                if (confirmation2) {
-                    localStorage.clear();
-                    alert("Store has been closed.");
-                    window.location.reload(); // Reload the page to reset everything
-                }
+            if (confirm("Are you sure you want to close the store?")) {
+                localStorage.clear();
+                alert("Store data has been reset.");
             }
-        }
-
-        // Go to Home Page
-        function goHome() {
-            window.location.href = 'index.html'; // Navigate to home page (adjust the link as needed)
         }
     </script>
 </body>

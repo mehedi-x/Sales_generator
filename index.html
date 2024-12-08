@@ -85,37 +85,10 @@
       background-color: #ffaa00;
     }
 
-    .loading {
-      display: none;
-      font-size: 1.5rem;
-      color: #ffcc00;
-      animation: loadingAnimation 1s infinite;
-    }
-
-    @keyframes loadingAnimation {
-      0% {
-        opacity: 0.2;
-      }
-      50% {
-        opacity: 1;
-      }
-      100% {
-        opacity: 0.2;
-      }
-    }
-
-    .home-button {
-      background-color: #2c2c2c;
-      color: #ffffff;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 1rem;
+    .last-sale {
+      text-align: left;
       margin-top: 20px;
-    }
-
-    .home-button:hover {
-      background-color: #ffaa00;
+      font-size: 0.9rem;
     }
 
     .print-button {
@@ -133,11 +106,10 @@
       background-color: #009900;
     }
 
-    /* Total Sales Section */
-    .total-sales {
-      font-size: 0.8rem;
+    .loading {
+      font-size: 1.5rem;
       color: #ffcc00;
-      margin-top: 10px;
+      display: none;
     }
   </style>
 </head>
@@ -158,7 +130,7 @@
     <!-- Store Info -->
     <div id="store-info-card" class="card hidden">
       <h2 id="storeNameDisplay"></h2>
-      <p class="total-sales" id="totalSalesDisplay">Total Sales: ৳0.00</p>
+      <p id="totalSalesDisplay">Total Sales: ৳0.00</p>
     </div>
 
     <!-- Sales Generate Section -->
@@ -166,23 +138,14 @@
       <h2>Generate Sale</h2>
       <label for="productName">Product Name:</label>
       <input type="text" id="productName" placeholder="Enter Product Name" required>
+
       <label for="quantity">Quantity (Optional):</label>
       <input type="number" id="quantity" placeholder="Enter Quantity">
+
       <label for="price">Price per Unit:</label>
       <input type="number" id="price" placeholder="Enter Price" required>
-      <button onclick="generateSale()">Generate Sale</button>
-    </div>
 
-    <!-- Settings / Dashboard Section -->
-    <div id="settings-card" class="card hidden">
-      <div class="loading" id="loading">Loading...</div>
-      <div id="dashboard-card" class="hidden">
-        <h2>Dashboard</h2>
-        <p>Total Sales: <span id="totalSales">0</span> ৳</p>
-        <p>Last Sale: <span id="lastSale">No Sales Yet</span></p>
-        <button class="home-button" onclick="goHome()">Home</button>
-        <button class="home-button" onclick="closeStore()">Close Store</button>
-      </div>
+      <button onclick="generateSale()">Generate Sale</button>
     </div>
 
     <!-- Last Sale Section -->
@@ -191,23 +154,32 @@
       <div class="last-sale" id="lastSaleDetails"></div>
       <button class="print-button" onclick="printLastSale()">Print Last Sale</button>
     </div>
+
+    <!-- Settings Section -->
+    <div id="settings-card" class="card hidden">
+      <h2>Dashboard</h2>
+      <div id="loadingIcon" class="loading">Loading...</div>
+      <div id="dashboardDetails" class="hidden">
+        <p><strong>Total Sales:</strong> <span id="dashboardTotalSales">৳0.00</span></p>
+        <p><strong>Last Sale:</strong> <span id="dashboardLastSale">N/A</span></p>
+        <button onclick="closeStore()">Close Store</button>
+        <button onclick="goHome()">Home</button>
+      </div>
+    </div>
   </div>
 
   <script>
-    // Check if store name is already set
     let storeName = localStorage.getItem('storeName') || '';
-    let totalSales = parseFloat(localStorage.getItem('totalSales')) || 0;
     let salesData = JSON.parse(localStorage.getItem('salesData')) || [];
-
+    
     if (storeName) {
       document.getElementById('main-page').classList.add('hidden');
       document.getElementById('store-info-card').classList.remove('hidden');
       document.getElementById('sales-generate-card').classList.remove('hidden');
       document.getElementById('storeNameDisplay').textContent = `Welcome to ${storeName}`;
-      document.getElementById('totalSalesDisplay').textContent = `Total Sales: ৳${totalSales.toFixed(2)}`;
+      updateTotalSales();
     }
 
-    // Function to set store name
     function setStoreName() {
       const storeInput = document.getElementById('storeNameInput').value.trim();
       if (storeInput) {
@@ -217,13 +189,12 @@
         document.getElementById('store-info-card').classList.remove('hidden');
         document.getElementById('sales-generate-card').classList.remove('hidden');
         document.getElementById('storeNameDisplay').textContent = `Welcome to ${storeName}`;
-        document.getElementById('totalSalesDisplay').textContent = `Total Sales: ৳${totalSales.toFixed(2)}`;
+        updateTotalSales();
       } else {
         alert('Please enter a valid store name!');
       }
     }
 
-    // Function to generate sale
     function generateSale() {
       const productName = document.getElementById('productName').value.trim();
       const quantity = document.getElementById('quantity').value.trim() || 1;
@@ -239,68 +210,67 @@
           total
         };
         salesData.push(sale);
-        totalSales += total;
         localStorage.setItem('salesData', JSON.stringify(salesData));
-        localStorage.setItem('totalSales', totalSales.toString());
         updateLastSale(sale);
-        document.getElementById('totalSalesDisplay').textContent = `Total Sales: ৳${totalSales.toFixed(2)}`;
         alert(`Sale Generated for: ${productName}, Total: ৳${total.toFixed(2)}`);
         document.getElementById('productName').value = '';
         document.getElementById('quantity').value = '';
         document.getElementById('price').value = '';
+        updateTotalSales();
       } else {
         alert('Please fill in all required fields!');
       }
     }
 
-    // Function to update last sale details
+    function updateTotalSales() {
+      const totalSales = salesData.reduce((total, sale) => total + sale.total, 0);
+      document.getElementById('totalSalesDisplay').textContent = `Total Sales: ৳${totalSales.toFixed(2)}`;
+      document.getElementById('dashboardTotalSales').textContent = `৳${totalSales.toFixed(2)}`;
+    }
+
     function updateLastSale(sale) {
       const lastSaleDetails = `
         <p><strong>Store Name:</strong> ${sale.storeName}</p>
         <p><strong>Product Name:</strong> ${sale.productName}</p>
         <p><strong>Quantity:</strong> ${sale.quantity}</p>
-        <p><strong>Price:</strong> ৳${sale.price}</p>
+        <p><strong>Price per Unit:</strong> ৳${sale.price.toFixed(2)}</p>
         <p><strong>Total:</strong> ৳${sale.total.toFixed(2)}</p>
       `;
       document.getElementById('lastSaleDetails').innerHTML = lastSaleDetails;
-      document.getElementById('last-sale-card').classList.remove('hidden');
     }
 
-    // Function to print last sale details
     function printLastSale() {
-      const lastSaleDetails = document.getElementById('lastSaleDetails').innerHTML;
-      const newWindow = window.open();
-      newWindow.document.write('<html><body>');
-      newWindow.document.write(lastSaleDetails);
-      newWindow.document.write('</body></html>');
-      newWindow.print();
+      const printContent = document.getElementById('lastSaleDetails').innerHTML;
+      const printWindow = window.open('', '_blank');
+      printWindow.document.write('<html><head><title>Print Last Sale</title></head><body>');
+      printWindow.document.write(printContent);
+      printWindow.document.write('</body></html>');
+      printWindow.document.close();
+      printWindow.print();
     }
 
-    // Function to toggle settings
     function toggleSettings() {
       document.getElementById('main-page').classList.add('hidden');
       document.getElementById('store-info-card').classList.add('hidden');
       document.getElementById('sales-generate-card').classList.add('hidden');
-      document.getElementById('settings-card').classList.remove('hidden');
-      document.getElementById('loading').style.display = 'block';
-      setTimeout(function () {
-        document.getElementById('loading').style.display = 'none';
-        document.getElementById('dashboard-card').classList.remove('hidden');
+      document.getElementById('loadingIcon').classList.remove('hidden');
+      setTimeout(() => {
+        document.getElementById('loadingIcon').classList.add('hidden');
+        document.getElementById('settings-card').classList.remove('hidden');
       }, 1000);
     }
 
-    // Go back to home page
+    function closeStore() {
+      localStorage.removeItem('storeName');
+      localStorage.removeItem('salesData');
+      location.reload();
+    }
+
     function goHome() {
       document.getElementById('settings-card').classList.add('hidden');
       document.getElementById('main-page').classList.remove('hidden');
-      document.getElementById('store-info-card').classList.remove('hidden');
-      document.getElementById('sales-generate-card').classList.remove('hidden');
-    }
-
-    // Close store
-    function closeStore() {
-      localStorage.clear();
-      goHome();
+      document.getElementById('store-info-card').classList.add('hidden');
+      document.getElementById('sales-generate-card').classList.add('hidden');
     }
   </script>
 </body>

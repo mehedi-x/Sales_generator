@@ -178,6 +178,29 @@
     .home-btn:hover {
       background-color: #2980b9;
     }
+
+    /* Loading animation */
+    .loading-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .loading-animation {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 5px solid transparent;
+      border-top-color: #00cc00;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
   </style>
 </head>
 <body>
@@ -202,7 +225,9 @@
     <!-- Settings Section -->
     <div id="settings-card" class="card hidden">
       <h2>Dashboard</h2>
-      <div id="loadingIcon" class="loading">Loading...</div>
+      <div id="loadingWrapper" class="loading-wrapper hidden">
+        <div class="loading-animation"></div>
+      </div>
       <div id="dashboardDetails" class="hidden">
         <div class="dashboard-section">
           <!-- Total Sales and Last Sale Section -->
@@ -235,7 +260,6 @@
         </div>
       </div>
     </div>
-
   </div>
 
   <script>
@@ -278,18 +302,14 @@
         };
         salesData.push(sale);
         localStorage.setItem('salesData', JSON.stringify(salesData));
-        updateLastSale(sale);
-        alert(`Sale Generated for: ${productName}, Total: ৳${total.toFixed(2)}`);
-        document.getElementById('productName').value = '';
-        document.getElementById('quantity').value = '';
-        document.getElementById('price').value = '';
         updateTotalSales();
+        alert('Sale generated successfully!');
       } else {
-        alert('Please enter valid product details!');
+        alert('Please fill out all fields correctly!');
       }
     }
 
-    // Update Total Sales and Last Sale Data
+    // Update Total Sales and Count
     function updateTotalSales() {
       let totalSales = 0;
       let salesCount = 0;
@@ -297,6 +317,7 @@
         totalSales += sale.total;
         salesCount++;
       });
+
       document.getElementById('dashboardTotalSales').innerText = totalSales.toFixed(2);
       document.getElementById('dashboardTotalSalesCount').innerText = salesCount;
     }
@@ -327,10 +348,10 @@
 
     // Toggle Settings View
     function toggleSettings() {
-      document.getElementById('loadingIcon').style.display = 'block';
+      document.getElementById('sales-generate-card').classList.add('hidden');
+      document.getElementById('loadingWrapper').classList.remove('hidden');
       setTimeout(function() {
-        document.getElementById('loadingIcon').style.display = 'none';
-        document.getElementById('sales-generate-card').classList.add('hidden');
+        document.getElementById('loadingWrapper').classList.add('hidden');
         document.getElementById('dashboardDetails').classList.remove('hidden');
       }, 1000);
     }

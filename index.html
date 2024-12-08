@@ -84,9 +84,15 @@
     }
 
     #dashboard {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+      display: none;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      font-size: 1.5rem;
     }
 
     .dashboard-item {
@@ -94,10 +100,6 @@
       padding: 15px;
       border-radius: 5px;
       text-align: center;
-    }
-
-    .hidden {
-      display: none;
     }
   </style>
 </head>
@@ -118,6 +120,7 @@
     <!-- Total Sales Section -->
     <div id="total-sales-section" class="card hidden">
       <h3>Total Sales: ৳<span id="total-sales">0</span></h3>
+      <h4>Total Products Sold: <span id="total-products">0</span></h4>
     </div>
 
     <!-- Product Entry Section -->
@@ -129,12 +132,17 @@
       <button id="generate-sale">Generate Sale</button>
     </div>
 
+    <!-- Loading Section -->
+    <div id="loading" class="loading">
+      Loading Dashboard...
+    </div>
+
     <!-- Dashboard Section -->
-    <div id="dashboard" class="card hidden">
-      <h2>Dashboard</h2>
-      <div id="dashboard-view" class="dashboard-item">
+    <div id="dashboard" class="hidden">
+      <h2>Live Sales Dashboard</h2>
+      <div class="dashboard-item">
         <h3>Sales Summary</h3>
-        <p>Total Products Sold: <span id="total-products">0</span></p>
+        <p>Total Products Sold: <span id="dashboard-products">0</span></p>
         <p>Total Sales: ৳<span id="dashboard-sales">0</span></p>
       </div>
       <button id="close-dashboard">Close Dashboard</button>
@@ -145,10 +153,12 @@
     const storeSection = document.getElementById("store-section");
     const totalSalesSection = document.getElementById("total-sales-section");
     const productSection = document.getElementById("product-section");
+    const loadingSection = document.getElementById("loading");
     const dashboard = document.getElementById("dashboard");
     const totalSales = document.getElementById("total-sales");
     const dashboardSales = document.getElementById("dashboard-sales");
     const totalProducts = document.getElementById("total-products");
+    const dashboardProducts = document.getElementById("dashboard-products");
 
     let storeData = JSON.parse(localStorage.getItem("storeData")) || {
       storeName: "",
@@ -156,7 +166,6 @@
       totalProducts: 0,
     };
 
-    // Initialize Store
     document.addEventListener("DOMContentLoaded", () => {
       if (storeData.storeName) {
         storeSection.classList.add("hidden");
@@ -166,7 +175,6 @@
       }
     });
 
-    // Start Store
     document.getElementById("start-store").addEventListener("click", () => {
       const storeName = document.getElementById("store-name").value.trim();
       if (storeName) {
@@ -180,7 +188,6 @@
       }
     });
 
-    // Generate Sale
     document.getElementById("generate-sale").addEventListener("click", () => {
       const productName = document.getElementById("product-name").value.trim();
       const productPrice = parseFloat(
@@ -202,18 +209,21 @@
       }
     });
 
-    // Update Dashboard
     function updateDashboard() {
       totalSales.textContent = storeData.totalSales;
       dashboardSales.textContent = storeData.totalSales;
       totalProducts.textContent = storeData.totalProducts;
+      dashboardProducts.textContent = storeData.totalProducts;
     }
 
-    // Dashboard Interaction
     document.getElementById("settings-icon").addEventListener("click", () => {
-      dashboard.classList.remove("hidden");
+      loadingSection.style.display = "block";
       totalSalesSection.classList.add("hidden");
       productSection.classList.add("hidden");
+      setTimeout(() => {
+        loadingSection.style.display = "none";
+        dashboard.classList.remove("hidden");
+      }, 2000);
     });
 
     document.getElementById("close-dashboard").addEventListener("click", () => {

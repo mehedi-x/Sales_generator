@@ -48,6 +48,8 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      height: 100vh;
+      justify-content: center;
     }
 
     .card {
@@ -162,7 +164,7 @@
     <!-- Last Sale Summary -->
     <div class="card">
       <h2>Last Sale Summary</h2>
-      <p>No sales recorded yet.</p>
+      <p id="last-sale-summary">No sales recorded yet.</p>
     </div>
   </main>
 
@@ -177,6 +179,13 @@
       const totalSalesSection = document.getElementById("total-sales-section");
       const startStoreButton = document.getElementById("start-store");
       const storeNameInput = document.getElementById("store-name");
+      const productNameInput = document.getElementById("product-name");
+      const productPriceInput = document.getElementById("product-price");
+      const productQuantityInput = document.getElementById("product-quantity");
+      const addProductButton = document.getElementById("add-product");
+      const lastSaleSummary = document.getElementById("last-sale-summary");
+
+      let totalSales = 0;
 
       // Check if store name exists in local storage
       if (localStorage.getItem("storeName")) {
@@ -201,10 +210,37 @@
         }
       });
 
-      // Function to show Total Sales section
+      // Show Total Sales section
       function showTotalSales() {
         totalSalesSection.classList.add("show");
+        document.getElementById("total-sales").textContent = totalSales;
       }
+
+      // Handle Add Product button click
+      addProductButton.addEventListener("click", () => {
+        const productName = productNameInput.value.trim();
+        const productPrice = parseFloat(productPriceInput.value);
+        const productQuantity = parseInt(productQuantityInput.value);
+
+        if (productName && !isNaN(productPrice) && !isNaN(productQuantity) && productQuantity > 0) {
+          // Update the last sale summary
+          const saleAmount = productPrice * productQuantity;
+          totalSales += saleAmount;
+
+          // Show last sale summary
+          lastSaleSummary.textContent = `Product: ${productName}, Quantity: ${productQuantity}, Total: ৳${saleAmount}`;
+
+          // Update total sales
+          document.getElementById("total-sales").textContent = totalSales;
+
+          // Clear input fields
+          productNameInput.value = '';
+          productPriceInput.value = '';
+          productQuantityInput.value = '';
+        } else {
+          alert("Please enter valid product details.");
+        }
+      });
     });
   </script>
 </body>

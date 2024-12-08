@@ -132,6 +132,13 @@
     .print-button:hover {
       background-color: #009900;
     }
+
+    /* Total Sales Section */
+    .total-sales {
+      font-size: 0.8rem;
+      color: #ffcc00;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
@@ -151,6 +158,7 @@
     <!-- Store Info -->
     <div id="store-info-card" class="card hidden">
       <h2 id="storeNameDisplay"></h2>
+      <p class="total-sales" id="totalSalesDisplay">Total Sales: ৳0.00</p>
     </div>
 
     <!-- Sales Generate Section -->
@@ -188,6 +196,7 @@
   <script>
     // Check if store name is already set
     let storeName = localStorage.getItem('storeName') || '';
+    let totalSales = parseFloat(localStorage.getItem('totalSales')) || 0;
     let salesData = JSON.parse(localStorage.getItem('salesData')) || [];
 
     if (storeName) {
@@ -195,6 +204,7 @@
       document.getElementById('store-info-card').classList.remove('hidden');
       document.getElementById('sales-generate-card').classList.remove('hidden');
       document.getElementById('storeNameDisplay').textContent = `Welcome to ${storeName}`;
+      document.getElementById('totalSalesDisplay').textContent = `Total Sales: ৳${totalSales.toFixed(2)}`;
     }
 
     // Function to set store name
@@ -207,6 +217,7 @@
         document.getElementById('store-info-card').classList.remove('hidden');
         document.getElementById('sales-generate-card').classList.remove('hidden');
         document.getElementById('storeNameDisplay').textContent = `Welcome to ${storeName}`;
+        document.getElementById('totalSalesDisplay').textContent = `Total Sales: ৳${totalSales.toFixed(2)}`;
       } else {
         alert('Please enter a valid store name!');
       }
@@ -228,8 +239,11 @@
           total
         };
         salesData.push(sale);
+        totalSales += total;
         localStorage.setItem('salesData', JSON.stringify(salesData));
+        localStorage.setItem('totalSales', totalSales.toString());
         updateLastSale(sale);
+        document.getElementById('totalSalesDisplay').textContent = `Total Sales: ৳${totalSales.toFixed(2)}`;
         alert(`Sale Generated for: ${productName}, Total: ৳${total.toFixed(2)}`);
         document.getElementById('productName').value = '';
         document.getElementById('quantity').value = '';
@@ -245,45 +259,14 @@
         <p><strong>Store Name:</strong> ${sale.storeName}</p>
         <p><strong>Product Name:</strong> ${sale.productName}</p>
         <p><strong>Quantity:</strong> ${sale.quantity}</p>
-        <p><strong>Price per Unit:</strong> ৳${sale.price.toFixed(2)}</p>
+        <p><strong>Price:</strong> ৳${sale.price}</p>
         <p><strong>Total:</strong> ৳${sale.total.toFixed(2)}</p>
       `;
       document.getElementById('lastSaleDetails').innerHTML = lastSaleDetails;
+      document.getElementById('last-sale-card').classList.remove('hidden');
     }
 
-    // Toggle settings view and load the dashboard
-    function toggleSettings() {
-      const loadingElement = document.getElementById('loading');
-      const settingsCard = document.getElementById('settings-card');
-      const mainPage = document.getElementById('main-page');
-      const dashboardCard = document.getElementById('dashboard-card');
-
-      mainPage.classList.add('hidden');
-      settingsCard.classList.remove('hidden');
-      loadingElement.style.display = 'block';
-
-      setTimeout(() => {
-        loadingElement.style.display = 'none';
-        dashboardCard.classList.remove('hidden');
-      }, 1000);
-    }
-
-    // Navigate to the home page
-    function goHome() {
-      document.getElementById('settings-card').classList.add('hidden');
-      document.getElementById('main-page').classList.remove('hidden');
-    }
-
-    // Close store and reset data
-    function closeStore() {
-      localStorage.clear();
-      document.getElementById('main-page').classList.remove('hidden');
-      document.getElementById('store-info-card').classList.add('hidden');
-      document.getElementById('sales-generate-card').classList.add('hidden');
-      document.getElementById('settings-card').classList.add('hidden');
-    }
-
-    // Print the last sale details
+    // Function to print last sale details
     function printLastSale() {
       const lastSaleDetails = document.getElementById('lastSaleDetails').innerHTML;
       const newWindow = window.open();
@@ -291,6 +274,33 @@
       newWindow.document.write(lastSaleDetails);
       newWindow.document.write('</body></html>');
       newWindow.print();
+    }
+
+    // Function to toggle settings
+    function toggleSettings() {
+      document.getElementById('main-page').classList.add('hidden');
+      document.getElementById('store-info-card').classList.add('hidden');
+      document.getElementById('sales-generate-card').classList.add('hidden');
+      document.getElementById('settings-card').classList.remove('hidden');
+      document.getElementById('loading').style.display = 'block';
+      setTimeout(function () {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('dashboard-card').classList.remove('hidden');
+      }, 1000);
+    }
+
+    // Go back to home page
+    function goHome() {
+      document.getElementById('settings-card').classList.add('hidden');
+      document.getElementById('main-page').classList.remove('hidden');
+      document.getElementById('store-info-card').classList.remove('hidden');
+      document.getElementById('sales-generate-card').classList.remove('hidden');
+    }
+
+    // Close store
+    function closeStore() {
+      localStorage.clear();
+      goHome();
     }
   </script>
 </body>

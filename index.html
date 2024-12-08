@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Store Management Dashboard</title>
+  <title>Store Management System</title>
   <style>
     /* Global Styles */
     * {
@@ -47,7 +47,7 @@
       text-align: center;
     }
 
-    input[type="text"] {
+    input[type="text"], input[type="number"] {
       width: 90%;
       padding: 10px;
       margin: 10px 0;
@@ -71,39 +71,6 @@
     button:hover {
       background-color: #ffaa00;
     }
-
-    #dashboard-modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.8);
-      color: #ffffff;
-      z-index: 1000;
-      justify-content: center;
-      align-items: center;
-    }
-
-    #dashboard-modal .modal-content {
-      background-color: #1e1e1e;
-      border-radius: 10px;
-      padding: 20px;
-      width: 90%;
-      max-width: 700px;
-      text-align: center;
-    }
-
-    .close-modal {
-      background-color: #ff4d4d;
-      color: #ffffff;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-top: 20px;
-    }
   </style>
 </head>
 <body>
@@ -122,34 +89,33 @@
     <!-- Total Sales Section -->
     <div id="total-sales-section" class="card" style="display: none;">
       <h3>Total Sales: ৳<span id="total-sales">0</span></h3>
-      <button id="close-store">Close Store</button>
     </div>
 
-    <!-- Free Dot for Dashboard -->
-    <button id="free-dot" style="margin-top: 20px; background-color: #00ccff;">Open Dashboard</button>
+    <!-- Product Entry Section -->
+    <div id="product-section" class="card" style="display: none;">
+      <h2>Product Entry</h2>
+      <input type="text" id="product-name" placeholder="Product Name">
+      <input type="number" id="product-price" placeholder="Product Price">
+      <input type="number" id="product-quantity" placeholder="Product Quantity">
+      <button id="generate-sale">Generate Sale</button>
+    </div>
+
+    <button id="close-store" style="display: none; margin-top: 20px; background-color: #ff4d4d;">Close Store</button>
   </main>
-
-  <!-- Dashboard Modal -->
-  <div id="dashboard-modal">
-    <div class="modal-content">
-      <h2>Store Dashboard</h2>
-      <p>Here is the full professional dashboard view with all the features.</p>
-      <!-- Add your dashboard details here -->
-      <button class="close-modal">Close</button>
-    </div>
-  </div>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const storeSection = document.getElementById("store-section");
       const totalSalesSection = document.getElementById("total-sales-section");
+      const productSection = document.getElementById("product-section");
       const startStoreButton = document.getElementById("start-store");
       const storeNameInput = document.getElementById("store-name");
       const totalSalesElement = document.getElementById("total-sales");
+      const productNameInput = document.getElementById("product-name");
+      const productPriceInput = document.getElementById("product-price");
+      const productQuantityInput = document.getElementById("product-quantity");
+      const generateSaleButton = document.getElementById("generate-sale");
       const closeStoreButton = document.getElementById("close-store");
-      const freeDotButton = document.getElementById("free-dot");
-      const dashboardModal = document.getElementById("dashboard-modal");
-      const closeModalButton = document.querySelector(".close-modal");
 
       let totalSales = 0;
 
@@ -161,6 +127,8 @@
         if (storeName) {
           storeSection.style.display = "none";
           totalSalesSection.style.display = "block";
+          productSection.style.display = "block";
+          closeStoreButton.style.display = "block";
           totalSales = savedSales ? parseInt(savedSales) : 0;
           totalSalesElement.textContent = totalSales;
         }
@@ -174,8 +142,31 @@
           localStorage.setItem("totalSales", 0);
           storeSection.style.display = "none";
           totalSalesSection.style.display = "block";
+          productSection.style.display = "block";
+          closeStoreButton.style.display = "block";
         } else {
           alert("Please enter a valid store name.");
+        }
+      });
+
+      // Generate Sale
+      generateSaleButton.addEventListener("click", () => {
+        const productName = productNameInput.value.trim();
+        const productPrice = parseFloat(productPriceInput.value);
+        const productQuantity = parseInt(productQuantityInput.value);
+
+        if (productName && productPrice > 0 && productQuantity > 0) {
+          const saleAmount = productPrice * productQuantity;
+          totalSales += saleAmount;
+          localStorage.setItem("totalSales", totalSales);
+          totalSalesElement.textContent = totalSales;
+
+          alert(`Sale Generated: ${productName}, Total: ৳${saleAmount}`);
+          productNameInput.value = "";
+          productPriceInput.value = "";
+          productQuantityInput.value = "";
+        } else {
+          alert("Please provide valid product details.");
         }
       });
 
@@ -187,17 +178,9 @@
         totalSalesElement.textContent = totalSales;
         storeSection.style.display = "block";
         totalSalesSection.style.display = "none";
+        productSection.style.display = "none";
+        closeStoreButton.style.display = "none";
         storeNameInput.value = "";
-      });
-
-      // Open Dashboard Modal
-      freeDotButton.addEventListener("click", () => {
-        dashboardModal.style.display = "flex";
-      });
-
-      // Close Dashboard Modal
-      closeModalButton.addEventListener("click", () => {
-        dashboardModal.style.display = "none";
       });
 
       // Initial Load

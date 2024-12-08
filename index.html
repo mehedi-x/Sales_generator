@@ -186,6 +186,7 @@
   </div>
 
   <script>
+    // Check if store name is already set
     let storeName = localStorage.getItem('storeName') || '';
     let salesData = JSON.parse(localStorage.getItem('salesData')) || [];
 
@@ -196,6 +197,7 @@
       document.getElementById('storeNameDisplay').textContent = `Welcome to ${storeName}`;
     }
 
+    // Function to set store name
     function setStoreName() {
       const storeInput = document.getElementById('storeNameInput').value.trim();
       if (storeInput) {
@@ -210,6 +212,7 @@
       }
     }
 
+    // Function to generate sale
     function generateSale() {
       const productName = document.getElementById('productName').value.trim();
       const quantity = document.getElementById('quantity').value.trim() || 1;
@@ -236,6 +239,7 @@
       }
     }
 
+    // Function to update last sale details
     function updateLastSale(sale) {
       const lastSaleDetails = `
         <p><strong>Store Name:</strong> ${sale.storeName}</p>
@@ -247,35 +251,19 @@
       document.getElementById('lastSaleDetails').innerHTML = lastSaleDetails;
     }
 
-    function toggleSettings() {
-      // Hide main sections
-      document.getElementById('main-page').classList.add('hidden');
-      document.getElementById('store-info-card').classList.add('hidden');
-      document.getElementById('sales-generate-card').classList.add('hidden');
-      
-      // Show loading effect
-      document.getElementById('loading').classList.remove('hidden');
-
-      // Show dashboard after 1 second
-      setTimeout(function() {
-        document.getElementById('loading').classList.add('hidden');
-        document.getElementById('settings-card').classList.remove('hidden');
-        document.getElementById('dashboard-card').classList.remove('hidden');
-      }, 1000);
-    }
-
+    // Function to go to home page
     function goHome() {
-      // Hide settings and dashboard
       document.getElementById('settings-card').classList.add('hidden');
       document.getElementById('main-page').classList.remove('hidden');
-      document.getElementById('store-info-card').classList.remove('hidden');
-      document.getElementById('sales-generate-card').classList.remove('hidden');
     }
 
+    // Function to close the store
     function closeStore() {
-      localStorage.removeItem('storeName');
-      localStorage.removeItem('salesData');
-      goHome();
+      localStorage.clear();
+      document.getElementById('main-page').classList.remove('hidden');
+      document.getElementById('store-info-card').classList.add('hidden');
+      document.getElementById('sales-generate-card').classList.add('hidden');
+      document.getElementById('settings-card').classList.add('hidden');
     }
   </script>
 </body>

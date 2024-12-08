@@ -4,329 +4,45 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Store Management System</title>
-  <style>
-    /* Global Styles */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Roboto', sans-serif;
-      background-color: #121212;
-      color: #ffffff;
-    }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #1f1f1f;
-      padding: 15px 20px;
-      border-bottom: 1px solid #333333;
-    }
-
-    header h1 {
-      font-size: 1.8rem;
-      color: #ffffff;
-    }
-
-    .settings-icon {
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: #ffcc00;
-      transition: color 0.3s ease;
-    }
-
-    .settings-icon:hover {
-      color: #ffaa00;
-    }
-
-    .container {
-      padding: 20px;
-    }
-
-    .card {
-      background-color: #1e1e1e;
-      border: 1px solid #333333;
-      border-radius: 10px;
-      padding: 20px;
-      margin: 20px 0;
-      text-align: center;
-      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
-    }
-
-    input, button {
-      margin: 10px;
-      padding: 10px;
-      border: none;
-      border-radius: 5px;
-    }
-
-    input {
-      width: calc(100% - 20px);
-      background-color: #2c2c2c;
-      color: #ffffff;
-    }
-
-    button {
-      background-color: #ffcc00;
-      color: #121212;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #ffaa00;
-    }
-
-    #loading {
-      display: none;
-      text-align: center;
-      font-size: 1.5rem;
-      color: #ffcc00;
-    }
-
-    /* All-in-One Page Styling */
-    #all-in-one-page {
-      display: none;
-      padding: 20px;
-    }
-
-    .sales-box {
-      border: 2px solid #ffcc00;
-      padding: 15px;
-      border-radius: 10px;
-      margin-top: 15px;
-      text-align: left;
-    }
-
-    .display {
-      font-size: 2rem;
-      padding: 20px;
-      background-color: #333333;
-      color: #ffcc00;
-      margin: 10px 0;
-      border-radius: 5px;
-      width: 100%;
-    }
-
-    .settings-container {
-      margin-top: 30px;
-      padding: 15px;
-      background-color: #1f1f1f;
-      border-radius: 8px;
-      text-align: center;
-    }
-
-    .settings-button {
-      background-color: #ffcc00;
-      color: #121212;
-      font-weight: bold;
-      cursor: pointer;
-      padding: 12px 20px;
-      border-radius: 5px;
-      font-size: 1.1rem;
-      transition: background-color 0.3s ease;
-    }
-
-    .settings-button:hover {
-      background-color: #ffaa00;
-    }
-
-    /* Styling for Last Sale section */
-    #last-sale-display {
-      font-size: 1.2rem;
-      background-color: #2c2c2c;
-      padding: 15px;
-      border-radius: 8px;
-      margin-top: 20px;
-      color: #ffcc00;
-    }
-
-    #last-sale-display p {
-      margin-bottom: 5px;
-    }
-
-    #last-sale-display span {
-      font-size: 1rem;
-      color: #fff;
-    }
-
-    /* Hide All Sales Data by Default */
-    .hidden {
-      display: none;
-    }
-
-    /* Hide Cards for Live Dashboard */
-    .hidden-dashboard {
-      display: none;
-    }
-
-  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-  <header>
-    <h1>Store Management System</h1>
-    <div class="settings-icon" onclick="openSettings()">⚙️</div>
-  </header>
-
   <div class="container">
-    <!-- Main Content (Initial Page) -->
+    <!-- Set Your Store Name Section -->
     <div id="main-page" class="card">
       <h2>Set Your Store Name</h2>
       <input type="text" id="storeNameInput" placeholder="Enter Store Name">
       <button id="startStoreBtn" onclick="setStoreName()">Start Store</button>
-      <div id="loading" class="hidden">Loading...</div>
     </div>
 
     <!-- Sales Data -->
-    <div id="sales-card" class="card">
+    <div id="sales-card" class="card hidden">
       <h2>Total Sales: <span id="totalSales">৳0</span></h2>
       <h2>Total Products Sold: <span id="totalProductsSold">0</span></h2>
     </div>
 
     <!-- Product Entry -->
-    <div id="product-entry-card" class="card">
+    <div id="product-entry-card" class="card hidden">
       <h2>Product Entry</h2>
       <input type="text" id="productName" placeholder="Product Name">
       <input type="number" id="productPrice" placeholder="Product Price">
       <input type="number" id="productQuantity" placeholder="Product Quantity">
       <button id="generateSaleBtn" onclick="generateSale()">Generate Sale</button>
     </div>
-  </div>
 
-  <!-- All-in-One Page (Live Dashboard) -->
-  <div id="all-in-one-page" class="hidden-dashboard">
-    <h2>Live Dashboard</h2>
-    <div id="liveDashboard" class="sales-box">
-      <p>Last Sale</p>
-      <p>Product Name: <span id="live-product-name">-</span></p>
-      <p>Price: ৳<span id="live-price">0</span></p>
-      <p>Quantity: <span id="live-quantity">0</span></p>
-      <p>Total Amount: ৳<span id="live-total-amount">0</span></p>
-      <button class="print-button" onclick="printData()">Print</button>
+    <!-- Settings Page -->
+    <div id="settings-page" class="card hidden">
+      <h2>Live Dashboard</h2>
+      <div id="last-sale-display" class="dashboard-box">
+        <p>Product Name: <span id="live-product-name">-</span></p>
+        <p>Price: <span id="live-price">৳0</span></p>
+        <p>Quantity: <span id="live-quantity">0</span></p>
+        <p>Total Amount: <span id="live-total-amount">৳0</span></p>
+      </div>
+      <button id="closeStoreBtn" onclick="closeStore()">Close Store</button>
     </div>
-    <button class="settings-button" onclick="closeStore()">Close Store</button>
   </div>
 
-  <!-- Last Sale Display (For All-in-One Page) -->
-  <div id="last-sale-display" class="hidden-dashboard">
-    <h4>Last Sale:</h4>
-    <p class="detail">Product Name: <span id="last-sale-name">-</span></p>
-    <p class="detail">Price: ৳<span id="last-sale-price">0</span></p>
-    <p class="detail">Quantity: <span id="last-sale-quantity">0</span></p>
-    <p class="detail">Total Amount: ৳<span id="last-sale-total">0</span></p>
-  </div>
-
-  <script>
-    let storeName = "";
-    let totalSales = 0;
-    let totalProductsSold = 0;
-    let lastSale = {};
-
-    // Set Store Name
-    function setStoreName() {
-      storeName = document.getElementById('storeNameInput').value;
-      if (storeName) {
-        localStorage.setItem('storeName', storeName);
-        document.getElementById('totalSales').innerText = "৳0";
-        document.getElementById('totalProductsSold').innerText = "0";
-        document.getElementById('storeNameInput').disabled = true;
-        document.getElementById('startStoreBtn').disabled = true;
-        document.getElementById('sales-card').style.display = "block";
-        document.getElementById('product-entry-card').style.display = "none"; // Hide Product Entry
-        document.getElementById('loading').classList.add('hidden');
-      }
-    }
-
-    // Generate Sale
-    function generateSale() {
-      const productName = document.getElementById('productName').value;
-      const productPrice = document.getElementById('productPrice').value;
-      const productQuantity = document.getElementById('productQuantity').value;
-
-      if (productName && productPrice && productQuantity) {
-        lastSale = {
-          productName,
-          productPrice: parseFloat(productPrice),
-          productQuantity: parseInt(productQuantity),
-          totalAmount: parseFloat(productPrice) * parseInt(productQuantity)
-        };
-
-        totalSales += lastSale.totalAmount;
-        totalProductsSold += parseInt(productQuantity);
-
-        // Update Display
-        document.getElementById('totalSales').innerText = "৳" + totalSales;
-        document.getElementById('totalProductsSold').innerText = totalProductsSold;
-        document.getElementById('last-sale-name').innerText = lastSale.productName;
-        document.getElementById('last-sale-price').innerText = lastSale.productPrice;
-        document.getElementById('last-sale-quantity').innerText = lastSale.productQuantity;
-        document.getElementById('last-sale-total').innerText = lastSale.totalAmount;
-
-        // Live Dashboard Update
-        document.getElementById('live-product-name').innerText = lastSale.productName;
-        document.getElementById('live-price').innerText = lastSale.productPrice;
-        document.getElementById('live-quantity').innerText = lastSale.productQuantity;
-        document.getElementById('live-total-amount').innerText = lastSale.totalAmount;
-
-        document.getElementById('productName').value = '';
-        document.getElementById('productPrice').value = '';
-        document.getElementById('productQuantity').value = '';
-      }
-    }
-
-    // Open Settings and Toggle View
-    function openSettings() {
-      document.getElementById('loading').classList.remove('hidden');
-      setTimeout(() => {
-        document.getElementById('loading').classList.add('hidden');
-        document.getElementById('all-in-one-page').style.display = "block";
-        document.getElementById('last-sale-display').classList.remove('hidden');
-        document.getElementById('sales-card').style.display = "none";
-        document.getElementById('product-entry-card').style.display = "none";
-      }, 1000);
-    }
-
-    // Close Store and Reset Everything
-    function closeStore() {
-      if (confirm("Are you sure you want to close the store?")) {
-        if (confirm("Are you absolutely sure?")) {
-          totalSales = 0;
-          totalProductsSold = 0;
-          lastSale = {};
-          document.getElementById('totalSales').innerText = "৳0";
-          document.getElementById('totalProductsSold').innerText = "0";
-          document.getElementById('live-product-name').innerText = "-";
-          document.getElementById('live-price').innerText = "0";
-          document.getElementById('live-quantity').innerText = "0";
-          document.getElementById('live-total-amount').innerText = "0";
-          document.getElementById('last-sale-display').classList.add('hidden');
-          document.getElementById('all-in-one-page').style.display = "none";
-          document.getElementById('sales-card').style.display = "block";
-          document.getElementById('product-entry-card').style.display = "block";
-        }
-      }
-    }
-
-    // Print Function
-    function printData() {
-      window.print();
-    }
-
-    // Load Store Name from LocalStorage
-    window.onload = () => {
-      const savedStoreName = localStorage.getItem('storeName');
-      if (savedStoreName) {
-        storeName = savedStoreName;
-        document.getElementById('storeNameInput').disabled = true;
-        document.getElementById('startStoreBtn').disabled = true;
-      }
-    };
-  </script>
-
+  <script src="script.js"></script>
 </body>
 </html>

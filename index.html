@@ -119,6 +119,56 @@
       margin-top: 15px;
       text-align: left;
     }
+
+    .display {
+      font-size: 2rem;
+      padding: 20px;
+      background-color: #333333;
+      color: #ffcc00;
+      margin: 10px 0;
+      border-radius: 5px;
+      width: 100%;
+    }
+
+    .settings-container {
+      margin-top: 30px;
+      padding: 15px;
+      background-color: #1f1f1f;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .settings-button {
+      background-color: #ffcc00;
+      color: #121212;
+      font-weight: bold;
+      cursor: pointer;
+      padding: 12px 20px;
+      border-radius: 5px;
+      font-size: 1.1rem;
+      transition: background-color 0.3s ease;
+    }
+
+    .settings-button:hover {
+      background-color: #ffaa00;
+    }
+
+    .setting-options {
+      margin-top: 20px;
+    }
+
+    .print-button {
+      background-color: #28a745;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .print-button:hover {
+      background-color: #218838;
+    }
   </style>
 </head>
 <body>
@@ -155,20 +205,36 @@
       Loading Dashboard...
     </div>
 
-    <!-- Settings Section - Will be visible when Settings is clicked -->
+    <!-- Live Dashboard Section -->
     <div id="settings-section" class="hidden">
       <h2>Live Dashboard</h2>
-      <!-- Sales Data Box -->
-      <div class="sales-box">
-        <h3>Last Sale</h3>
+      
+      <!-- Last Sale Display -->
+      <div class="display" id="last-sale-display">
+        <p>Last Sale:</p>
         <p>Product Name: <span id="last-sale-name">-</span></p>
         <p>Price: ৳<span id="last-sale-price">0</span></p>
         <p>Quantity: <span id="last-sale-quantity">0</span></p>
         <p>Total Amount: ৳<span id="last-sale-total">0</span></p>
       </div>
-      
-      <button id="close-dashboard">Close Dashboard</button>
-      <button id="close-store">Close Store</button>
+
+      <!-- Sales Data Box -->
+      <div class="sales-box">
+        <h3>All Sales Data</h3>
+        <p>Total Sales: ৳<span id="total-sales-display">0</span></p>
+        <p>Total Products Sold: <span id="total-products-display">0</span></p>
+      </div>
+
+      <!-- Close Store & Print Buttons -->
+      <div class="setting-options">
+        <button class="print-button" id="print-button">Print Receipt</button>
+        <button id="close-store">Close Store</button>
+      </div>
+    </div>
+
+    <!-- Settings Button -->
+    <div class="settings-container">
+      <button class="settings-button" id="open-settings">Open Settings</button>
     </div>
   </main>
 
@@ -178,14 +244,10 @@
     const productSection = document.getElementById("product-section");
     const loadingSection = document.getElementById("loading");
     const settingsSection = document.getElementById("settings-section");
-    const totalSales = document.getElementById("total-sales");
-    const totalProducts = document.getElementById("total-products");
-
-    const lastSaleName = document.getElementById("last-sale-name");
-    const lastSalePrice = document.getElementById("last-sale-price");
-    const lastSaleQuantity = document.getElementById("last-sale-quantity");
-    const lastSaleTotal = document.getElementById("last-sale-total");
-
+    const lastSaleDisplay = document.getElementById("last-sale-display");
+    const totalSalesDisplay = document.getElementById("total-sales-display");
+    const totalProductsDisplay = document.getElementById("total-products-display");
+    
     let storeData = JSON.parse(localStorage.getItem("storeData")) || {
       storeName: "",
       totalSales: 0,
@@ -217,60 +279,46 @@
 
     document.getElementById("generate-sale").addEventListener("click", () => {
       const productName = document.getElementById("product-name").value.trim();
-      const productPrice = parseFloat(
-        document.getElementById("product-price").value
-      );
-      const productQuantity = parseInt(
-        document.getElementById("product-quantity").value
-      );
-
-      if (productName && productPrice > 0 && productQuantity > 0) {
-        const saleAmount = productPrice * productQuantity;
-        storeData.totalSales += saleAmount;
+      const productPrice = parseFloat(document.getElementById("product-price").value);
+      const productQuantity = parseInt(document.getElementById("product-quantity").value);
+      
+      if (productName && !isNaN(productPrice) && !isNaN(productQuantity)) {
+        const totalAmount = productPrice * productQuantity;
+        
+        storeData.totalSales += totalAmount;
         storeData.totalProducts += productQuantity;
-
         storeData.lastSale = {
           productName,
           productPrice,
           productQuantity,
-          saleAmount
+          totalAmount
         };
 
         localStorage.setItem("storeData", JSON.stringify(storeData));
+
         updateDashboard();
-        alert(`${productName} sold for ৳${saleAmount}`);
       } else {
-        alert("Please enter valid product details!");
+        alert("Please fill all fields correctly.");
       }
     });
 
     function updateDashboard() {
-      totalSales.textContent = storeData.totalSales;
-      totalProducts.textContent = storeData.totalProducts;
-
-      // Update Last Sale Data
-      if (storeData.lastSale.productName) {
-        lastSaleName.textContent = storeData.lastSale.productName;
-        lastSalePrice.textContent = storeData.lastSale.productPrice;
-        lastSaleQuantity.textContent = storeData.lastSale.productQuantity;
-        lastSaleTotal.textContent = storeData.lastSale.saleAmount;
-      }
+      document.getElementById("total-sales").textContent = storeData.totalSales;
+      document.getElementById("total-products").textContent = storeData.totalProducts;
+      document.getElementById("last-sale-name").textContent = storeData.lastSale.productName || "-";
+      document.getElementById("last-sale-price").textContent = storeData.lastSale.productPrice || 0;
+      document.getElementById("last-sale-quantity").textContent = storeData.lastSale.productQuantity || 0;
+      document.getElementById("last-sale-total").textContent = storeData.lastSale.totalAmount || 0;
+      totalSalesDisplay.textContent = storeData.totalSales;
+      totalProductsDisplay.textContent = storeData.totalProducts;
     }
 
-    document.getElementById("settings-icon").addEventListener("click", () => {
+    document.getElementById("open-settings").addEventListener("click", () => {
       loadingSection.style.display = "block";
-      totalSalesSection.classList.add("hidden");
-      productSection.classList.add("hidden");
       setTimeout(() => {
         loadingSection.style.display = "none";
         settingsSection.classList.remove("hidden");
       }, 1000);
-    });
-
-    document.getElementById("close-dashboard").addEventListener("click", () => {
-      settingsSection.classList.add("hidden");
-      totalSalesSection.classList.remove("hidden");
-      productSection.classList.remove("hidden");
     });
 
     document.getElementById("close-store").addEventListener("click", () => {
@@ -283,8 +331,13 @@
           storeSection.classList.remove("hidden");
           totalSalesSection.classList.add("hidden");
           productSection.classList.add("hidden");
+          settingsSection.classList.add("hidden");
         }
       }
+    });
+
+    document.getElementById("print-button").addEventListener("click", () => {
+      window.print();
     });
   </script>
 </body>

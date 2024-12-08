@@ -89,6 +89,19 @@
       display: none;
       font-size: 1.5rem;
       color: #ffcc00;
+      animation: loadingAnimation 1s infinite;
+    }
+
+    @keyframes loadingAnimation {
+      0% {
+        opacity: 0.2;
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0.2;
+      }
     }
 
     .home-button {
@@ -235,18 +248,24 @@
     }
 
     function toggleSettings() {
-      const settingsCard = document.getElementById('settings-card');
-      const mainPageCard = document.getElementById('main-page');
-      mainPageCard.classList.add('hidden');
-      settingsCard.classList.remove('hidden');
+      // Hide main sections
+      document.getElementById('main-page').classList.add('hidden');
+      document.getElementById('store-info-card').classList.add('hidden');
+      document.getElementById('sales-generate-card').classList.add('hidden');
+      
+      // Show loading effect
       document.getElementById('loading').classList.remove('hidden');
+
+      // Show dashboard after 1 second
       setTimeout(function() {
         document.getElementById('loading').classList.add('hidden');
+        document.getElementById('settings-card').classList.remove('hidden');
         document.getElementById('dashboard-card').classList.remove('hidden');
       }, 1000);
     }
 
     function goHome() {
+      // Hide settings and dashboard
       document.getElementById('settings-card').classList.add('hidden');
       document.getElementById('main-page').classList.remove('hidden');
       document.getElementById('store-info-card').classList.remove('hidden');

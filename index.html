@@ -57,11 +57,6 @@
       box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
     }
 
-    .card-border {
-      border: 2px solid #ffcc00;
-      margin-top: 15px;
-    }
-
     input, button {
       margin: 10px;
       padding: 10px;
@@ -157,20 +152,6 @@
     #last-sale-display span {
       font-size: 1rem;
       color: #fff;
-    }
-
-    /* Adjusted for professional look */
-    #last-sale-display h4 {
-      font-size: 1.4rem;
-      margin-bottom: 15px;
-    }
-
-    #last-sale-display .detail {
-      font-size: 1.1rem;
-    }
-
-    #last-sale-display .detail span {
-      font-weight: bold;
     }
 
     /* Hide All Sales Data by Default */
@@ -286,6 +267,7 @@
     // Open Settings and Toggle View
     function openSettings() {
       document.getElementById('all-in-one-page').style.display = "block";
+      document.getElementById('last-sale-display').classList.remove('hidden');
     }
 
     // Close Store
@@ -312,6 +294,5 @@
       window.print();
     }
   </script>
-
 </body>
 </html>

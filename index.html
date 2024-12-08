@@ -85,27 +85,6 @@
       background-color: #ffaa00;
     }
 
-    .last-sale {
-      text-align: left;
-      margin-top: 20px;
-      font-size: 0.9rem;
-    }
-
-    .print-button {
-      display: block;
-      margin: 20px auto;
-      background-color: #00cc00;
-      color: #ffffff;
-      border: none;
-      padding: 10px 20px;
-      cursor: pointer;
-      border-radius: 5px;
-    }
-
-    .print-button:hover {
-      background-color: #009900;
-    }
-
     .loading {
       display: none;
       font-size: 1.5rem;
@@ -124,6 +103,21 @@
 
     .home-button:hover {
       background-color: #ffaa00;
+    }
+
+    .print-button {
+      display: block;
+      margin: 20px auto;
+      background-color: #00cc00;
+      color: #ffffff;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .print-button:hover {
+      background-color: #009900;
     }
   </style>
 </head>
@@ -166,6 +160,7 @@
         <p>Total Sales: <span id="totalSales">0</span> ৳</p>
         <p>Last Sale: <span id="lastSale">No Sales Yet</span></p>
         <button class="home-button" onclick="goHome()">Home</button>
+        <button class="home-button" onclick="closeStore()">Close Store</button>
       </div>
     </div>
 
@@ -254,6 +249,14 @@
     function goHome() {
       document.getElementById('settings-card').classList.add('hidden');
       document.getElementById('main-page').classList.remove('hidden');
+      document.getElementById('store-info-card').classList.remove('hidden');
+      document.getElementById('sales-generate-card').classList.remove('hidden');
+    }
+
+    function closeStore() {
+      localStorage.removeItem('storeName');
+      localStorage.removeItem('salesData');
+      goHome();
     }
   </script>
 </body>

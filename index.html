@@ -125,8 +125,17 @@
   </div>
 
   <script>
-    let storeName = '';
+    let storeName = localStorage.getItem('storeName') || ''; // Get from localStorage or set to empty string
     let totalSales = 0;
+
+    // Check if store name is already set
+    if (storeName) {
+      // If Store Name exists, hide the main page and show the store info and sales generate section
+      document.getElementById('main-page').classList.add('hidden');
+      document.getElementById('store-info-card').classList.remove('hidden');
+      document.getElementById('sales-generate-card').classList.remove('hidden');
+      document.getElementById('storeNameDisplay').textContent = `Welcome to ${storeName}`;
+    }
 
     // Set Store Name
     function setStoreName() {

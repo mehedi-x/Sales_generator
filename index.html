@@ -45,7 +45,6 @@
 
     .container {
       padding: 20px;
-      text-align: center;
     }
 
     .card {
@@ -53,10 +52,14 @@
       border: 1px solid #333333;
       border-radius: 10px;
       padding: 20px;
-      margin: 20px auto;
-      width: 90%;
-      max-width: 500px;
+      margin: 20px 0;
+      text-align: center;
       box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
+    }
+
+    .card-border {
+      border: 2px solid #ffcc00;
+      margin-top: 15px;
     }
 
     input, button {
@@ -83,23 +86,29 @@
       background-color: #ffaa00;
     }
 
+    #loading {
+      display: none;
+      text-align: center;
+      font-size: 1.5rem;
+    }
+
     #dashboard {
       display: none;
       padding: 20px;
       text-align: center;
     }
 
-    .loading {
-      display: none;
-      text-align: center;
-      font-size: 1.5rem;
-    }
-
     .dashboard-item {
       background-color: #1f1f1f;
       padding: 15px;
+      border: 1px solid #ffcc00;
       border-radius: 5px;
       text-align: center;
+      margin: 10px 0;
+    }
+
+    .hidden {
+      display: none;
     }
   </style>
 </head>
@@ -118,13 +127,13 @@
     </div>
 
     <!-- Total Sales Section -->
-    <div id="total-sales-section" class="card hidden">
+    <div id="total-sales-section" class="card hidden card-border">
       <h3>Total Sales: ৳<span id="total-sales">0</span></h3>
       <h4>Total Products Sold: <span id="total-products">0</span></h4>
     </div>
 
     <!-- Product Entry Section -->
-    <div id="product-section" class="card hidden">
+    <div id="product-section" class="card hidden card-border">
       <h2>Product Entry</h2>
       <input type="text" id="product-name" placeholder="Product Name">
       <input type="number" id="product-price" placeholder="Product Price">
@@ -139,7 +148,7 @@
 
     <!-- Dashboard Section -->
     <div id="dashboard" class="hidden">
-      <h2>Live Sales Dashboard</h2>
+      <h2>Live Dashboard</h2>
       <div class="dashboard-item">
         <h3>Sales Summary</h3>
         <p>Total Products Sold: <span id="dashboard-products">0</span></p>
@@ -223,7 +232,7 @@
       setTimeout(() => {
         loadingSection.style.display = "none";
         dashboard.classList.remove("hidden");
-      }, 2000);
+      }, 1000);
     });
 
     document.getElementById("close-dashboard").addEventListener("click", () => {

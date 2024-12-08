@@ -16,6 +16,7 @@
       font-family: 'Roboto', sans-serif;
       background-color: #121212;
       color: #ffffff;
+      overflow-x: hidden;
     }
 
     header {
@@ -44,8 +45,8 @@
     }
 
     .container {
-      text-align: center;
       padding: 20px;
+      text-align: center;
     }
 
     .card {
@@ -53,32 +54,10 @@
       border: 1px solid #333333;
       border-radius: 10px;
       padding: 20px;
-      margin: 10px auto;
+      margin: 20px auto;
       width: 90%;
       max-width: 500px;
       box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
-      text-align: center;
-    }
-
-    .dashboard {
-      display: none;
-      padding: 20px;
-      background-color: #1e1e1e;
-      border: 1px solid #333333;
-      border-radius: 10px;
-      margin: 10px;
-      text-align: left;
-    }
-
-    .dashboard h2 {
-      margin-bottom: 20px;
-    }
-
-    .dashboard-item {
-      display: flex;
-      justify-content: space-between;
-      padding: 10px;
-      border-bottom: 1px solid #333333;
     }
 
     button {
@@ -105,6 +84,42 @@
       max-width: 300px;
     }
 
+    .loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      display: none;
+    }
+
+    .loading-screen.active {
+      display: flex;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid #333333;
+      border-top: 5px solid #ffcc00;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
     .hidden {
       display: none;
     }
@@ -112,9 +127,14 @@
 </head>
 <body>
   <header>
-    <h1>Store Management System</h1>
-    <i class="settings-icon" id="settings-icon">⚙</i>
+    <h1>Store Management</h1>
+    <i id="settings-icon" class="settings-icon">⚙</i>
   </header>
+
+  <!-- Loading Screen -->
+  <div id="loading-screen" class="loading-screen">
+    <div class="spinner"></div>
+  </div>
 
   <main class="container">
     <!-- Store Setup Section -->
@@ -139,26 +159,16 @@
     </div>
 
     <!-- Dashboard Section -->
-    <div id="dashboard" class="dashboard hidden">
+    <div id="dashboard" class="card hidden">
       <h2>Dashboard</h2>
-      <div class="dashboard-item">
-        <span>Total Sales:</span>
-        <span id="dashboard-sales">৳0</span>
-      </div>
-      <div class="dashboard-item">
-        <span>Last Sale:</span>
-        <span id="last-sale">N/A</span>
-      </div>
-      <div class="dashboard-item">
-        <span>Wholesale Orders:</span>
-        <span id="wholesale-orders">0</span>
-      </div>
-      <button id="close-dashboard">Close Dashboard</button>
+      <p>Sales Overview</p>
+      <button id="close-dashboard">Close</button>
     </div>
   </main>
 
   <script>
-    // Initialize variables
+    // Variables
+    const loadingScreen = document.getElementById("loading-screen");
     const storeSection = document.getElementById("store-section");
     const totalSalesSection = document.getElementById("total-sales-section");
     const productSection = document.getElementById("product-section");
@@ -168,22 +178,20 @@
     const storeNameInput = document.getElementById("store-name");
     const startStoreButton = document.getElementById("start-store");
     const totalSales = document.getElementById("total-sales");
-    const dashboardSales = document.getElementById("dashboard-sales");
-    const lastSale = document.getElementById("last-sale");
 
-    let salesData = {
-      total: 0,
-      last: "N/A",
-      wholesaleOrders: 0,
+    // Save Data in LocalStorage
+    let storeData = JSON.parse(localStorage.getItem("storeData")) || {
+      storeName: "",
+      totalSales: 0,
     };
 
-    // Load saved data
+    // Initialize Store
     document.addEventListener("DOMContentLoaded", () => {
-      const savedStoreName = localStorage.getItem("storeName");
-      if (savedStoreName) {
+      if (storeData.storeName) {
         storeSection.classList.add("hidden");
         totalSalesSection.classList.remove("hidden");
         productSection.classList.remove("hidden");
+        totalSales.textContent = storeData.totalSales;
       }
     });
 
@@ -191,7 +199,8 @@
     startStoreButton.addEventListener("click", () => {
       const storeName = storeNameInput.value.trim();
       if (storeName) {
-        localStorage.setItem("storeName", storeName);
+        storeData.storeName = storeName;
+        localStorage.setItem("storeData", JSON.stringify(storeData));
         storeSection.classList.add("hidden");
         totalSalesSection.classList.remove("hidden");
         productSection.classList.remove("hidden");
@@ -200,18 +209,22 @@
       }
     });
 
-    // Settings Icon Click
+    // Show Loading Screen
     settingsIcon.addEventListener("click", () => {
-      totalSalesSection.classList.add("hidden");
-      productSection.classList.add("hidden");
-      dashboard.classList.remove("hidden");
+      loadingScreen.classList.add("active");
+      setTimeout(() => {
+        loadingScreen.classList.remove("active");
+        dashboard.classList.remove("hidden");
+        totalSalesSection.classList.add("hidden");
+        productSection.classList.add("hidden");
+      }, 1000);
     });
 
     // Close Dashboard
     closeDashboard.addEventListener("click", () => {
+      dashboard.classList.add("hidden");
       totalSalesSection.classList.remove("hidden");
       productSection.classList.remove("hidden");
-      dashboard.classList.add("hidden");
     });
   </script>
 </body>

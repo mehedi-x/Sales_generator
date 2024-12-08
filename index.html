@@ -3,57 +3,60 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>2040 Dark Mode Store Management</title>
+  <title>Android-Style Store Manager</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div id="app">
+    <!-- Navigation Drawer -->
+    <nav id="drawer">
+      <ul>
+        <li><button id="view-overview">📊 Overview</button></li>
+        <li><button id="view-history">🕒 Sales History</button></li>
+        <li><button id="download-history">⬇️ Download Data</button></li>
+        <li><button id="close-store">🔒 Close Store</button></li>
+      </ul>
+    </nav>
+
+    <!-- Header -->
     <header>
-      <h1>🚀 Store Management System</h1>
-      <div id="store-info">
-        <input type="text" id="store-name-input" placeholder="Enter Your Store Name">
-        <button id="set-store">Start Store</button>
-      </div>
+      <button id="menu-toggle">☰</button>
+      <h1>Store Manager</h1>
     </header>
 
+    <!-- Main Content -->
     <main>
       <section id="dashboard">
-        <div id="overview">
-          <h2>📊 Sales Overview</h2>
-          <canvas id="sales-chart"></canvas>
-          <div id="total-sales-summary">
-            <h3>Total Sales</h3>
-            <p><span id="total-sales">৳0</span></p>
-          </div>
+        <!-- Store Info -->
+        <div id="store-info">
+          <h2>Set Store Name</h2>
+          <input type="text" id="store-name-input" placeholder="Enter Store Name">
+          <button id="set-store">Start</button>
         </div>
 
+        <!-- Add Product -->
         <div id="add-product">
-          <h2>➕ Add Product</h2>
-          <form id="product-form">
-            <input type="text" id="product-name" placeholder="Product Name">
-            <input type="number" id="product-price" placeholder="Price">
-            <input type="number" id="product-quantity" placeholder="Quantity">
-            <button type="button" id="generate-sale">Generate Sale</button>
-          </form>
+          <h2>Add New Product</h2>
+          <input type="text" id="product-name" placeholder="Product Name">
+          <input type="number" id="product-price" placeholder="Price">
+          <input type="number" id="product-quantity" placeholder="Quantity">
+          <button id="generate-sale">Generate Sale</button>
         </div>
-      </section>
 
-      <section id="last-sale">
-        <h2>🛒 Last Sale Summary</h2>
-        <div id="sale-summary">
+        <!-- Last Sale -->
+        <div id="last-sale">
+          <h2>Last Sale Summary</h2>
           <p>No sales recorded yet.</p>
         </div>
       </section>
-    </main>
 
-    <footer>
-      <div id="actions">
-        <button id="view-history">View History</button>
-        <button id="download-history">Download History</button>
-        <button id="close-store">Close Store</button>
+      <!-- Total Sales -->
+      <div id="total-sales-display">
+        <h2>Total Sales: <span id="total-sales">৳0</span></h2>
       </div>
-    </footer>
+    </main>
   </div>
+
   <script src="script.js"></script>
 </body>
 </html>

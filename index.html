@@ -61,16 +61,6 @@
       display: none;
     }
 
-    .loading-icon {
-      font-size: 2rem;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
     input, button {
       margin: 10px;
       padding: 10px;
@@ -113,65 +103,70 @@
     <!-- Store Name Display -->
     <div id="store-info-card" class="card hidden">
       <h2 id="storeNameDisplay"></h2>
-      <p>Total Sales: $<span id="totalSales">0</span></p>
+    </div>
+
+    <!-- Sales Generate Section -->
+    <div id="sales-generate-card" class="card hidden">
+      <h2>Generate Sale</h2>
+      <label for="productName">Product Name:</label>
+      <input type="text" id="productName" placeholder="Enter Product Name" required>
+      <label for="quantity">Quantity (Optional):</label>
+      <input type="number" id="quantity" placeholder="Enter Quantity">
+      <label for="price">Price per Unit:</label>
+      <input type="number" id="price" placeholder="Enter Price" required>
+      <button onclick="generateSale()">Generate Sale</button>
     </div>
 
     <!-- Dashboard -->
-    <div id="loading-card" class="card hidden">
-      <h2>Loading Dashboard...</h2>
-      <div class="loading-icon">⏳</div>
-    </div>
-
     <div id="dashboard-card" class="card hidden">
       <h2>Dashboard</h2>
-      <p>Here you can view all details:</p>
-      <ul>
-        <li>Total Sales: $<span id="totalSalesDetails">0</span></li>
-        <li>Total Products Sold: <span id="totalProductsSold">0</span></li>
-        <li>Last Bill Amount: $<span id="lastBill">0</span></li>
-      </ul>
-      <button onclick="printLastBill()">Print Last Bill</button>
+      <p>Total Sales: $<span id="totalSales">0</span></p>
     </div>
   </div>
 
   <script>
     let storeName = '';
     let totalSales = 0;
-    let totalProductsSold = 0;
-    let lastBillAmount = 0;
 
     // Set Store Name
     function setStoreName() {
       const storeInput = document.getElementById('storeNameInput').value.trim();
       if (storeInput) {
         storeName = storeInput;
+        localStorage.setItem('storeName', storeName); // Save to local storage
         document.getElementById('main-page').classList.add('hidden');
         document.getElementById('store-info-card').classList.remove('hidden');
+        document.getElementById('sales-generate-card').classList.remove('hidden');
         document.getElementById('storeNameDisplay').textContent = `Welcome to ${storeName}`;
       } else {
         alert('Please enter a valid store name!');
       }
     }
 
-    // Load Dashboard
-    function loadDashboard() {
-      document.getElementById('loading-card').classList.remove('hidden');
-      setTimeout(() => {
-        document.getElementById('loading-card').classList.add('hidden');
-        document.getElementById('dashboard-card').classList.remove('hidden');
-        document.getElementById('totalSalesDetails').textContent = totalSales;
-        document.getElementById('totalProductsSold').textContent = totalProductsSold;
-        document.getElementById('lastBill').textContent = lastBillAmount;
-      }, 2000);
+    // Generate Sale
+    function generateSale() {
+      const productName = document.getElementById('productName').value.trim();
+      const quantity = document.getElementById('quantity').value.trim();
+      const price = document.getElementById('price').value.trim();
+
+      if (productName && price) {
+        const total = (quantity ? parseInt(quantity) : 1) * parseFloat(price);
+        totalSales += total;
+        alert(`Sale Generated: \nProduct: ${productName}\nTotal: $${total.toFixed(2)}`);
+        document.getElementById('totalSales').textContent = totalSales.toFixed(2);
+        document.getElementById('productName').value = '';
+        document.getElementById('quantity').value = '';
+        document.getElementById('price').value = '';
+      } else {
+        alert('Please fill in all required fields!');
+      }
     }
 
-    // Print Last Bill
-    function printLastBill() {
-      const printContent = `Last Bill Amount: $${lastBillAmount}`;
-      const newWindow = window.open('', '', 'width=300,height=200');
-      newWindow.document.write(`<p>${printContent}</p>`);
-      newWindow.print();
-      newWindow.close();
+    // Load Dashboard
+    function loadDashboard() {
+      document.getElementById('store-info-card').classList.add('hidden');
+      document.getElementById('sales-generate-card').classList.add('hidden');
+      document.getElementById('dashboard-card').classList.remove('hidden');
     }
   </script>
 </body>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Modern Store Management</title>
+  <title>Store Manager</title>
   <style>
     /* Base Styles */
     * {
@@ -19,36 +19,11 @@
       line-height: 1.6;
     }
 
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px 20px;
-      background-color: #1f1f1f;
-      border-bottom: 1px solid #333333;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-    }
-
-    header h1 {
-      font-size: 1.8rem;
-      font-weight: bold;
-      color: #ffffff;
-    }
-
-    header button {
-      background: none;
-      border: none;
-      color: #ffffff;
-      font-size: 1.5rem;
-      cursor: pointer;
-    }
-
-    /* Main Content */
     main {
-      padding: 20px;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      align-items: center;
+      padding: 20px;
     }
 
     .card {
@@ -56,16 +31,28 @@
       border: 1px solid #333333;
       border-radius: 10px;
       padding: 20px;
+      margin: 10px 0;
+      width: 100%;
+      max-width: 500px;
       box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
+      text-align: center;
+      opacity: 1;
+      transition: opacity 0.5s ease-out, transform 0.5s ease-out;
     }
 
-    .card h2 {
+    .hide {
+      opacity: 0;
+      transform: scale(0.9);
+      pointer-events: none;
+    }
+
+    h2 {
       font-size: 1.5rem;
       margin-bottom: 15px;
     }
 
-    input[type="text"], input[type="number"] {
-      width: 100%;
+    input[type="text"] {
+      width: 90%;
       padding: 10px;
       margin: 10px 0;
       border: 1px solid #444444;
@@ -89,93 +76,70 @@
       background-color: #ffaa00;
     }
 
-    /* Total Sales */
     .total-sales {
       background-color: #1e1e1e;
-      text-align: center;
       padding: 15px;
       border-radius: 10px;
       font-size: 1.5rem;
       font-weight: bold;
-    }
-
-    /* Footer */
-    footer {
+      display: none; /* Initially hidden */
       text-align: center;
-      padding: 10px;
-      background-color: #1f1f1f;
-      color: #888888;
-      font-size: 0.9rem;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
     }
 
-    footer a {
-      color: #ffcc00;
-      text-decoration: none;
+    .show {
+      display: block;
     }
   </style>
 </head>
 <body>
-  <!-- Header -->
-  <header>
-    <h1>Store Manager</h1>
-    <button id="menu-toggle">☰</button>
-  </header>
-
-  <!-- Main Content -->
   <main>
     <!-- Store Name Section -->
-    <div class="card">
+    <div id="store-section" class="card">
       <h2>Set Your Store Name</h2>
       <input type="text" id="store-name" placeholder="Enter Store Name">
       <button id="start-store">Start Store</button>
     </div>
 
-    <!-- Add Product Section -->
-    <div class="card">
-      <h2>Add Product</h2>
-      <input type="text" id="product-name" placeholder="Product Name">
-      <input type="number" id="product-price" placeholder="Price">
-      <input type="number" id="product-quantity" placeholder="Quantity">
-      <button id="add-product">Add Product</button>
-    </div>
-
-    <!-- Last Sale Summary -->
-    <div class="card">
-      <h2>Last Sale Summary</h2>
-      <p>No sales recorded yet.</p>
-    </div>
-
-    <!-- Total Sales Display -->
-    <div class="total-sales">
+    <!-- Total Sales Section -->
+    <div id="total-sales-section" class="total-sales">
       Total Sales: ৳<span id="total-sales">0</span>
     </div>
   </main>
 
-  <!-- Footer -->
-  <footer>
-    &copy; 2024 <a href="#">Store Manager Inc.</a> All rights reserved.
-  </footer>
-
   <script>
-    // JavaScript for basic functionality
-    document.getElementById("start-store").addEventListener("click", () => {
-      const storeName = document.getElementById("store-name").value;
-      if (storeName.trim() !== "") {
-        alert(`Store "${storeName}" started successfully!`);
-      } else {
-        alert("Please enter a valid store name.");
+    document.addEventListener("DOMContentLoaded", () => {
+      const storeSection = document.getElementById("store-section");
+      const totalSalesSection = document.getElementById("total-sales-section");
+      const startStoreButton = document.getElementById("start-store");
+      const storeNameInput = document.getElementById("store-name");
+
+      // Check if store name exists in local storage
+      if (localStorage.getItem("storeName")) {
+        showTotalSales();
       }
-    });
 
-    document.getElementById("add-product").addEventListener("click", () => {
-      const productName = document.getElementById("product-name").value;
-      const productPrice = parseFloat(document.getElementById("product-price").value);
-      const productQuantity = parseInt(document.getElementById("product-quantity").value);
+      // Handle Start Store button click
+      startStoreButton.addEventListener("click", () => {
+        const storeName = storeNameInput.value.trim();
+        if (storeName) {
+          // Save store name in local storage
+          localStorage.setItem("storeName", storeName);
 
-      if (productName && productPrice > 0 && productQuantity > 0) {
-        alert(`Product "${productName}" added successfully!`);
-      } else {
-        alert("Please enter valid product details.");
+          // Animate and hide the store section
+          storeSection.classList.add("hide");
+          setTimeout(() => {
+            storeSection.style.display = "none";
+            showTotalSales();
+          }, 500); // Match the animation duration
+        } else {
+          alert("Please enter a valid store name.");
+        }
+      });
+
+      // Function to show Total Sales section
+      function showTotalSales() {
+        totalSalesSection.classList.add("show");
       }
     });
   </script>

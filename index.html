@@ -295,10 +295,11 @@
         };
         salesData.push(sale);
         localStorage.setItem('salesData', JSON.stringify(salesData));
+        alert('Sale Generated Successfully');
         updateTotalSales();
-        alert('Sale generated successfully!');
+        updateLastSale(sale);
       } else {
-        alert('Please fill out all fields correctly!');
+        alert('Please enter all required fields!');
       }
     }
 

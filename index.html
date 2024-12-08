@@ -130,12 +130,32 @@
     .dashboard .box p {
       font-size: 0.9rem;
     }
+
+    .loading {
+      display: none;
+      font-size: 2rem;
+      text-align: center;
+      margin-top: 50px;
+      color: #ffaa00;
+    }
+
+    .home-icon {
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #ffcc00;
+      transition: color 0.3s ease;
+    }
+
+    .home-icon:hover {
+      color: #ffaa00;
+    }
   </style>
 </head>
 <body>
   <header>
     <h1>Store Management</h1>
-    <div class="menu-icon" onclick="toggleLastSale()">☰</div>
+    <div class="menu-icon" onclick="showSettings()">⚙️</div>
+    <div class="home-icon" onclick="goToHome()">🏠</div>
   </header>
 
   <div class="container">
@@ -181,14 +201,17 @@
         <button onclick="toggleLastSale()">View Last Sale</button>
       </div>
       <div class="box">
-        <h3>Professional Chart</h3>
-        <p>Chart goes here</p>
-      </div>
-      <div class="box">
-        <h3>Sales History</h3>
+        <h3>Total History</h3>
         <button onclick="updateSalesHistory()">View History</button>
       </div>
+      <div class="box">
+        <h3>Close Store</h3>
+        <button onclick="closeStore()">Close Store</button>
+      </div>
     </div>
+
+    <!-- Loading Icon -->
+    <div id="loading" class="loading">Loading...</div>
   </div>
 
   <script>
@@ -255,14 +278,12 @@
 
     // লাস্ট সেল আপডেট করা
     function updateLastSale(sale) {
-      const lastSaleDetails = `
-        <p><strong>Store Name:</strong> ${sale.storeName}</p>
+      const lastSaleDetails = document.getElementById('lastSaleDetails');
+      lastSaleDetails.innerHTML = `
         <p><strong>Product Name:</strong> ${sale.productName}</p>
         <p><strong>Quantity:</strong> ${sale.quantity}</p>
-        <p><strong>Price per Unit:</strong> ৳${sale.price.toFixed(2)}</p>
         <p><strong>Total:</strong> ৳${sale.total.toFixed(2)}</p>
       `;
-      document.getElementById('lastSaleDetails').innerHTML = lastSaleDetails;
     }
 
     // লাস্ট সেল প্রিন্ট করা
@@ -276,30 +297,16 @@
       printWindow.print();
     }
 
-    // লাস্ট সেল টগল করা
-    function toggleLastSale() {
-      const lastSaleCard = document.getElementById('last-sale-card');
-      if (lastSaleCard.classList.contains('hidden')) {
-        const lastSale = salesData[salesData.length - 1];
-        if (lastSale) {
-          updateLastSale(lastSale);
-          lastSaleCard.classList.remove('hidden');
-        } else {
-          alert('No sales data available!');
-        }
-      } else {
-        lastSaleCard.classList.add('hidden');
-      }
-    }
-
-    // সেটিংস মেনু শো করা
+    // ড্যাশবোর্ড দেখানো
     function showSettings() {
       document.getElementById('main-page').classList.add('hidden');
       document.getElementById('store-info-card').classList.add('hidden');
       document.getElementById('sales-generate-card').classList.add('hidden');
 
-      // লোডিং ইফেক্ট যোগ করা
+      // লোডিং ইফেক্ট দেখানো
+      document.getElementById('loading').classList.remove('hidden');
       setTimeout(() => {
+        document.getElementById('loading').classList.add('hidden');
         document.getElementById('dashboard').classList.remove('hidden');
       }, 1000);
     }
@@ -307,25 +314,12 @@
     // হোম পেজে ফিরে যাওয়া
     function goToHome() {
       document.getElementById('dashboard').classList.add('hidden');
-      document.getElementById('store-info-card').classList.remove('hidden');
-      document.getElementById('sales-generate-card').classList.remove('hidden');
-    }
-
-    // সেল হিস্ট্রি আপডেট করা
-    function updateSalesHistory() {
-      const historyContainer = document.getElementById('salesHistory');
-      historyContainer.innerHTML = '';
-      salesData.slice(-5).reverse().forEach((sale, index) => {
-        const saleEntry = `
-          <div>
-            <p><strong>${index + 1}. Product Name:</strong> ${sale.productName}</p>
-            <p><strong>Quantity:</strong> ${sale.quantity}</p>
-            <p><strong>Total:</strong> ৳${sale.total.toFixed(2)}</p>
-          </div>
-          <hr>
-        `;
-        historyContainer.innerHTML += saleEntry;
-      });
+      document.getElementById('loading').classList.remove('hidden');
+      setTimeout(() => {
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('store-info-card').classList.remove('hidden');
+        document.getElementById('sales-generate-card').classList.remove('hidden');
+      }, 1000);
     }
 
     // ক্লোজ স্টোর ফাংশন

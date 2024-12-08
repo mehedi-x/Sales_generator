@@ -169,19 +169,19 @@
   </header>
 
   <div class="container">
-    <div class="card">
+    <div class="card" id="store-name-card">
       <h2>Set Your Store Name</h2>
       <input type="text" id="storeNameInput" placeholder="Enter Store Name">
       <button id="startStoreBtn" onclick="setStoreName()">Start Store</button>
       <div id="loading" class="hidden">Loading...</div>
     </div>
 
-    <div class="card">
+    <div class="card" id="sales-card">
       <h2>Total Sales: <span id="totalSales">৳0</span></h2>
       <h2>Total Products Sold: <span id="totalProductsSold">0</span></h2>
     </div>
 
-    <div class="card">
+    <div class="card" id="product-entry-card">
       <h2>Product Entry</h2>
       <input type="text" id="productName" placeholder="Product Name">
       <input type="number" id="productPrice" placeholder="Product Price">
@@ -227,7 +227,8 @@
         document.getElementById('totalProductsSold').innerText = "0";
         document.getElementById('storeNameInput').disabled = true;
         document.getElementById('startStoreBtn').disabled = true;
-        document.getElementById('totalSales').parentElement.style.display = "block";
+        document.getElementById('sales-card').style.display = "block";
+        document.getElementById('product-entry-card').style.display = "none"; // Hide Product Entry
         document.getElementById('loading').classList.add('hidden');
       }
     }
@@ -261,6 +262,11 @@
         document.getElementById('live-price').innerText = lastSale.productPrice;
         document.getElementById('live-quantity').innerText = lastSale.productQuantity;
         document.getElementById('live-total-amount').innerText = lastSale.totalAmount;
+
+        // Clear Inputs
+        document.getElementById('productName').value = '';
+        document.getElementById('productPrice').value = '';
+        document.getElementById('productQuantity').value = '';
       }
     }
 

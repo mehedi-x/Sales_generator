@@ -91,11 +91,6 @@
     .hidden {
       display: none;
     }
-
-    .sales-summary {
-      font-size: 1.2rem;
-      margin: 15px 0;
-    }
   </style>
 </head>
 <body>
@@ -109,16 +104,16 @@
     <div id="main-page" class="card">
       <h2>Set Your Store Name</h2>
       <input type="text" id="storeNameInput" placeholder="Enter Store Name">
-      <button id="startStoreBtn" onclick="setStoreName()">Start Store</button>
+      <button id="startStoreBtn" onclick="setStoreName()">Start</button>
       <div id="loading" class="hidden">Loading...</div>
     </div>
 
     <!-- Sales Data -->
     <div id="sales-card" class="card hidden">
-      <h2>Welcome to <span id="storeNameDisplay"></span></h2>
-      <h3 class="sales-summary">Total Sales: ৳<span id="totalSales">0</span></h3>
-      <h3 class="sales-summary">Total Products Sold: <span id="totalProductsSold">0</span></h3>
-      <button onclick="resetStore()">Close Store</button>
+      <h2><span id="storeNameDisplay"></span></h2>
+      <p>Total Sales: ৳<span id="totalSales">0</span></p>
+      <p>Products Sold: <span id="totalProductsSold">0</span></p>
+      <button onclick="resetStore()">Close</button>
     </div>
 
     <!-- Product Entry -->
@@ -127,16 +122,16 @@
       <input type="text" id="productName" placeholder="Product Name">
       <input type="number" id="productPrice" placeholder="Product Price">
       <input type="number" id="productQuantity" placeholder="Product Quantity">
-      <button onclick="generateSale()">Generate Sale</button>
+      <button onclick="generateSale()">Add</button>
     </div>
 
     <!-- Last Sale Display -->
     <div id="last-sale-card" class="card hidden">
       <h3>Last Sale</h3>
-      <p>Product Name: <span id="lastProductName">-</span></p>
+      <p>Name: <span id="lastProductName">-</span></p>
       <p>Price: ৳<span id="lastProductPrice">0</span></p>
-      <p>Quantity: <span id="lastProductQuantity">0</span></p>
-      <p>Total Amount: ৳<span id="lastTotalAmount">0</span></p>
+      <p>Qty: <span id="lastProductQuantity">0</span></p>
+      <p>Total: ৳<span id="lastTotalAmount">0</span></p>
     </div>
   </div>
 

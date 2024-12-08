@@ -81,22 +81,21 @@
       background-color: #ffaa00;
     }
 
-    #loading {
-      display: none;
-      text-align: center;
-      font-size: 1.5rem;
-      color: #ffcc00;
-    }
-
     .hidden {
       display: none;
+    }
+
+    canvas {
+      max-width: 100%;
+      margin: 20px auto;
+      display: block;
     }
   </style>
 </head>
 <body>
   <header>
     <h1>Store Management System</h1>
-    <div class="settings-icon" onclick="openSettings()">⚙️</div>
+    <div class="settings-icon" onclick="toggleDatabase()">⚙️</div>
   </header>
 
   <div class="container">
@@ -105,18 +104,9 @@
       <h2>Set Your Store Name</h2>
       <input type="text" id="storeNameInput" placeholder="Enter Store Name">
       <button id="startStoreBtn" onclick="setStoreName()">Start</button>
-      <div id="loading" class="hidden">Loading...</div>
     </div>
 
-    <!-- Sales Data -->
-    <div id="sales-card" class="card hidden">
-      <h2><span id="storeNameDisplay"></span></h2>
-      <p>Total Sales: ৳<span id="totalSales">0</span></p>
-      <p>Products Sold: <span id="totalProductsSold">0</span></p>
-      <button onclick="resetStore()">Close</button>
-    </div>
-
-    <!-- Product Entry -->
+    <!-- Entry Section -->
     <div id="product-entry-card" class="card hidden">
       <h2>Product Entry</h2>
       <input type="text" id="productName" placeholder="Product Name">
@@ -125,16 +115,21 @@
       <button onclick="generateSale()">Add</button>
     </div>
 
-    <!-- Last Sale Display -->
-    <div id="last-sale-card" class="card hidden">
-      <h3>Last Sale</h3>
-      <p>Name: <span id="lastProductName">-</span></p>
-      <p>Price: ৳<span id="lastProductPrice">0</span></p>
-      <p>Qty: <span id="lastProductQuantity">0</span></p>
-      <p>Total: ৳<span id="lastTotalAmount">0</span></p>
+    <!-- Dashboard -->
+    <div id="dashboard-card" class="card hidden">
+      <h3>Dashboard</h3>
+      <canvas id="salesChart"></canvas>
+    </div>
+
+    <!-- Database Settings -->
+    <div id="database-card" class="card hidden">
+      <h3>Database Options</h3>
+      <p>Database settings will be displayed here.</p>
+      <button onclick="replaceEntry()">Replace Entry</button>
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
     let storeName = '';
     let totalSales = 0;
@@ -145,11 +140,10 @@
       const storeInput = document.getElementById('storeNameInput').value.trim();
       if (storeInput) {
         storeName = storeInput;
-        document.getElementById('storeNameDisplay').innerText = storeName;
         document.getElementById('main-page').classList.add('hidden');
-        document.getElementById('sales-card').classList.remove('hidden');
         document.getElementById('product-entry-card').classList.remove('hidden');
-        document.getElementById('last-sale-card').classList.remove('hidden');
+        document.getElementById('dashboard-card').classList.remove('hidden');
+        loadChart();
         alert(`Welcome to ${storeName}!`);
       } else {
         alert('Please enter a valid store name!');
@@ -163,17 +157,11 @@
       const productQuantity = parseInt(document.getElementById('productQuantity').value);
 
       if (productName && productPrice > 0 && productQuantity > 0) {
-        const totalAmount = productPrice * productQuantity;
-        totalSales += totalAmount;
+        totalSales += productPrice * productQuantity;
         totalProductsSold += productQuantity;
 
-        document.getElementById('totalSales').innerText = totalSales;
-        document.getElementById('totalProductsSold').innerText = totalProductsSold;
-        document.getElementById('lastProductName').innerText = productName;
-        document.getElementById('lastProductPrice').innerText = productPrice;
-        document.getElementById('lastProductQuantity').innerText = productQuantity;
-        document.getElementById('lastTotalAmount').innerText = totalAmount;
-
+        loadChart();
+        alert('Product added successfully!');
         document.getElementById('productName').value = '';
         document.getElementById('productPrice').value = '';
         document.getElementById('productQuantity').value = '';
@@ -182,16 +170,46 @@
       }
     }
 
-    // Reset Store
-    function resetStore() {
-      if (confirm('Are you sure you want to reset the store?')) {
-        location.reload();
+    // Load Chart
+    function loadChart() {
+      const ctx = document.getElementById('salesChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Total Sales', 'Products Sold'],
+          datasets: [{
+            label: 'Store Data',
+            data: [totalSales, totalProductsSold],
+            backgroundColor: ['#ffcc00', '#ffaa00']
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              display: false
+            }
+          }
+        }
+      });
+    }
+
+    // Toggle Database Settings
+    function toggleDatabase() {
+      const databaseCard = document.getElementById('database-card');
+      const entryCard = document.getElementById('product-entry-card');
+      if (databaseCard.classList.contains('hidden')) {
+        databaseCard.classList.remove('hidden');
+        entryCard.classList.add('hidden');
+      } else {
+        databaseCard.classList.add('hidden');
       }
     }
 
-    // Placeholder for Settings
-    function openSettings() {
-      alert('Settings feature coming soon!');
+    // Replace Entry Section
+    function replaceEntry() {
+      document.getElementById('database-card').classList.add('hidden');
+      document.getElementById('product-entry-card').classList.remove('hidden');
     }
   </script>
 </body>

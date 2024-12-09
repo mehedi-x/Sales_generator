@@ -37,73 +37,24 @@
         </section>
 
         <!-- Product Entry Section -->
-<section id="productEntry" class="card" style="display: none;">
-    <h2>Add Products</h2>
-    <form id="productForm">
-        <!-- Product Name -->
-        <div class="form-group">
-            <label for="productName">Product Name:</label>
-            <input 
-                type="text" 
-                id="productName" 
-                class="input-field" 
-                placeholder="Enter Product Name (e.g., Rice)" 
-                required 
-                autocomplete="off">
-        </div>
+        <section id="productEntry" class="card" style="display: none;">
+            <h2>Add Products</h2>
+            <div class="form-group">
+                <label for="productName">Product Name:</label>
+                <input type="text" id="productName" placeholder="Enter Product Name" required>
+            </div>
+            <div class="form-group">
+                <label for="productPrice">Product Price (৳):</label>
+                <input type="number" id="productPrice" placeholder="Enter Product Price" required>
+            </div>
+            <div class="form-group">
+                <label for="productQuantity">Quantity:</label>
+                <input type="number" id="productQuantity" placeholder="Enter Quantity" required>
+            </div>
+            <button id="addToSale" class="primary-button">Add to Sale</button>
+        </section>
 
-        <!-- Product Price -->
-        <div class="form-group">
-            <label for="productPrice">Product Price (৳):</label>
-            <input 
-                type="number" 
-                id="productPrice" 
-                class="input-field" 
-                placeholder="Enter Price (e.g., 50)" 
-                step="0.01" 
-                min="0" 
-                required>
-        </div>
-
-        <!-- Product Quantity -->
-        <div class="form-group">
-            <label for="productQuantity">Quantity:</label>
-            <input 
-                type="number" 
-                id="productQuantity" 
-                class="input-field" 
-                placeholder="Enter Quantity (e.g., 10)" 
-                min="1" 
-                required>
-        </div>
-
-        <!-- Product Category -->
-        <div class="form-group">
-            <label for="productCategory">Category:</label>
-            <select id="productCategory" class="input-field" required>
-                <option value="" disabled selected>Select Category</option>
-                <option value="grocery">Grocery</option>
-                <option value="electronics">Electronics</option>
-                <option value="clothing">Clothing</option>
-                <option value="others">Others</option>
-            </select>
-        </div>
-
-        <!-- Product Description -->
-        <div class="form-group">
-            <label for="productDescription">Description (optional):</label>
-            <textarea 
-                id="productDescription" 
-                class="input-field" 
-                rows="3" 
-                placeholder="Enter a short description of the product"></textarea>
-        </div>
-
-        <!-- Add Button -->
-        <button id="addToSale" class="primary-button">Add to Sale</button>
-    </form>
-</section>
-     <!-- Added Product List Section -->
+        <!-- Added Product List Section -->
         <section id="addedProducts" class="card" style="display: none;">
             <h2>Products in Cart</h2>
             <table class="dark-table">

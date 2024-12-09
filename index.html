@@ -12,7 +12,7 @@
         <h1>🛒 Store Management System</h1>
         <div class="total-sales">
             <span>Total Sales:</span>
-            <span id="totalSales">0</span> ৳
+            <span id="totalSales">0.00</span> ৳
         </div>
     </header>
 
@@ -40,43 +40,18 @@
         <section id="productEntry" class="card" style="display: none;">
             <h2>Add Products</h2>
             <form id="productForm">
-                <!-- Product Name -->
                 <div class="form-group">
                     <label for="productName">Product Name:</label>
-                    <input 
-                        type="text" 
-                        id="productName" 
-                        class="input-field" 
-                        placeholder="Enter Product Name (e.g., Rice)" 
-                        required 
-                        autocomplete="off">
+                    <input type="text" id="productName" class="input-field" placeholder="Enter Product Name (e.g., Rice)" required autocomplete="off">
                 </div>
-
-                <!-- Product Price -->
                 <div class="form-group">
                     <label for="productPrice">Product Price (৳):</label>
-                    <input 
-                        type="number" 
-                        id="productPrice" 
-                        class="input-field" 
-                        placeholder="Enter Price (e.g., 50)" 
-                        step="0.01" 
-                        min="0" 
-                        required>
+                    <input type="number" id="productPrice" class="input-field" placeholder="Enter Price (e.g., 50)" step="0.01" min="0" required>
                 </div>
-
-                <!-- Product Quantity (Optional) -->
                 <div class="form-group">
                     <label for="productQuantity">Quantity (Optional):</label>
-                    <input 
-                        type="number" 
-                        id="productQuantity" 
-                        class="input-field" 
-                        placeholder="Enter Quantity (e.g., 10)" 
-                        min="1">
+                    <input type="number" id="productQuantity" class="input-field" placeholder="Enter Quantity (e.g., 10)" min="1">
                 </div>
-
-                <!-- Add Button -->
                 <button id="addToSale" class="primary-button">Add to Sale</button>
             </form>
         </section>

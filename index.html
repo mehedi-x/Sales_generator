@@ -63,6 +63,45 @@
             </div>
         </section>
     </main>
+    <!-- Product Entry Section -->
+<section id="productEntry" style="display: none;">
+    <h2>Product Entry</h2>
+    <div class="form-group">
+        <label for="productName">Product Name:</label>
+        <input type="text" id="productName" placeholder="Enter Product Name" required>
+    </div>
+    <div class="form-group">
+        <label for="productPrice">Product Price (৳):</label>
+        <input type="number" id="productPrice" placeholder="Enter Product Price" required>
+    </div>
+    <div class="form-group">
+        <label for="productQuantity">Quantity:</label>
+        <input type="number" id="productQuantity" placeholder="Enter Quantity" required>
+    </div>
+    <button id="addToSale">Add to Sale</button>
+    <button id="generateSale" style="display: none;">Generate Sale</button>
+</section>
+
+<!-- Added Product List Section -->
+<section id="addedProducts" style="display: none;">
+    <h2>Added Products</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Product Name</th>
+                <th>Price (৳)</th>
+                <th>Quantity</th>
+                <th>Total (৳)</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="productList">
+            <!-- Added products will be dynamically listed here -->
+        </tbody>
+    </table>
+    <button id="finalizeSale">Finalize Sale</button>
+</section>
+
 
     <!-- Sales History Modal -->
     <div id="historyModal" class="modal" style="display: none;">

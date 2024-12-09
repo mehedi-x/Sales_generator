@@ -1,1 +1,14 @@
 
+store_management/
+│
+├── app.py              # মূল ফাইল (Flask অ্যাপ রান করবে)
+├── static/             # CSS, JS, Images
+│   ├── styles.css
+│   └── script.js
+├── templates/          # HTML ফাইল
+│   ├── index.html
+│   ├── sales.html
+│   ├── purchase.html
+│   └── stock.html
+├── database.db         # SQLite ডাটাবেজ
+└── requirements.txt    # Python প্যাকেজ লিস্ট

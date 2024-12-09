@@ -16,17 +16,6 @@
         </div>
     </header>
 
-    <!-- Navigation Menu -->
-    <nav class="dark-nav">
-        <button id="menuToggle" class="menu-button">☰ Menu</button>
-        <ul id="menuOptions" class="menu-options" style="display: none;">
-            <li><button id="viewHistory">📜 Full Sales History</button></li>
-            <li><button id="downloadHistory">⬇️ Download Sales History</button></li>
-            <li><button id="settings">⚙️ Settings</button></li>
-            <li><button id="closeStore">🔒 Close Store</button></li>
-        </ul>
-    </nav>
-
     <!-- Main Content Section -->
     <main class="dark-main">
         <!-- Store Setup Section -->
@@ -36,9 +25,9 @@
             <button id="setupStore" class="primary-button">Set Store Name</button>
         </section>
 
-        <!-- Product Entry Section -->
-        <section id="productEntry" class="card" style="display: none;">
-            <h2>Add Products</h2>
+        <!-- Sales Generator Section -->
+        <section id="salesGenerator" class="card" style="display: none;">
+            <h2>Sales Generator</h2>
             <form id="productForm">
                 <div class="form-group">
                     <label for="productName">Product Name:</label>
@@ -54,26 +43,6 @@
                 </div>
                 <button id="addToSale" class="primary-button">Add to Sale</button>
             </form>
-        </section>
-
-        <!-- Added Product List Section -->
-        <section id="addedProducts" class="card" style="display: none;">
-            <h2>Products in Cart</h2>
-            <table class="dark-table">
-                <thead>
-                    <tr>
-                        <th>Product Name</th>
-                        <th>Price (৳)</th>
-                        <th>Quantity</th>
-                        <th>Total (৳)</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="productList">
-                    <!-- Products will be listed dynamically -->
-                </tbody>
-            </table>
-            <button id="finalizeSale" class="success-button">Finalize Sale</button>
         </section>
     </main>
 

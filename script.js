@@ -149,3 +149,49 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    const menuToggle = document.getElementById("menuToggle");
+    const menuOptions = document.getElementById("menuOptions");
+
+    // Toggle menu visibility on click
+    menuToggle.addEventListener("click", () => {
+        if (menuOptions.style.display === "block") {
+            menuOptions.style.display = "none";
+        } else {
+            menuOptions.style.display = "block";
+        }
+    });
+
+    // Close the menu when clicking outside
+    document.addEventListener("click", (event) => {
+        if (!menuToggle.contains(event.target) && !menuOptions.contains(event.target)) {
+            menuOptions.style.display = "none";
+        }
+    });
+
+    // Add functionality for each menu option
+    document.getElementById("viewHistory").addEventListener("click", () => {
+        alert("Displaying full sales history...");
+        // Add your logic here
+    });
+
+    document.getElementById("downloadHistory").addEventListener("click", () => {
+        alert("Downloading sales history...");
+        // Add your logic here
+    });
+
+    document.getElementById("settings").addEventListener("click", () => {
+        alert("Opening settings...");
+        // Add your logic here
+    });
+
+    document.getElementById("closeStore").addEventListener("click", () => {
+        const confirmation = confirm("Are you sure you want to close the store?");
+        if (confirmation) {
+            alert("Store closed.");
+            // Add your logic here
+        }
+    });
+});
+

@@ -3,214 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sales Manager</title>
-    <style>
-        /* Global Styling */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: white;
-            margin: 0;
-            padding: 0;
-        }
-
-        /* Header Styling */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #1e1e1e;
-            padding: 15px 20px;
-        }
-
-        .header h1 {
-            margin: 0;
-            font-size: 24px;
-            color: #fff;
-        }
-
-        .settings-icon {
-            background-color: #4CAF50;
-            color: #fff;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: 0.3s ease;
-        }
-
-        .settings-icon:hover {
-            background-color: #45a049;
-        }
-
-        /* Main Page Content */
-        .sales-generator {
-            display: block;
-            background-color: #1e1e1e;
-            padding: 20px;
-            margin: 20px auto;
-            width: 90%;
-            max-width: 500px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-        }
-
-        .sales-generator h3 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        input[type="text"], input[type="number"] {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border: 1px solid #444;
-            border-radius: 5px;
-            background-color: #222;
-            color: white;
-            font-size: 16px;
-        }
-
-        button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 5px;
-            margin-top: 10px;
-            width: 100%;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-
-        /* Settings Section */
-        .settings-section {
-            display: none;
-            padding: 20px;
-            margin: 20px auto;
-            width: 90%;
-            max-width: 800px;
-            background-color: #1e1e1e;
-            border-radius: 10px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-        }
-
-        .settings-section h3 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .box {
-            background-color: #333;
-            padding: 20px;
-            margin: 10px 0;
-            border-radius: 5px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .box h4 {
-            margin: 0 0 10px 0;
-        }
-
-        /* Media Query for Mobile */
-        @media (max-width: 768px) {
-            .sales-generator, .settings-section {
-                width: 95%;
-            }
-        }
-    </style>
+    <title>Store Management</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Header -->
-    <div class="header">
-        <h1>Sales Manager</h1>
-        <button class="settings-icon" onclick="toggleSettings()">Settings</button>
+    <header>
+        <h1>Store Management System</h1>
+        <div class="total-sales">
+            Total Sales: <span id="totalSales">0</span> ৳
+        </div>
+    </header>
+    <main>
+        <section id="storeSetup">
+            <h2>Set Up Your Store</h2>
+            <input type="text" id="storeName" placeholder="Enter Store Name">
+            <button id="setupStore">Set Store Name</button>
+        </section>
+
+        <section id="productEntry" style="display: none;">
+            <h2>Product Entry</h2>
+            <input type="text" id="productName" placeholder="Product Name">
+            <input type="number" id="productPrice" placeholder="Price">
+            <input type="number" id="productQuantity" placeholder="Quantity">
+            <button id="generateSale">Generate Sale</button>
+        </section>
+
+        <section id="salesSummary" style="display: none;">
+            <h2>Last Sale Summary</h2>
+            <div id="summaryDetails"></div>
+        </section>
+    </main>
+
+    <nav id="menu">
+        <button id="viewHistory">Full Sales History</button>
+        <button id="downloadHistory">Download Sales History</button>
+        <button id="closeStore">Close Store</button>
+    </nav>
+
+    <div id="historyModal" style="display: none;">
+        <h2>Sales History</h2>
+        <div id="historyContent"></div>
+        <button id="closeHistoryModal">Close</button>
     </div>
 
-    <!-- Sales Generator Section -->
-    <div class="sales-generator" id="sales-generator">
-        <h3>Generate Sale</h3>
-        <input type="text" id="product-name" placeholder="Product Name">
-        <input type="number" id="product-price" placeholder="Product Price">
-        <input type="number" id="product-quantity" placeholder="Quantity (Optional)">
-        <button onclick="generateSale()">Generate Sale</button>
-    </div>
-
-    <!-- Settings Section -->
-    <div class="settings-section" id="settings-section">
-        <h3>Dashboard</h3>
-        <div class="box">
-            <h4>Total Sales</h4>
-            <p>৳<span id="total-sales">0.00</span></p>
-        </div>
-        <div class="box">
-            <h4>Total Sales Count</h4>
-            <p><span id="sales-count">0</span> Sales</p>
-        </div>
-        <div class="box">
-            <h4>Last Sale</h4>
-            <p><span id="last-sale">N/A</span></p>
-        </div>
-        <div class="box">
-            <button onclick="printSales()">Print Report</button>
-        </div>
-        <div class="box">
-            <button onclick="closeStore()">Close Store</button>
-        </div>
-    </div>
-
-    <script>
-        // Toggle Settings Section
-        function toggleSettings() {
-            const salesGenerator = document.getElementById('sales-generator');
-            const settingsSection = document.getElementById('settings-section');
-
-            // Hide Sales Generator and Show Settings
-            if (settingsSection.style.display === 'none' || settingsSection.style.display === '') {
-                salesGenerator.style.display = 'none';
-                settingsSection.style.display = 'block';
-            } else {
-                // Show Sales Generator and Hide Settings
-                salesGenerator.style.display = 'block';
-                settingsSection.style.display = 'none';
-            }
-        }
-
-        // Generate Sale
-        function generateSale() {
-            const productName = document.getElementById('product-name').value;
-            const productPrice = parseFloat(document.getElementById('product-price').value) || 0;
-            const productQuantity = parseInt(document.getElementById('product-quantity').value) || 1;
-            const total = productPrice * productQuantity;
-
-            // Save data in Local Storage
-            localStorage.setItem('lastSale', productName + " - ৳" + total);
-            const currentSales = parseFloat(localStorage.getItem('totalSales') || 0);
-            const currentCount = parseInt(localStorage.getItem('salesCount') || 0);
-
-            localStorage.setItem('totalSales', currentSales + total);
-            localStorage.setItem('salesCount', currentCount + 1);
-
-            alert('Sale Generated!');
-        }
-
-        // Print Sales Report
-        function printSales() {
-            window.print();
-        }
-
-        // Close Store
-        function closeStore() {
-            if (confirm("Are you sure you want to close the store?")) {
-                localStorage.clear();
-                alert("Store data has been reset.");
-            }
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>

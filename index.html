@@ -3,48 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Store Management</title>
+    <title>Store Management System</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Header Section -->
     <header>
-        <h1>Store Management System</h1>
-        <div class="total-sales">
-            Total Sales: <span id="totalSales">0</span> ৳
+        <div class="header-container">
+            <h1>Store Management System</h1>
+            <div class="total-sales">
+                Total Sales: <span id="totalSales">0</span> ৳
+            </div>
         </div>
     </header>
+
+    <!-- Main Content Section -->
     <main>
+        <!-- Store Setup Section -->
         <section id="storeSetup">
             <h2>Set Up Your Store</h2>
-            <input type="text" id="storeName" placeholder="Enter Store Name">
+            <input type="text" id="storeName" placeholder="Enter Store Name" required>
             <button id="setupStore">Set Store Name</button>
         </section>
 
+        <!-- Product Entry Section -->
         <section id="productEntry" style="display: none;">
             <h2>Product Entry</h2>
-            <input type="text" id="productName" placeholder="Product Name">
-            <input type="number" id="productPrice" placeholder="Price">
-            <input type="number" id="productQuantity" placeholder="Quantity">
+            <div class="form-group">
+                <label for="productName">Product Name:</label>
+                <input type="text" id="productName" placeholder="Enter Product Name" required>
+            </div>
+            <div class="form-group">
+                <label for="productPrice">Product Price (৳):</label>
+                <input type="number" id="productPrice" placeholder="Enter Product Price" required>
+            </div>
+            <div class="form-group">
+                <label for="productQuantity">Quantity:</label>
+                <input type="number" id="productQuantity" placeholder="Enter Quantity" required>
+            </div>
             <button id="generateSale">Generate Sale</button>
         </section>
 
+        <!-- Sales Summary Section -->
         <section id="salesSummary" style="display: none;">
             <h2>Last Sale Summary</h2>
-            <div id="summaryDetails"></div>
+            <div id="summaryDetails">
+                <!-- Sales Summary Will Be Injected Here -->
+            </div>
         </section>
     </main>
 
+    <!-- Navigation Menu -->
     <nav id="menu">
         <button id="viewHistory">Full Sales History</button>
         <button id="downloadHistory">Download Sales History</button>
         <button id="closeStore">Close Store</button>
     </nav>
 
-    <div id="historyModal" style="display: none;">
-        <h2>Sales History</h2>
-        <div id="historyContent"></div>
-        <button id="closeHistoryModal">Close</button>
+    <!-- Sales History Modal -->
+    <div id="historyModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2>Sales History</h2>
+            <div id="historyContent">
+                <!-- Sales History Will Be Injected Here -->
+            </div>
+            <button id="closeHistoryModal" class="modal-close">Close</button>
+        </div>
     </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2024 Store Management System. All Rights Reserved.</p>
+    </footer>
 
     <script src="script.js"></script>
 </body>

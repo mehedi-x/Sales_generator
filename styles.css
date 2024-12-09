@@ -1,139 +1,86 @@
 /* General Styles */
 body {
-    font-family: 'Arial', sans-serif;
     margin: 0;
-    padding: 0;
+    font-family: Arial, sans-serif;
     background-color: #121212;
-    color: #e0e0e0;
+    color: #ffffff;
 }
 
-/* Header */
-.dark-header {
-    background-color: #1f1f1f;
+header.dark-header {
+    background-color: #1e1e1e;
     padding: 20px;
     text-align: center;
-    border-bottom: 1px solid #444;
+    border-bottom: 2px solid #444;
 }
 
 .dark-header h1 {
-    font-size: 24px;
     margin: 0;
+    font-size: 1.8rem;
 }
 
-.total-sales {
-    margin-top: 10px;
-    font-size: 18px;
-}
-
-/* Navigation Menu */
 .dark-nav {
-    background-color: #1f1f1f;
-    padding: 10px;
-    text-align: center;
-    border-bottom: 1px solid #444;
+    background-color: #1e1e1e;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #444;
 }
 
 .menu-button {
-    background: #3f3f3f;
-    color: white;
-    padding: 10px 20px;
+    background: none;
+    color: #ffffff;
     border: none;
-    border-radius: 5px;
+    font-size: 1.2rem;
     cursor: pointer;
-    font-size: 16px;
-}
-
-.menu-options {
-    margin-top: 10px;
-    list-style: none;
-    padding: 0;
 }
 
 .menu-options li {
+    list-style: none;
     margin: 5px 0;
 }
 
-.menu-options button {
-    background: #444;
-    color: white;
-    padding: 8px 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-.menu-options button:hover {
-    background: #666;
-}
-
-/* Main Content */
 .dark-main {
     padding: 20px;
-    text-align: center;
 }
 
-/* Card Style */
 .card {
-    background-color: #1f1f1f;
-    padding: 20px;
-    margin: 20px auto;
+    background-color: #1e1e1e;
+    border: 1px solid #444;
     border-radius: 8px;
-    max-width: 500px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    margin-bottom: 20px;
 }
 
-/* Table */
+.primary-button, .success-button {
+    background-color: #0066ff;
+    color: #ffffff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.primary-button:hover, .success-button:hover {
+    background-color: #0056d2;
+}
+
 .dark-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
 }
 
 .dark-table th, .dark-table td {
+    padding: 10px;
     border: 1px solid #444;
-    padding: 10px;
+    text-align: left;
+}
+
+footer.dark-footer {
     text-align: center;
-}
-
-.dark-table th {
-    background-color: #333;
-    color: white;
-}
-
-/* Buttons */
-.primary-button {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.primary-button:hover {
-    background-color: #0056b3;
-}
-
-.success-button {
-    background-color: #28a745;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.success-button:hover {
-    background-color: #1e7e34;
-}
-
-/* Footer */
-.dark-footer {
-    background-color: #1f1f1f;
-    padding: 10px;
-    text-align: center;
-    border-top: 1px solid #444;
-    margin-top: 20px;
-    font-size: 14px;
+    padding: 10px 0;
+    background-color: #1e1e1e;
+    border-top: 2px solid #444;
+    font-size: 0.9rem;
 }

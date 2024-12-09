@@ -54,12 +54,15 @@
     </main>
 
     <!-- Navigation Menu -->
-    <nav id="menu">
-        <button id="viewHistory">Full Sales History</button>
-        <button id="downloadHistory">Download Sales History</button>
-        <button id="closeStore">Close Store</button>
-    </nav>
-
+<nav id="menu">
+    <button id="menuToggle">☰ Menu</button>
+    <ul id="menuOptions" style="display: none;">
+        <li><button id="viewHistory">📜 Full Sales History</button></li>
+        <li><button id="downloadHistory">⬇️ Download Sales History</button></li>
+        <li><button id="settings">⚙️ Settings</button></li>
+        <li><button id="closeStore">🔒 Close Store</button></li>
+    </ul>
+</nav>
     <!-- Sales History Modal -->
     <div id="historyModal" class="modal" style="display: none;">
         <div class="modal-content">

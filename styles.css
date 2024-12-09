@@ -126,3 +126,51 @@ footer.dark-footer {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
     color: #fff;
 }
+.form-group {
+    margin-bottom: 15px;
+}
+
+.input-field {
+    width: 100%;
+    padding: 12px;
+    margin-top: 5px;
+    border: 1px solid #444;
+    border-radius: 8px;
+    background-color: #222; /* Dark mode */
+    color: #fff;
+    font-size: 16px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.input-field:focus {
+    border-color: #06f;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 102, 255, 0.5);
+}
+
+.primary-button {
+    background-color: #06f;
+    color: #fff;
+    padding: 12px 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 18px;
+    width: 100%;
+    transition: background-color 0.3s;
+}
+
+.primary-button:hover {
+    background-color: #0056b3;
+}
+
+.card {
+    background-color: #333;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    color: #fff;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+}

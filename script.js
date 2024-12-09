@@ -131,3 +131,75 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+    const productList = [];
+    const productListTable = document.getElementById("productList");
+    const addedProductsSection = document.getElementById("addedProducts");
+    const generateSaleButton = document.getElementById("generateSale");
+
+    // Add product to temporary sale list
+    document.getElementById("addToSale").addEventListener("click", () => {
+        const productName = document.getElementById("productName").value.trim();
+        const productPrice = parseFloat(document.getElementById("productPrice").value);
+        const productQuantity = parseInt(document.getElementById("productQuantity").value);
+
+        if (!productName || productPrice <= 0 || productQuantity <= 0) {
+            alert("Please provide valid product details.");
+            return;
+        }
+
+        const productTotal = productPrice * productQuantity;
+
+        // Add to product list
+        productList.push({
+            name: productName,
+            price: productPrice,
+            quantity: productQuantity,
+            total: productTotal,
+        });
+
+        // Reset input fields
+        document.getElementById("productName").value = "";
+        document.getElementById("productPrice").value = "";
+        document.getElementById("productQuantity").value = "";
+
+        updateProductList();
+        addedProductsSection.style.display = "block";
+    });
+
+    // Update product list table
+    function updateProductList() {
+        productListTable.innerHTML = ""; // Clear previous entries
+        productList.forEach((product, index) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${product.name}</td>
+                <td>${product.price.toFixed(2)}</td>
+                <td>${product.quantity}</td>
+                <td>${product.total.toFixed(2)}</td>
+                <td><button onclick="removeProduct(${index})">Remove</button></td>
+            `;
+            productListTable.appendChild(row);
+        });
+    }
+
+    // Remove product from list
+    window.removeProduct = (index) => {
+        productList.splice(index, 1);
+        updateProductList();
+        if (productList.length === 0) {
+            addedProductsSection.style.display = "none";
+        }
+    };
+
+    // Finalize sale and generate total
+    document.getElementById("finalizeSale").addEventListener("click", () => {
+        const totalSaleAmount = productList.reduce((sum, product) => sum + product.total, 0);
+
+        alert(`Total Sale: ৳${totalSaleAmount.toFixed(2)}`);
+        // Add logic to save or process this sale
+        productList.length = 0; // Clear the list
+        updateProductList();
+        addedProductsSection.style.display = "none";
+    });
+});

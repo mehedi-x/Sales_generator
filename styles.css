@@ -138,3 +138,40 @@ button:hover {
 #menuOptions button:focus {
     outline: none;
 }
+/* Added Product List Styles */
+#addedProducts {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #1f1f1f;
+    border-radius: 5px;
+    color: white;
+}
+
+#addedProducts table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#addedProducts th, #addedProducts td {
+    border: 1px solid #444;
+    padding: 10px;
+    text-align: center;
+}
+
+#addedProducts th {
+    background-color: #333;
+}
+
+#addedProducts button {
+    background-color: #d9534f;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+#addedProducts button:hover {
+    background-color: #c9302c;
+}

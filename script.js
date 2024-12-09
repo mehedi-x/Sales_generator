@@ -195,3 +195,84 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+// Select elements
+const productForm = document.getElementById('productForm');
+const productList = document.getElementById('productList');
+const totalSalesElement = document.getElementById('totalSales');
+
+// Function to get products from LocalStorage
+function getProductsFromStorage() {
+    const products = localStorage.getItem('products');
+    return products ? JSON.parse(products) : [];
+}
+
+// Function to save products to LocalStorage
+function saveProductsToStorage(products) {
+    localStorage.setItem('products', JSON.stringify(products));
+}
+
+// Function to update product list in UI
+function updateProductListUI() {
+    const products = getProductsFromStorage();
+    let totalSales = 0;
+
+    productList.innerHTML = ''; // Clear existing list
+    products.forEach((product, index) => {
+        const total = product.price * product.quantity;
+        totalSales += total;
+
+        const row = `
+            <tr>
+                <td>${product.name}</td>
+                <td>${product.price} ৳</td>
+                <td>${product.quantity}</td>
+                <td>${total.toFixed(2)} ৳</td>
+                <td>
+                    <button onclick="deleteProduct(${index})" class="danger-button">Remove</button>
+                </td>
+            </tr>
+        `;
+        productList.innerHTML += row;
+    });
+
+    totalSalesElement.textContent = totalSales.toFixed(2);
+}
+
+// Function to delete a product
+function deleteProduct(index) {
+    const products = getProductsFromStorage();
+    products.splice(index, 1); // Remove product by index
+    saveProductsToStorage(products);
+    updateProductListUI(); // Update UI
+}
+
+// Event listener for form submission
+productForm.addEventListener('submit', (event) => {
+    event.preventDefault(); // Prevent form refresh
+
+    // Get form values
+    const name = document.getElementById('productName').value;
+    const price = parseFloat(document.getElementById('productPrice').value);
+    const quantity = parseInt(document.getElementById('productQuantity').value) || 1; // Default to 1 if empty
+
+    // Validate inputs
+    if (!name || isNaN(price) || price <= 0) {
+        alert('Please enter valid product details!');
+        return;
+    }
+
+    // Save product to LocalStorage
+    const products = getProductsFromStorage();
+    products.push({ name, price, quantity });
+    saveProductsToStorage(products);
+
+    // Update UI
+    updateProductListUI();
+
+    // Clear form
+    productForm.reset();
+});
+
+// Initialize UI on page load
+updateProductListUI();
+

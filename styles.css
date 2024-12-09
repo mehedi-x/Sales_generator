@@ -1,176 +1,184 @@
 /* General Styles */
-body {
+* {
     margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
     font-family: Arial, sans-serif;
     background-color: #121212;
-    color: #ffffff;
-}
-
-header.dark-header {
-    background-color: #1e1e1e;
-    padding: 20px;
-    text-align: center;
-    border-bottom: 2px solid #444;
-}
-
-.dark-header h1 {
-    margin: 0;
-    font-size: 1.8rem;
-}
-
-.dark-nav {
-    background-color: #1e1e1e;
-    padding: 10px 20px;
+    color: #fff;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 2px solid #444;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
-.menu-button {
-    background: none;
-    color: #ffffff;
-    border: none;
-    font-size: 1.2rem;
-    cursor: pointer;
-}
-
-.menu-options li {
-    list-style: none;
-    margin: 5px 0;
-}
-
-.dark-main {
-    padding: 20px;
-}
-
-.card {
-    background-color: #1e1e1e;
-    border: 1px solid #444;
-    border-radius: 8px;
-    padding: 15px;
+h1, h2 {
+    text-align: center;
     margin-bottom: 20px;
 }
 
-.primary-button, .success-button {
-    background-color: #0066ff;
-    color: #ffffff;
+/* Header Styles */
+.dark-header {
+    background-color: #1c1c1c;
+    padding: 20px;
+}
+
+.total-sales {
+    text-align: center;
+    font-size: 1.2em;
+    margin-top: 10px;
+}
+
+/* Navigation Menu */
+.dark-nav {
+    background-color: #333;
+    padding: 10px;
+}
+
+.menu-button {
+    background-color: #333;
+    color: #fff;
     border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
+    font-size: 1.5em;
     cursor: pointer;
-    font-size: 1rem;
+    width: 100%;
+}
+
+.menu-options {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu-options li {
+    border-top: 1px solid #444;
+}
+
+.menu-options li button {
+    background: #333;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    width: 100%;
+    text-align: left;
+    font-size: 1.2em;
+    cursor: pointer;
+}
+
+.menu-options li button:hover {
+    background-color: #555;
+}
+
+/* Main Content */
+.dark-main {
+    flex: 1;
+    padding: 20px;
+}
+
+.card {
+    background-color: #1c1c1c;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.input-field {
+    width: 100%;
+    padding: 10px;
+    margin-top: 8px;
+    border: 1px solid #444;
+    background-color: #333;
+    color: #fff;
+    border-radius: 4px;
+}
+
+.primary-button, .success-button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    font-size: 1.2em;
+    cursor: pointer;
+    border-radius: 4px;
 }
 
 .primary-button:hover, .success-button:hover {
-    background-color: #0056d2;
+    background-color: #45a049;
 }
 
+.dark-footer {
+    background-color: #1c1c1c;
+    text-align: center;
+    padding: 10px;
+    font-size: 1em;
+    color: #888;
+}
+
+/* Table Styles */
 .dark-table {
     width: 100%;
     border-collapse: collapse;
+    margin-top: 20px;
 }
 
 .dark-table th, .dark-table td {
-    padding: 10px;
-    border: 1px solid #444;
+    padding: 12px;
     text-align: left;
 }
 
-footer.dark-footer {
-    text-align: center;
-    padding: 10px 0;
-    background-color: #1e1e1e;
-    border-top: 2px solid #444;
-    font-size: 0.9rem;
-}
-.form-group {
-    margin-bottom: 15px;
-}
-
-.input-field {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #222; /* Dark mode */
-    color: #fff;
-}
-
-.input-field:focus {
-    border-color: #06f;
-    outline: none;
-    box-shadow: 0 0 5px rgba(0, 102, 255, 0.5);
-}
-
-.primary-button {
-    background-color: #06f;
-    color: #fff;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    width: 100%;
-}
-
-.primary-button:hover {
-    background-color: #0056b3;
-}
-
-.card {
+.dark-table th {
     background-color: #333;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    color: #fff;
-}
-.form-group {
-    margin-bottom: 15px;
 }
 
-.input-field {
-    width: 100%;
-    padding: 12px;
-    margin-top: 5px;
-    border: 1px solid #444;
-    border-radius: 8px;
-    background-color: #222; /* Dark mode */
-    color: #fff;
-    font-size: 16px;
-    transition: border-color 0.3s, box-shadow 0.3s;
+.dark-table tr:nth-child(even) {
+    background-color: #222;
 }
 
-.input-field:focus {
-    border-color: #06f;
-    outline: none;
-    box-shadow: 0 0 5px rgba(0, 102, 255, 0.5);
+.dark-table tr:hover {
+    background-color: #444;
 }
 
-.primary-button {
-    background-color: #06f;
-    color: #fff;
-    padding: 12px 15px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 18px;
-    width: 100%;
-    transition: background-color 0.3s;
+/* Responsive Design */
+@media (max-width: 768px) {
+    .dark-header h1, .menu-button {
+        font-size: 1.2em;
+    }
+
+    .menu-options li button {
+        font-size: 1em;
+    }
+
+    .input-field {
+        padding: 8px;
+    }
+
+    .primary-button, .success-button {
+        font-size: 1em;
+    }
 }
 
-.primary-button:hover {
-    background-color: #0056b3;
-}
+@media (max-width: 480px) {
+    .dark-header h1 {
+        font-size: 1.5em;
+    }
 
-.card {
-    background-color: #333;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    color: #fff;
-    width: 100%;
-    max-width: 500px;
-    margin: 0 auto;
+    .menu-button {
+        font-size: 1.5em;
+    }
+
+    .input-field {
+        padding: 6px;
+    }
+
+    .primary-button, .success-button {
+        font-size: 0.9em;
+    }
+
+    .dark-footer p {
+        font-size: 0.8em;
+    }
 }

@@ -24,35 +24,10 @@ body {
     font-size: 16px;
 }
 
-/* Navigation */
-.dark-nav {
-    background: #1e1e1e;
-    padding: 10px;
-    text-align: center;
-}
-
-.menu-button {
-    background: #00aaff;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.menu-options {
-    margin: 10px 0;
-    list-style: none;
-    padding: 0;
-}
-
-.menu-options li {
-    margin: 5px 0;
-}
-
 /* Main Content */
 .dark-main {
     padding: 20px;
+    transition: all 0.5s ease-in-out;
 }
 
 .card {
@@ -60,25 +35,27 @@ body {
     padding: 20px;
     margin-bottom: 20px;
     border-radius: 10px;
+    animation: fadeIn 0.5s ease-in-out;
 }
 
-.form-group {
-    margin-bottom: 15px;
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
-.input-field {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border: 1px solid #444;
-    border-radius: 5px;
-    background: #333;
-    color: #fff;
+.hidden {
+    display: none;
+    opacity: 0;
 }
 
 /* Buttons */
-.primary-button,
-.success-button {
+.primary-button {
     background: #00aaff;
     color: #fff;
     border: none;
@@ -87,12 +64,8 @@ body {
     cursor: pointer;
 }
 
-.success-button {
-    background: #00c853;
-}
-
-.primary-button:hover,
-.success-button:hover {
+.primary-button:hover {
+    background: #008ecc;
     opacity: 0.9;
 }
 

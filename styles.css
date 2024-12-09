@@ -1,205 +1,106 @@
-/* General Styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
+/* General Reset */
 body {
+    margin: 0;
     font-family: Arial, sans-serif;
-    background-color: #181818; /* Darker background for contrast */
-    color: #e0e0e0; /* Soft white for text */
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+    color: #fff;
+    background-color: #121212;
 }
 
-h1, h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #f5f5f5; /* Bright text for headings */
-}
-
-/* Header Styles */
+/* Header */
 .dark-header {
-    background-color: #212121; /* Dark gray */
+    background: #1e1e1e;
     padding: 20px;
-    border-bottom: 2px solid #424242; /* Subtle border */
+    text-align: center;
+}
+
+.dark-header h1 {
+    margin: 0;
+    font-size: 24px;
+    color: #ffffff;
 }
 
 .total-sales {
-    text-align: center;
-    font-size: 1.2em;
     margin-top: 10px;
+    font-size: 16px;
 }
 
-/* Navigation Menu */
+/* Navigation */
 .dark-nav {
-    background-color: #333; /* Medium dark gray */
+    background: #1e1e1e;
     padding: 10px;
+    text-align: center;
 }
 
 .menu-button {
-    background-color: #424242; /* Slightly lighter gray for button */
-    color: #e0e0e0;
+    background: #00aaff;
+    color: #fff;
     border: none;
-    font-size: 1.5em;
+    padding: 10px 20px;
     cursor: pointer;
-    width: 100%;
-    border-radius: 6px; /* Rounded edges for modern look */
-    transition: background-color 0.3s ease;
-}
-
-.menu-button:hover {
-    background-color: #616161; /* Highlight on hover */
+    font-size: 16px;
 }
 
 .menu-options {
+    margin: 10px 0;
     list-style: none;
     padding: 0;
-    margin: 0;
 }
 
 .menu-options li {
-    border-top: 1px solid #424242;
-}
-
-.menu-options li button {
-    background: #424242;
-    color: #e0e0e0;
-    border: none;
-    padding: 10px;
-    width: 100%;
-    text-align: left;
-    font-size: 1.2em;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.menu-options li button:hover {
-    background-color: #616161;
+    margin: 5px 0;
 }
 
 /* Main Content */
 .dark-main {
-    flex: 1;
     padding: 20px;
 }
 
 .card {
-    background-color: #212121;
-    border-radius: 8px;
+    background: #1e1e1e;
     padding: 20px;
     margin-bottom: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+    border-radius: 10px;
+}
+
+.form-group {
+    margin-bottom: 15px;
 }
 
 .input-field {
     width: 100%;
     padding: 10px;
-    margin-top: 8px;
-    border: 1px solid #424242;
-    background-color: #333;
-    color: #e0e0e0;
-    border-radius: 6px;
-    transition: border-color 0.3s ease, background-color 0.3s ease;
+    margin-top: 5px;
+    border: 1px solid #444;
+    border-radius: 5px;
+    background: #333;
+    color: #fff;
 }
 
-.input-field:focus {
-    border-color: #81c784; /* Green highlight for focus */
-    background-color: #424242;
-    outline: none;
-}
-
-.primary-button, .success-button {
-    width: 100%;
-    padding: 12px;
-    margin-top: 20px;
-    background-color: #81c784; /* Soft green */
-    color: #212121;
+/* Buttons */
+.primary-button,
+.success-button {
+    background: #00aaff;
+    color: #fff;
     border: none;
-    font-size: 1.2em;
+    padding: 10px 20px;
+    border-radius: 5px;
     cursor: pointer;
-    border-radius: 6px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.primary-button:hover, .success-button:hover {
-    background-color: #66bb6a; /* Darker green for hover */
-    transform: scale(1.03); /* Slight zoom effect */
+.success-button {
+    background: #00c853;
 }
 
+.primary-button:hover,
+.success-button:hover {
+    opacity: 0.9;
+}
+
+/* Footer */
 .dark-footer {
-    background-color: #212121;
+    background: #1e1e1e;
     text-align: center;
-    padding: 10px;
-    font-size: 1em;
-    color: #9e9e9e;
-}
-
-/* Table Styles */
-.dark-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-.dark-table th, .dark-table td {
-    padding: 12px;
-    text-align: left;
-    color: #e0e0e0;
-}
-
-.dark-table th {
-    background-color: #333;
-    border-bottom: 2px solid #424242;
-}
-
-.dark-table tr:nth-child(even) {
-    background-color: #2b2b2b;
-}
-
-.dark-table tr:hover {
-    background-color: #424242;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .dark-header h1, .menu-button {
-        font-size: 1.2em;
-    }
-
-    .menu-options li button {
-        font-size: 1em;
-    }
-
-    .input-field {
-        padding: 8px;
-    }
-
-    .primary-button, .success-button {
-        font-size: 1em;
-    }
-}
-
-@media (max-width: 480px) {
-    .dark-header h1 {
-        font-size: 1.5em;
-    }
-
-    .menu-button {
-        font-size: 1.5em;
-    }
-
-    .input-field {
-        padding: 6px;
-    }
-
-    .primary-button, .success-button {
-        font-size: 0.9em;
-    }
-
-    .dark-footer p {
-        font-size: 0.8em;
-    }
+    padding: 15px;
+    font-size: 14px;
+    color: #bbb;
 }
